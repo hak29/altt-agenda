@@ -387,6 +387,109 @@ a:hover { text-decoration: underline; }
   outline: none; border-bottom: 1px dashed var(--border-highlight);
   padding-bottom: 2px;
 }
+
+/* ── CALL SCRIPT PANEL ── */
+.script-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+}
+.script-overlay.open { display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+.script-panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); max-width: 720px; width: 100%;
+  max-height: 85vh; overflow-y: auto; padding: 0;
+}
+.script-header {
+  position: sticky; top: 0; background: var(--surface);
+  padding: 16px 20px 12px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; z-index: 1;
+}
+.script-header h2 { font-size: 1.1rem; font-weight: 700; }
+.script-header h2 span { color: var(--gold); }
+.script-close {
+  background: none; border: none; color: var(--muted); font-size: 1.3rem;
+  cursor: pointer; padding: 4px 8px;
+}
+.script-close:hover { color: var(--text); }
+.script-body { padding: 16px 20px 24px; }
+.script-block { margin-bottom: 18px; }
+.script-block h3 {
+  font-size: 0.82rem; font-weight: 700; color: var(--gold);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.script-block h3 .time {
+  font-weight: 400; color: var(--muted); font-size: 0.72rem;
+  text-transform: none; letter-spacing: 0;
+}
+.script-line {
+  font-size: 0.82rem; color: var(--text); padding: 3px 0 3px 14px;
+  border-left: 2px solid var(--border); margin-bottom: 2px; line-height: 1.5;
+}
+.script-line strong { color: var(--gold); font-weight: 600; }
+.script-line em { color: var(--muted); font-style: normal; }
+.script-line.say { border-left-color: var(--blue-bright); }
+.script-line.ask { border-left-color: var(--amber); }
+.script-line.flag { border-left-color: var(--red); }
+.script-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+@media (max-width: 600px) {
+  .script-overlay.open { padding: 10px; }
+  .script-panel { max-height: 90vh; }
+}
+
+/* ── CHANGE LOG PANEL ── */
+.log-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+}
+.log-overlay.open { display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; }
+.log-panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); max-width: 640px; width: 100%;
+  max-height: 85vh; overflow-y: auto; padding: 0;
+}
+.log-header {
+  position: sticky; top: 0; background: var(--surface);
+  padding: 16px 20px 12px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; z-index: 1;
+}
+.log-header h2 { font-size: 1.1rem; font-weight: 700; }
+.log-header h2 span { color: var(--blue-bright); }
+.log-close {
+  background: none; border: none; color: var(--muted); font-size: 1.3rem;
+  cursor: pointer; padding: 4px 8px;
+}
+.log-close:hover { color: var(--text); }
+.log-body { padding: 12px 20px 24px; }
+.log-entry {
+  padding: 8px 0; border-bottom: 1px solid rgba(45,58,94,.5);
+  font-size: 0.8rem; line-height: 1.5;
+}
+.log-entry:last-child { border-bottom: none; }
+.log-ts { color: var(--muted); font-size: 0.7rem; font-family: monospace; }
+.log-action { font-weight: 600; }
+.log-action.add { color: var(--green); }
+.log-action.edit { color: var(--amber); }
+.log-action.delete { color: var(--red); }
+.log-action.note { color: var(--blue-bright); }
+.log-action.revert { color: var(--purple); }
+.log-detail { color: var(--muted); margin-left: 4px; }
+.log-revert-btn {
+  background: none; border: 1px solid var(--border); color: var(--purple);
+  font-size: 0.65rem; padding: 1px 6px; border-radius: 3px;
+  cursor: pointer; margin-left: 8px;
+}
+.log-revert-btn:hover { background: var(--purple); color: #fff; }
+.log-empty { color: var(--muted); font-size: 0.82rem; padding: 20px 0; text-align: center; }
+.log-actions {
+  display: flex; gap: 6px; padding: 0 20px 12px;
+}
+.log-actions button {
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--muted); padding: 4px 10px; border-radius: var(--radius);
+  cursor: pointer; font-size: 0.72rem;
+}
+.log-actions button:hover { color: var(--text); border-color: var(--border-highlight); }
 </style>
 </head>
 <body>
@@ -436,6 +539,8 @@ a:hover { text-decoration: underline; }
     <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>
     <button onclick="exportMarkdown()">Export MD</button>
+    <button onclick="toggleScript()" style="background:var(--gold);color:#000;border-color:var(--gold);font-weight:600">&#9654; Call Script</button>
+    <button onclick="toggleLog()">&#128221; Change Log</button>
     <span class="spacer"></span>
     <span class="read-only-banner" id="readOnlyBanner">READ-ONLY (past week)</span>
   </div>
@@ -837,11 +942,14 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-damit">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-damit')">
-        <span class="sub-title">DAMit VII <span class="badge badge-today">Mar 30 / Review Today</span></span>
+        <span class="sub-title">DAMit VII <span class="badge badge-today">Mar 30 / 1,150 Reg</span></span>
         <span class="sub-chevron" id="chv-sub-kc-damit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-damit">
-        <div class="item-text">Dan Whiting proof email reviewed. Stats ready. Credly certs configured.</div>
+        <span class="section-label done">ACCOMPLISHED</span>
+        <div class="item-text">1,150 registrations (as of Mar 24). Prep email blasting today (auto-send to new registrants). On-demand up within 2 hours with recap. More emails + LinkedIn posts planned.</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">New KPI: every member sends at least one person (Stephen, Amanda, Greg pushing). Daily recaps once training starts. Dan Whiting proof reviewed. Credly certs configured.</div>
         <textarea class="notes" data-key="kc-damit" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1128,6 +1236,114 @@ a:hover { text-decoration: underline; }
 </div>
 
 </div><!-- /.main -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     CHANGE LOG OVERLAY
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="log-overlay" id="logOverlay" onclick="if(event.target===this)toggleLog()">
+  <div class="log-panel">
+    <div class="log-header">
+      <h2><span>&#128221;</span> Change Log</h2>
+      <button class="log-close" onclick="toggleLog()">&times;</button>
+    </div>
+    <div class="log-actions">
+      <button onclick="exportLog()">Export Log</button>
+      <button onclick="clearLog()">Clear All</button>
+    </div>
+    <div class="log-body" id="logBody">
+      <div class="log-empty">No changes logged yet for this week.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     CALL SCRIPT OVERLAY
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="script-overlay" id="scriptOverlay" onclick="if(event.target===this)toggleScript()">
+  <div class="script-panel">
+    <div class="script-header">
+      <h2><span>&#9654;</span> Call Script</h2>
+      <button class="script-close" onclick="toggleScript()">&times;</button>
+    </div>
+    <div class="script-body">
+
+      <div class="script-block">
+        <h3>Opening <span class="time">~1 min</span></h3>
+        <div class="script-line say">"Hey everyone. Let's jump in &mdash; we have a lot to cover."</div>
+        <div class="script-line say">"Quick context: last real meeting was March 10. March 17 was brief. Let's catch up on 2 weeks of movement."</div>
+      </div>
+
+      <hr class="script-divider">
+
+      <div class="script-block">
+        <h3>1. Labs &mdash; CAP <span class="time">~5 min</span></h3>
+        <div class="script-line say">"CAP is covered in the weekly CAP call &mdash; just high-level flags here."</div>
+        <div class="script-line ask"><strong>Ask Greg:</strong> "Any update on the AmFam CMO letter to Sharina Smith?"</div>
+        <div class="script-line flag"><strong>Flag:</strong> Claritas blanket agreement still expired. Blocks new experiments.</div>
+        <div class="script-line ask"><strong>Ask:</strong> "GCE contract &mdash; Heba confirmed mid-April. Anything we need to do?"</div>
+        <div class="script-line say">"Custom Ink / Phil Auerbach &mdash; strong interest. Scoping calls being set up."</div>
+      </div>
+
+      <hr class="script-divider">
+
+      <div class="script-block">
+        <h3>2. Labs &mdash; A3 (Intuit + Campbell) <span class="time">~5 min</span></h3>
+        <div class="script-line say">"Intuit/Monks: we're on Call #4 &mdash; persona refinement. Creative concept selected. Rough cut target ~April 1."</div>
+        <div class="script-line flag"><strong>Flag:</strong> Legal review needed for AI-generated content. Persona $8M flagged.</div>
+        <div class="script-line say">"Campbell/Monks: In execution. Need update from the team on creative development status."</div>
+        <div class="script-line ask"><strong>Ask:</strong> "Novartis &mdash; Dave Carey ISI feasibility for video generation. Any word?"</div>
+      </div>
+
+      <hr class="script-divider">
+
+      <div class="script-block">
+        <h3>3. Labs &mdash; AURA <span class="time">~5 min</span></h3>
+        <div class="script-line ask"><strong>Ask:</strong> "AT&amp;T &mdash; I sent a follow-up. Any response? Where are we on pixel implementation?"</div>
+        <div class="script-line say">"Christopher Stanger is ambitious about scaling. We need 10M impressions over 4 weeks."</div>
+        <div class="script-line ask"><strong>Ask:</strong> "GM AURA &mdash; testing Buick or GMC. 15-25% conversion target. Status?"</div>
+      </div>
+
+      <hr class="script-divider">
+
+      <div class="script-block">
+        <h3>4. Labs &mdash; SIFT + ACE <span class="time">~3 min</span></h3>
+        <div class="script-line say">"SIFT is no longer paused &mdash; back on track with Cognitiv."</div>
+        <div class="script-line ask"><strong>Ask Alec:</strong> "Details on GM SIFT call?"</div>
+        <div class="script-line say">"ACE: VidMob/Kroger targeting CCS summer. Celtra stalled &mdash; Vania left."</div>
+        <div class="script-line ask"><strong>Ask:</strong> "AT&amp;T ACE &mdash; they built internally. What's our alternative vendor?"</div>
+      </div>
+
+      <hr class="script-divider">
+
+      <div class="script-block">
+        <h3>5. Knowledge Center <span class="time">~5 min</span></h3>
+        <div class="script-line say">"DAMit VII: proof reviewed today, ready to blast. March 30 session."</div>
+        <div class="script-line say">"MAC certification: belts progressing. 10K+ registrations."</div>
+        <div class="script-line say">"Agentic AI survey &mdash; launching this week."</div>
+        <div class="script-line ask"><strong>Ask:</strong> "Benchmark study &mdash; Jerome flagged data validity. Any resolution?"</div>
+      </div>
+
+      <hr class="script-divider">
+
+      <div class="script-block">
+        <h3>6. Community <span class="time">~3 min</span></h3>
+        <div class="script-line ask"><strong>Ask Greg:</strong> "David Berkowitz email &mdash; you flagged this. What do we need to discuss?"</div>
+        <div class="script-line say">"Slack community: strategy deck v3 finalized. Alec coordinating launch."</div>
+        <div class="script-line say">"CATS May 14: 120+ registrations, waitlist being set up."</div>
+        <div class="script-line say">"Great Debates: Starting June 20. Speakers TBD."</div>
+      </div>
+
+      <hr class="script-divider">
+
+      <div class="script-block">
+        <h3>Wrap-up <span class="time">~2 min</span></h3>
+        <div class="script-line say">"Let me quickly recap action items..."</div>
+        <div class="script-line say">"Anything else before we close?"</div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- ════════════════════════════════════════════════════════════════════════
      JAVASCRIPT
@@ -1450,6 +1666,146 @@ a:hover { text-decoration: underline; }
     });
     try { localStorage.setItem('altt-edits-' + getWeekKey(), JSON.stringify(edits)); } catch(e) {}
   }
+
+  /* ── Call Script Toggle ── */
+  window.toggleScript = function() {
+    const ov = document.getElementById('scriptOverlay');
+    ov.classList.toggle('open');
+  };
+
+  /* ── Change Log ── */
+  function getLogKey() { return 'altt-log-' + getWeekKey(); }
+
+  function getChangeLog() {
+    try { return JSON.parse(localStorage.getItem(getLogKey())) || []; } catch(e) { return []; }
+  }
+
+  function saveChangeLog(log) {
+    try { localStorage.setItem(getLogKey(), JSON.stringify(log)); } catch(e) {}
+  }
+
+  window.logChange = function(action, target, detail, snapshot) {
+    const log = getChangeLog();
+    log.push({
+      ts: new Date().toISOString(),
+      action: action, // add, edit, delete, note, revert
+      target: target,
+      detail: detail || '',
+      snapshot: snapshot || null
+    });
+    saveChangeLog(log);
+  };
+
+  window.toggleLog = function() {
+    const ov = document.getElementById('logOverlay');
+    ov.classList.toggle('open');
+    if (ov.classList.contains('open')) renderLog();
+  };
+
+  function renderLog() {
+    const body = document.getElementById('logBody');
+    const log = getChangeLog();
+    if (!log.length) {
+      body.innerHTML = '<div class="log-empty">No changes logged yet for this week.</div>';
+      return;
+    }
+    body.innerHTML = log.slice().reverse().map(function(e, ri) {
+      const i = log.length - 1 - ri;
+      const d = new Date(e.ts);
+      const ts = d.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' ' +
+                 d.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+      const revertBtn = e.snapshot ? ' <button class="log-revert-btn" onclick="revertChange('+i+')">Revert</button>' : '';
+      return '<div class="log-entry">' +
+        '<span class="log-ts">' + ts + '</span> ' +
+        '<span class="log-action ' + e.action + '">' + e.action.toUpperCase() + '</span> ' +
+        '<strong>' + e.target + '</strong>' +
+        (e.detail ? '<span class="log-detail">&mdash; ' + e.detail + '</span>' : '') +
+        revertBtn +
+        '</div>';
+    }).join('');
+  }
+
+  window.revertChange = function(index) {
+    const log = getChangeLog();
+    const entry = log[index];
+    if (!entry || !entry.snapshot) { alert('No snapshot to revert to.'); return; }
+    if (!confirm('Revert "' + entry.target + '" to state before this change?')) return;
+    // Restore the snapshot data
+    const data = entry.snapshot;
+    if (data.type === 'note') {
+      const el = document.querySelector('[data-key="' + data.key + '"]');
+      if (el) { el.value = data.value || ''; debounceSave(); }
+    }
+    logChange('revert', entry.target, 'Reverted to pre-change state');
+    renderLog();
+  };
+
+  window.exportLog = function() {
+    const log = getChangeLog();
+    if (!log.length) { alert('No changes to export.'); return; }
+    let md = '# ALTT Agenda Change Log — ' + getWeekKey() + '\n\n';
+    md += '| Time | Action | Item | Detail |\n|------|--------|------|--------|\n';
+    log.forEach(function(e) {
+      const d = new Date(e.ts);
+      const ts = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      md += '| ' + ts + ' | ' + e.action.toUpperCase() + ' | ' + e.target + ' | ' + (e.detail || '') + ' |\n';
+    });
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ALTT-ChangeLog-' + getWeekKey() + '.md';
+    a.click();
+  };
+
+  window.clearLog = function() {
+    if (!confirm('Clear all change log entries for this week?')) return;
+    saveChangeLog([]);
+    renderLog();
+  };
+
+  // Hook into existing edit/delete/add to auto-log
+  const origDeleteItem = window.deleteItem;
+  window.deleteItem = function(btn) {
+    const card = btn.closest('.sub-card');
+    const name = card.querySelector('.sub-title')?.textContent?.trim() || 'Unknown';
+    if (confirm('Delete "' + name + '"?')) {
+      logChange('delete', name, 'Item removed from agenda');
+      card.remove();
+      saveEdits();
+    }
+  };
+
+  const origFinishEdit = window.finishEdit;
+  window.finishEdit = function(card) {
+    if (!card || !card.classList.contains('editing')) return;
+    const oldTitle = card.querySelector('.sub-title')?.textContent?.trim();
+    card.classList.remove('editing');
+    const input = card.querySelector('.edit-title');
+    const title = card.querySelector('.sub-title');
+    if (input && title) {
+      const badge = title.querySelector('.badge');
+      const newTitle = input.value.trim();
+      title.textContent = newTitle + ' ';
+      if (badge) title.appendChild(badge);
+      if (oldTitle !== newTitle) logChange('edit', newTitle, 'Renamed from "' + oldTitle + '"');
+    }
+    card.querySelectorAll('.item-text').forEach(function(t) { t.contentEditable = 'false'; });
+    saveEdits();
+  };
+
+  // Log note changes (debounced)
+  let noteLogTimer = null;
+  document.addEventListener('input', function(e) {
+    if (e.target.matches('textarea[data-key]')) {
+      clearTimeout(noteLogTimer);
+      noteLogTimer = setTimeout(function() {
+        const key = e.target.getAttribute('data-key');
+        const card = e.target.closest('.sub-card');
+        const name = card ? (card.querySelector('.sub-title')?.textContent?.trim() || key) : key;
+        logChange('note', name, 'Notes updated', { type: 'note', key: key, value: e.target.value });
+      }, 3000); // Log after 3s of inactivity to avoid spam
+    }
+  });
 
   /* ── Init ── */
   updateWeekDisplay();
