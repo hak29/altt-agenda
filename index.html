@@ -8,17 +8,25 @@
 :root{
 --bg:#0a0f1a;--surface:#0f1628;--surface2:#162038;--surface3:#1d2a4a;
 --border:#253560;--text:#e8ecf4;--muted:#8892b0;--dim:#4a5580;
---accent:#ffa400;--accent2:#ffb833;--gold:#ffa400;
+--gold:#ffa400;--gold2:#ffb833;
+--blue:#6b8acd;--blue-dim:#4a6ba0;
 --navy:#0f1628;--navy2:#162038;--navy3:#1b2847;
---orange:#ff6b35;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
---purple:#8b5cf6;--blue:#3b82f6;--emerald:#10b981;--pink:#ec4899;
+--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
+--purple:#8b5cf6;--blue-bright:#3b82f6;--emerald:#10b981;--pink:#ec4899;
+--orange:#ff6b35;
 --radius:8px;--radius-lg:12px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:15px;scroll-behavior:smooth}
 body{font-family:'Segoe UI',Aptos,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
-a{color:var(--accent);text-decoration:none}
+a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--blue-dim)}
 
 /* Header */
 .header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;position:sticky;top:0;z-index:100}
@@ -31,15 +39,15 @@ a:hover{text-decoration:underline}
 /* Week Nav */
 .week-nav{display:flex;align-items:center;gap:8px}
 .week-nav button{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:var(--radius);cursor:pointer;font-size:.82rem;transition:all .15s}
-.week-nav button:hover{background:var(--surface3);border-color:var(--accent)}
-.week-nav .btn-today{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600}
-.week-nav .btn-today:hover{background:var(--accent2)}
+.week-nav button:hover{background:var(--surface3);border-color:var(--blue)}
+.week-nav .btn-today{background:var(--gold);color:#000;border-color:var(--gold);font-weight:600}
+.week-nav .btn-today:hover{background:var(--gold2)}
 .week-label{font-size:.95rem;font-weight:600;min-width:220px;text-align:center}
 
 /* Toolbar */
 .toolbar{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
 .toolbar button{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:var(--radius);cursor:pointer;font-size:.78rem;transition:all .15s}
-.toolbar button:hover{color:var(--text);border-color:var(--accent)}
+.toolbar button:hover{color:var(--text);border-color:var(--blue)}
 .save-indicator{font-size:.72rem;color:var(--green);margin-left:auto;opacity:0;transition:opacity .3s}
 .save-indicator.show{opacity:1}
 
@@ -47,856 +55,649 @@ a:hover{text-decoration:underline}
 .readonly-banner{display:none;background:var(--surface3);border:1px solid var(--amber);border-radius:var(--radius);padding:10px 16px;margin:12px 24px 0;font-size:.82rem;color:var(--amber);text-align:center}
 .readonly-banner.visible{display:block}
 
-/* Tabs */
-.tabs{display:flex;gap:0;background:var(--surface);border-bottom:2px solid var(--border);padding:0 24px;overflow-x:auto}
-.tab{padding:12px 22px;cursor:pointer;font-size:.88rem;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap;position:relative}
-.tab:hover{color:var(--text)}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.tab .badge{background:var(--accent);color:#000;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle}
+/* Main Content */
+.main{max-width:960px;margin:0 auto;padding:20px 24px 80px}
 
-/* Content */
-.content{max-width:1200px;margin:0 auto;padding:20px 24px 80px}
-.tab-panel{display:none}
-.tab-panel.active{display:block}
+/* KPI Bar */
+.kpi-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:16px}
+.kpi-bar h3{font-size:.8rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:600}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.kpi-item{display:flex;align-items:baseline;gap:8px;font-size:.85rem}
+.kpi-item .kpi-num{color:var(--gold);font-weight:700;font-size:1rem}
+.kpi-item .kpi-label{color:var(--text)}
 
 /* Stats Bar */
-.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;text-align:center}
-.stat-card .stat-value{font-size:1.5rem;font-weight:700;color:var(--accent)}
-.stat-card .stat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.stats-bar{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:120px;text-align:center}
+.stat-num{font-size:1.3rem;font-weight:700;color:var(--gold)}
+.stat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
 
-/* Alert */
-.alert{background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(245,158,11,.08));border:1px solid var(--red);border-radius:var(--radius);padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-size:.85rem}
-.alert-icon{font-size:1.2rem}
-.alert-text{color:var(--red);font-weight:500}
+/* Attention Alert */
+.attention-bar{background:var(--surface);border:1px solid var(--red);border-radius:var(--radius);padding:12px 18px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.attention-bar .att-item{font-size:.85rem;color:var(--text)}
+.attention-bar .att-item strong{color:var(--red)}
+.attention-bar .att-item.deadline strong{color:var(--amber)}
 
 /* Section */
-.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px;overflow:hidden}
-.section-header{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .15s}
+.section{margin-bottom:28px}
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;user-select:none}
 .section-header:hover{background:var(--surface2)}
-.section-header .chevron{color:var(--muted);font-size:.7rem;transition:transform .2s;flex-shrink:0}
-.section-header.collapsed .chevron{transform:rotate(-90deg)}
-.section-tag{display:inline-block;padding:2px 10px;border-radius:4px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.tag-cap{background:rgba(255,107,53,.15);color:var(--orange)}
-.tag-a3{background:rgba(139,92,246,.15);color:var(--purple)}
-.tag-aura{background:rgba(59,130,246,.15);color:var(--blue)}
-.tag-sift{background:rgba(245,158,11,.15);color:var(--amber)}
-.tag-ace{background:rgba(16,185,129,.15);color:var(--emerald)}
-.tag-arc{background:rgba(236,72,153,.15);color:var(--pink)}
-.section-title{font-size:.95rem;font-weight:600;flex:1}
-.section-count{font-size:.72rem;color:var(--muted);background:var(--surface3);padding:2px 8px;border-radius:10px}
-.section-partner{font-size:.72rem;color:var(--dim);margin-left:auto}
-.section-body{padding:0 18px 16px;display:block}
-.section-header.collapsed+.section-body{display:none}
+.section-title{font-size:1.05rem;font-weight:700;color:var(--blue);display:flex;align-items:center;gap:10px}
+.section-title .time-est{font-size:.72rem;color:var(--muted);font-weight:400;background:var(--surface2);padding:2px 8px;border-radius:10px}
+.section-toggle{color:var(--muted);font-size:.8rem;transition:transform .2s}
+.section-body{background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:16px}
+.section-body.collapsed{display:none}
 
-/* Item */
-.item{border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;background:var(--surface2);transition:border-color .15s}
-.item:hover{border-color:var(--surface3)}
-.item-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.item-name{font-weight:600;font-size:.9rem}
-.item-status{font-size:.65rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
-.status-action{background:rgba(239,68,68,.15);color:var(--red)}
-.status-contract{background:rgba(59,130,246,.15);color:var(--blue)}
-.status-urgent{background:rgba(239,68,68,.2);color:var(--red);border:1px solid var(--red)}
-.status-pending{background:rgba(245,158,11,.15);color:var(--amber)}
-.status-stalled{background:rgba(139,92,246,.15);color:var(--purple)}
-.status-new{background:rgba(34,197,94,.15);color:var(--green)}
-.status-execution{background:rgba(16,185,129,.15);color:var(--emerald)}
-.status-active{background:rgba(59,130,246,.15);color:var(--blue)}
-.status-delayed{background:rgba(245,158,11,.15);color:var(--amber)}
-.status-evaluation{background:rgba(139,92,246,.15);color:var(--purple)}
-.status-review{background:rgba(255,164,0,.15);color:var(--accent)}
-.status-deadline{background:rgba(239,68,68,.2);color:var(--red)}
-.status-due{background:rgba(239,68,68,.15);color:var(--red)}
-.status-multi{background:rgba(139,92,246,.12);color:var(--purple)}
-.status-progress{background:rgba(59,130,246,.12);color:var(--blue)}
-.status-launching{background:rgba(34,197,94,.15);color:var(--green)}
-.status-info{background:rgba(136,146,176,.12);color:var(--muted)}
+/* Lab Sub-Section */
+.lab-section{margin-bottom:20px}
+.lab-section:last-child{margin-bottom:0}
+.lab-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.lab-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 10px;border-radius:10px;color:#fff}
+.lab-tag.cap{background:var(--orange)}
+.lab-tag.a3{background:var(--purple)}
+.lab-tag.aura{background:var(--blue-bright)}
+.lab-tag.sift{background:var(--amber);color:#000}
+.lab-tag.ace{background:var(--emerald)}
+.lab-tag.arc{background:var(--pink)}
+.lab-name{font-size:.9rem;font-weight:600;color:var(--text)}
+.lab-partner{font-size:.75rem;color:var(--muted)}
 
-.item-detail{font-size:.82rem;color:var(--text);margin-bottom:4px;padding-left:4px;line-height:1.5}
-.item-detail .marker{font-weight:600;margin-right:4px}
+/* Items */
+.item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.item:last-child{margin-bottom:0}
+.item-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.item-name{font-weight:600;font-size:.9rem;color:var(--text)}
+.item-status{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:8px}
+.status-action{background:rgba(59,130,246,.15);color:var(--blue-bright);border:1px solid rgba(59,130,246,.3)}
+.status-urgent{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.status-pending{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.status-execution{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.status-evaluation{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3)}
+.status-active{background:rgba(107,138,205,.15);color:var(--blue);border:1px solid rgba(107,138,205,.3)}
+.status-stalled{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.status-delayed{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.status-progress{background:rgba(16,185,129,.15);color:var(--emerald);border:1px solid rgba(16,185,129,.3)}
+.status-review{background:rgba(107,138,205,.15);color:var(--blue);border:1px solid rgba(107,138,205,.3)}
+.status-due{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);animation:pulse-due 2s infinite}
+.status-new{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3)}
+.status-launching{background:rgba(16,185,129,.15);color:var(--emerald);border:1px solid rgba(16,185,129,.3)}
+@keyframes pulse-due{0%,100%{opacity:1}50%{opacity:.6}}
+
+.item-detail{font-size:.82rem;color:var(--muted);padding:2px 0;padding-left:20px;position:relative}
+.marker{position:absolute;left:0;top:3px;font-size:.75rem;width:16px;text-align:center}
 .marker-done{color:var(--green)}
-.marker-next{color:var(--accent)}
+.marker-next{color:var(--blue)}
 .marker-help{color:var(--red)}
 
-.item-sources{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.source{font-size:.65rem;padding:1px 7px;border-radius:3px;font-weight:500}
-.source-call{background:rgba(34,197,94,.12);color:var(--green)}
-.source-email{background:rgba(245,158,11,.12);color:var(--amber)}
-.source-action{background:rgba(239,68,68,.12);color:var(--red)}
+.item-sources{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.source{font-size:.65rem;padding:2px 6px;border-radius:4px;background:var(--surface3);color:var(--muted);border:1px solid var(--border)}
+.source-call{border-color:rgba(107,138,205,.3);color:var(--blue)}
+.source-email{border-color:rgba(16,185,129,.3);color:var(--emerald)}
+.source-slack{border-color:rgba(139,92,246,.3);color:var(--purple)}
 
 .item-notes{margin-top:8px}
-.item-notes textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:8px 10px;font-size:.8rem;font-family:inherit;resize:vertical;min-height:36px;line-height:1.4;transition:border-color .15s}
-.item-notes textarea:focus{outline:none;border-color:var(--accent)}
-.item-notes textarea.readonly{opacity:.5;cursor:not-allowed}
+.item-notes textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:8px 10px;font-size:.8rem;font-family:inherit;resize:vertical;min-height:32px;transition:border-color .15s}
+.item-notes textarea:focus{outline:none;border-color:var(--blue)}
+.item-notes textarea::placeholder{color:var(--dim)}
 
-/* Compact items (no detail) */
-.item-compact{border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:6px;background:var(--surface2);font-size:.84rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.item-compact .item-name{font-weight:500;font-size:.84rem}
+/* Stalled list */
+.stalled-list{font-size:.78rem;color:var(--dim);padding:4px 0 0 8px;font-style:italic}
+
+/* Sub-items (for Knowledge/Community) */
+.sub-section{margin-top:14px}
+.sub-section h4{font-size:.82rem;color:var(--blue);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
 
 /* Action Items */
-.action-group{margin-bottom:20px}
-.action-group-title{font-size:.9rem;font-weight:600;color:var(--accent);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.action-item{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;border-radius:var(--radius);margin-bottom:4px;font-size:.84rem;background:var(--surface2);border:1px solid var(--border)}
-.action-num{color:var(--accent);font-weight:700;min-width:22px}
-.action-text{flex:1}
-.action-owner{font-size:.72rem;color:var(--muted);background:var(--surface3);padding:2px 8px;border-radius:4px;white-space:nowrap;align-self:center}
+.action-group{margin-bottom:16px}
+.action-group h4{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.action-group h4 .count{background:var(--surface3);color:var(--muted);font-size:.7rem;padding:1px 7px;border-radius:8px;font-weight:400}
+.action-item{display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:4px;font-size:.82rem}
+.action-item input[type=checkbox]{margin-top:3px;accent-color:var(--blue)}
+.action-item label{flex:1;color:var(--text);cursor:pointer}
+.action-item .action-tag{font-size:.65rem;padding:1px 6px;border-radius:4px;background:rgba(239,68,68,.15);color:var(--red);font-weight:600;white-space:nowrap}
+.action-item .action-tag.today{background:rgba(239,68,68,.2);color:var(--red)}
+.action-item .action-tag.monitor{background:rgba(245,158,11,.15);color:var(--amber)}
+.action-item .action-tag.schedule{background:rgba(107,138,205,.15);color:var(--blue)}
+.action-item .action-tag.confirm{background:rgba(16,185,129,.15);color:var(--emerald)}
+.action-item .action-tag.escalation{background:rgba(239,68,68,.15);color:var(--red)}
+
+.team-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.team-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
+.team-card h5{font-size:.8rem;font-weight:600;color:var(--blue);margin-bottom:6px}
+.team-card li{font-size:.78rem;color:var(--muted);margin-bottom:3px;list-style:none;padding-left:12px;position:relative}
+.team-card li::before{content:">";position:absolute;left:0;color:var(--blue)}
 
 /* Meeting Notes */
-.meeting-notes-area{margin-top:20px}
-.meeting-notes-area h3{font-size:.95rem;font-weight:600;margin-bottom:8px;color:var(--accent)}
-.meeting-notes-area textarea{width:100%;min-height:300px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:12px;font-size:.85rem;font-family:inherit;resize:vertical;line-height:1.5}
-.meeting-notes-area textarea:focus{outline:none;border-color:var(--accent)}
+.meeting-notes textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:12px 14px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:120px}
+.meeting-notes textarea:focus{outline:none;border-color:var(--blue)}
+.meeting-notes textarea::placeholder{color:var(--dim)}
 
 /* Responsive */
-@media(max-width:768px){
-  .header-top{flex-direction:column;align-items:flex-start}
-  .stats-bar{grid-template-columns:repeat(2,1fr)}
-  .tabs{padding:0 12px}
-  .tab{padding:10px 14px;font-size:.82rem}
-  .content{padding:16px 12px 60px}
-  .section-header{flex-wrap:wrap}
-  .section-partner{margin-left:0;width:100%}
-  .item-header{flex-direction:column}
-}
-@media(max-width:480px){
-  .stats-bar{grid-template-columns:1fr 1fr}
-  .week-label{min-width:auto;font-size:.82rem}
+@media(max-width:640px){
+  .header{padding:12px 16px}
+  .main{padding:16px}
+  .stats-bar{gap:8px}
+  .stat{min-width:80px;padding:8px 10px}
+  .stat-num{font-size:1.1rem}
+  .kpi-grid{grid-template-columns:1fr}
+  .team-actions{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<div class="header">
+<header class="header">
   <div class="header-top">
     <div class="header-brand">
-      <h1>ALTT Weekly Agenda<span>| MMA Global</span></h1>
+      <h1>ALTT <span>Weekly Agenda</span></h1>
+      <span class="header-meta">MMA Global &middot; AI Leadership Think Tank</span>
     </div>
     <div class="week-nav">
-      <button onclick="prevWeek()" title="Previous week">&larr;</button>
-      <div class="week-label" id="weekLabel"></div>
-      <button onclick="nextWeek()" title="Next week">&rarr;</button>
+      <button onclick="prevWeek()">&#9664; Prev</button>
+      <span class="week-label" id="weekLabel"></span>
+      <button onclick="nextWeek()">Next &#9654;</button>
       <button class="btn-today" onclick="jumpToday()">Today</button>
     </div>
-    <div class="header-meta" id="headerMeta">Data as of Mar 24, 2026</div>
   </div>
   <div class="toolbar">
-    <button onclick="collapseAll()">Collapse All</button>
-    <button onclick="expandAll()">Expand All</button>
-    <button onclick="exportMarkdown()">Export Markdown</button>
-    <span class="save-indicator" id="saveIndicator">Saved</span>
+    <button onclick="toggleAllSections(true)">Expand All</button>
+    <button onclick="toggleAllSections(false)">Collapse All</button>
+    <button onclick="exportMarkdown()">Export MD</button>
+    <span class="save-indicator" id="saveInd">Saved</span>
   </div>
+</header>
+
+<div class="readonly-banner" id="readonlyBanner">
+  You are viewing a past week. Notes are read-only.
 </div>
 
-<!-- Read-only banner -->
-<div class="readonly-banner" id="readonlyBanner">You are viewing a past week. Notes are read-only.</div>
+<!-- MAIN -->
+<main class="main">
 
-<!-- TABS -->
-<div class="tabs">
-  <div class="tab active" data-tab="labs" onclick="switchTab('labs')">Labs<span class="badge">97</span></div>
-  <div class="tab" data-tab="knowledge" onclick="switchTab('knowledge')">Knowledge Center<span class="badge">11</span></div>
-  <div class="tab" data-tab="community" onclick="switchTab('community')">Community<span class="badge">8</span></div>
-  <div class="tab" data-tab="actions" onclick="switchTab('actions')">Action Items<span class="badge">16</span></div>
-</div>
+  <!-- KPIs -->
+  <div class="kpi-bar">
+    <h3>2026 KPIs</h3>
+    <div class="kpi-grid">
+      <div class="kpi-item"><span class="kpi-num">20+</span><span class="kpi-label">new AI experiments across 6 labs</span></div>
+      <div class="kpi-item"><span class="kpi-num">10,000+</span><span class="kpi-label">training registrations (DAMit + MAC)</span></div>
+      <div class="kpi-item"><span class="kpi-num">Launch</span><span class="kpi-label">community platform (Slack + events)</span></div>
+      <div class="kpi-item"><span class="kpi-num">3+</span><span class="kpi-label">research papers / guides published</span></div>
+    </div>
+  </div>
 
-<!-- CONTENT -->
-<div class="content">
-
-<!-- ========== LABS TAB ========== -->
-<div class="tab-panel active" id="panel-labs">
-
+  <!-- Stats Bar -->
   <div class="stats-bar">
-    <div class="stat-card"><div class="stat-value">6</div><div class="stat-label">Active Labs</div></div>
-    <div class="stat-card"><div class="stat-value">97</div><div class="stat-label">Experiments</div></div>
-    <div class="stat-card"><div class="stat-value">160%</div><div class="stat-label">Avg Lift (CAP)</div></div>
-    <div class="stat-card"><div class="stat-value">$665K</div><div class="stat-label">Pipeline Value</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Active Labs</div></div>
+    <div class="stat"><div class="stat-num">97</div><div class="stat-label">Total Experiments</div></div>
+    <div class="stat"><div class="stat-num">29</div><div class="stat-label">CAP Completed</div></div>
+    <div class="stat"><div class="stat-num">9,334</div><div class="stat-label">DAMit Registrations</div></div>
+    <div class="stat"><div class="stat-num">+160%</div><div class="stat-label">CAP Avg Lift</div></div>
   </div>
 
-  <div class="alert">
-    <span class="alert-icon">&#9888;</span>
-    <span class="alert-text">10 experiments need attention &nbsp;|&nbsp; 6 deadlines this week (4 today)</span>
+  <!-- Attention Alert -->
+  <div class="attention-bar">
+    <div class="att-item"><strong>10</strong> experiments need attention</div>
+    <div class="att-item deadline"><strong>6</strong> deadlines this week</div>
+    <div class="att-item"><strong>2</strong> urgent items</div>
   </div>
 
-  <!-- ===== CAP ===== -->
-  <div class="section" id="sec-cap">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-tag tag-cap">CAP</span>
-      <span class="section-title">Consortium for AI Personalization</span>
-      <span class="section-count">29 active &middot; 29 completed</span>
-      <span class="section-partner">Claritas / Rex Briggs</span>
+  <!-- ========================================== -->
+  <!-- LABS (~25 min) -->
+  <!-- ========================================== -->
+  <div class="section" id="sec-labs">
+    <div class="section-header" onclick="toggleSection('sec-labs')">
+      <div class="section-title">Labs <span class="time-est">~25 min</span></div>
+      <span class="section-toggle" id="toggle-sec-labs">&#9660;</span>
     </div>
-    <div class="section-body">
+    <div class="section-body" id="body-sec-labs">
 
-      <!-- GM -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">GM (GMC CTV)</span>
-          <span class="item-status status-action">Action</span>
+      <!-- CAP -->
+      <div class="lab-section">
+        <div class="lab-header">
+          <span class="lab-tag cap">CAP</span>
+          <span class="lab-name">Creative AI Personalization</span>
+          <span class="lab-partner">Claritas / Rex Briggs</span>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 19 CAP Weekly &mdash; brand name usage discussed, strict fee structure emphasized by Greg</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Confirm Norm's green light. Contract signing + media plan. CTV expansion to Roku + Amazon Prime (brand KPI, 4x impressions, $1M+ budget). AURA crossover test (Buick/GMC).</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Need Greg to re-engage Roku as MMA member for collaboration</div>
-        <div class="item-sources"><span class="source source-call">CAP Weekly Mar 19</span><span class="source source-action">Greg action</span></div>
-        <div class="item-notes"><textarea data-key="cap-gm" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- GCE -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">GCE</span>
-          <span class="item-status status-contract">Contract in Progress</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">GM Update (from Rex)</span>
+            <span class="item-status status-action">Action</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 19: brand name usage resolved + fee structure aligned</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Norm green light needed, CTV expansion Roku + Prime, AURA crossover</div>
+          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Greg re-engage Roku contact</div>
+          <div class="item-sources">
+            <span class="source source-call">Call Mar 19</span>
+          </div>
+          <div class="item-notes"><textarea data-key="cap-gm-update" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 16 media strategy call (43 min) &mdash; video campaign plan: 75% PvE (55% YouTube, 45% OTT/CTV). Mar 23: Chelsea (Claritas) sent DPA to Chad Wilson. Chad forwarded to Heba (procurement). Heba confirmed receipt.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Heba to review DPA and respond. Finalize contract with legal. Target mid-April launch.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Hassan pushed back on contract terms &mdash; outstanding revisions need resolution</div>
-        <div class="item-sources"><span class="source source-call">Strategy call Mar 16</span><span class="source source-email">DPA email Mar 23</span></div>
-        <div class="item-notes"><textarea data-key="cap-gce" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Claritas CAP Blanket -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Claritas CAP Blanket Agreement</span>
-          <span class="item-status status-urgent">Urgent - New</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Claritas CAP Blanket Agreement</span>
+            <span class="item-status status-urgent">Urgent</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Don Sklenka flagged Mar 23: agreement expired Dec 31</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Re-up decision needed &mdash; covers ALL CAP experiments</div>
+          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Greg: decision on renewal terms</div>
+          <div class="item-sources">
+            <span class="source source-email">Email Mar 23</span>
+          </div>
+          <div class="item-notes"><textarea data-key="cap-blanket-agreement" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Don Sklenka flagged (Mar 23 email) that blanket agreement expired Dec 31</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Decide whether to re-up terms</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Needs discussion with Greg &mdash; contract covers all CAP experiments</div>
-        <div class="item-sources"><span class="source source-email">Don email Mar 23</span><span class="source source-action">Greg decision</span></div>
-        <div class="item-notes"><textarea data-key="cap-blanket" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- AmFam -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">AmFam</span>
-          <span class="item-status status-pending">Pending Data</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">AmFam Data Cooperation</span>
+            <span class="item-status status-pending">Pending</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Briefing note written for Greg</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Greg to write CMO Sharina Smith</div>
+          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Board relationship at risk if delayed</div>
+          <div class="item-notes"><textarea data-key="cap-amfam" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Briefing note written (DOCX created). 28.8% lift achieved.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Greg to write to CMO Sharina Smith for data cooperation. Forensic audit if data provided.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Data reconciliation issues block deeper analysis. Board relationship at risk if no cooperation.</div>
-        <div class="item-sources"><span class="source source-action">Greg action</span><span class="source source-email">Briefing note</span></div>
-        <div class="item-notes"><textarea data-key="cap-amfam" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Campbell -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Campbell</span>
-          <span class="item-status status-urgent">Urgent - Stalled 14d</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">POSSIBLE Sessions</span>
+            <span class="item-status status-review">Review</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Which brands present? Finalize speakers + format</div>
+          <div class="item-notes"><textarea data-key="cap-possible" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Feb 23 overview presented (29 experiments, 18 brands, 160% lift). $35K/4-week sprint scoped.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Await response from Campbell team after follow-up call</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Stalled 14 days &mdash; needs escalation or re-engagement. Circana proxy for sales signal is a challenge.</div>
-        <div class="item-sources"><span class="source source-call">Overview Feb 23</span><span class="source source-action">Escalation needed</span></div>
-        <div class="item-notes"><textarea data-key="cap-campbell" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Custom Ink -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Custom Ink</span>
-          <span class="item-status status-new">New - Exploration</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Impact Numbers / Rex White Paper</span>
+            <span class="item-status status-active">Strategic</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Rex shared draft: conversion density, KPI selection, creative diversity</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Pre-launch checklist, 2 data scientists from Mike</div>
+          <div class="item-notes"><textarea data-key="cap-whitepaper" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 10 intro call with Phil Auerbach. Strong interest across paid search, CRM, analytics, brand.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Schedule follow-up with Phil. Include Don/Mike from Claritas. CRM personalization feasibility check.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> No timeline set for Custom Ink's internal regroup &mdash; follow-up risk</div>
-        <div class="item-sources"><span class="source source-call">Intro call Mar 10</span></div>
-        <div class="item-notes"><textarea data-key="cap-customink" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- GroundTruth -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">GroundTruth</span>
-          <span class="item-status status-due">Due Today</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">CAP vs Claritas Positioning</span>
+            <span class="item-status status-review">Review</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Side-by-side comparison needed for clarity</div>
+          <div class="item-notes"><textarea data-key="cap-positioning" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 16 discussion (25.5 min) &mdash; 160% engagement increase demonstrated from 30 lab tests</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Matt Knight to review Claritas partnership status. Rosie checking Home Depot study. Hassan verify data lag reduction with Rex.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Customer Advisory Board presentation follow-up needed</div>
-        <div class="item-sources"><span class="source source-call">Discussion Mar 16</span><span class="source source-action">Due today</span></div>
-        <div class="item-notes"><textarea data-key="cap-groundtruth" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Clorox -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Clorox</span>
-          <span class="item-status status-due">Due Today - New</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">New Pipeline</span>
+            <span class="item-status status-active">Pipeline</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> <strong>Clorox</strong> &mdash; schedule intro via Amanda</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> <strong>Marriott</strong> &mdash; call with Michelle, POSSIBLE event</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> <strong>Ford</strong> &mdash; Don interested, scheduling</div>
+          <div class="item-notes"><textarea data-key="cap-pipeline" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 19 CAP Weekly &mdash; interest flagged</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Schedule introductory call with Jade (via Amanda Hyland). Discuss CAP experiment scope.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> None</div>
-        <div class="item-sources"><span class="source source-call">CAP Weekly Mar 19</span></div>
-        <div class="item-notes"><textarea data-key="cap-clorox" placeholder="Notes..."></textarea></div>
       </div>
 
-      <!-- Marriott -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Marriott</span>
-          <span class="item-status status-due">Due Today - New</span>
+      <!-- A3 -->
+      <div class="lab-section">
+        <div class="lab-header">
+          <span class="lab-tag a3">A3</span>
+          <span class="lab-name">Agentic AI Advertising</span>
+          <span class="lab-partner">Monks</span>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 19 CAP Weekly &mdash; calls being scheduled from membership team</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Schedule call with Michelle. Leverage POSSIBLE event for in-person intro with Andy.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> None</div>
-        <div class="item-sources"><span class="source source-call">CAP Weekly Mar 19</span></div>
-        <div class="item-notes"><textarea data-key="cap-marriott" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Peloton -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Peloton</span>
-          <span class="item-status status-multi">Multi-Lab - Stalled</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Intuit</span>
+            <span class="item-status status-execution">Execution</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 20 Call #3: creative concept selected</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Call #4: persona refinement, concept approval, legal review AI content, rough cut ~Apr 1</div>
+          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Legal review needed; persona $8M flagged</div>
+          <div class="item-sources">
+            <span class="source source-call">Call Mar 20</span>
+          </div>
+          <div class="item-notes"><textarea data-key="a3-intuit" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 6 intro call (62 min). 5 AI use cases identified. Strong interest.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Wait for FY2025 (July). Leah scheduling CAP deep-dive with Rex &amp; Don.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Team fully booked until June. Need patience but maintain relationship.</div>
-        <div class="item-sources"><span class="source source-call">Intro call Mar 6</span></div>
-        <div class="item-notes"><textarea data-key="cap-peloton" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Ford -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Ford</span>
-          <span class="item-status status-new">New</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Campbell + Monks</span>
+            <span class="item-status status-execution">Execution</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> In progress with Monks</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Track progress, Hassan brief team</div>
+          <div class="item-notes"><textarea data-key="a3-campbell" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 19 CAP Weekly &mdash; Don interested, calls being scheduled</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Schedule introductory call</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> None</div>
-        <div class="item-sources"><span class="source source-call">CAP Weekly Mar 19</span></div>
-        <div class="item-notes"><textarea data-key="cap-ford" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Arcelik Turkey -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Arcelik Turkey</span>
-          <span class="item-status status-deadline">Due Mar 31</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Novartis</span>
+            <span class="item-status status-evaluation">Evaluation</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Video generation for FDA label changes &mdash; Dave Carey ISI feasibility</div>
+          <div class="item-notes"><textarea data-key="a3-novartis" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Brand willing to proceed but waiting for org changes</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Check in if no Guliz response by end of March</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> None</div>
-        <div class="item-sources"><span class="source source-email">Status check</span></div>
-        <div class="item-notes"><textarea data-key="cap-arcelik" placeholder="Notes..."></textarea></div>
+
+        <div class="stalled-list">Stalled: Peloton (FY2027), SC Johnson, The Hartford, Chipotle</div>
       </div>
 
-      <!-- Impact Numbers / Rex White Paper -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Impact Numbers / Rex White Paper</span>
-          <span class="item-status status-progress">In Progress</span>
+      <!-- AURA -->
+      <div class="lab-section">
+        <div class="lab-header">
+          <span class="lab-tag aura">AURA</span>
+          <span class="lab-name">AI Uncovering Responsive Audiences</span>
+          <span class="lab-partner">Claritas</span>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Rex shared draft white paper on campaign lift challenges. AI scoring system in development.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Rex to present analysis on why latest experiments have lower impact. Pre-launch creative checklist.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Need 2 data scientists from Mike (Claritas) assigned to Rex</div>
-        <div class="item-sources"><span class="source source-email">Rex draft</span><span class="source source-action">Mike/Claritas</span></div>
-        <div class="item-notes"><textarea data-key="cap-rexpaper" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Compact items -->
-      <div class="item-compact">
-        <span class="item-name">CAP vs Claritas</span>
-        <span class="item-status status-info">Info</span>
-        <span style="color:var(--muted);font-size:.8rem">Need side-by-side comparison</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">PMAX / Advantage+</span>
-        <span class="item-status status-info">Info</span>
-        <span style="color:var(--muted);font-size:.8rem">Measurement approach designed for GM</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">CAP Main Stage + Roundtable</span>
-        <span class="item-status status-info">Info</span>
-        <span style="color:var(--muted);font-size:.8rem">Finalize speakers and format</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">CAP Insights Series</span>
-        <span class="item-status status-info">Info</span>
-        <span style="color:var(--muted);font-size:.8rem">Webinar? TBD</span>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ===== A3 ===== -->
-  <div class="section" id="sec-a3">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-tag tag-a3">A3</span>
-      <span class="section-title">Agentic AI Advertising</span>
-      <span class="section-count">23 active &middot; 2 completed</span>
-      <span class="section-partner">Monks</span>
-    </div>
-    <div class="section-body">
-
-      <!-- Intuit -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Intuit</span>
-          <span class="item-status status-execution">Execution - Active</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">AT&amp;T</span>
+            <span class="item-status status-pending">Pending FUP</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Pixel implementation progressing (Mar 6), Hassan sent follow-up</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Check response from Christopher Stanger, cookie details from Claritas</div>
+          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Clarify 10M impression minimum</div>
+          <div class="item-sources">
+            <span class="source source-email">Email Mar 6</span>
+          </div>
+          <div class="item-notes"><textarea data-key="aura-att" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 20 Call #3 &mdash; Creative concept selected. Mar 20 Call #4 &mdash; Persona/character refinement. Weekly calls ongoing (Feb 27 &ndash; Apr 3).</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Confirm concept approval. Loop in legal for AI-generated content review. Review rough cut of video (~April 1). Confirm persona revenue figures realistic ($8M physical therapy flagged).</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Legal review of AI-generated content before external use. KPI difficulty lessons from other campaigns apply.</div>
-        <div class="item-sources"><span class="source source-call">Calls Mar 20</span><span class="source source-action">Legal review</span></div>
-        <div class="item-notes"><textarea data-key="a3-intuit" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Campbell + Monks -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Campbell + Monks</span>
-          <span class="item-status status-execution">Execution</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">GM (Buick/GMC)</span>
+            <span class="item-status status-active">Moving</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Feb 18: testing Buick/GMC, 15-25% conversion target, Pronghorn + Dynata</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Christine connect segments</div>
+          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Dynamic expansion delayed 6 months</div>
+          <div class="item-sources">
+            <span class="source source-call">Call Feb 18</span>
+          </div>
+          <div class="item-notes"><textarea data-key="aura-gm" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> In execution (4.2) per pipeline. Feb 27 joint call happened.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Track progress. Hassan to brief team on outcomes.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Cross-reference with CAP Campbell stall</div>
-        <div class="item-sources"><span class="source source-call">Joint call Feb 27</span></div>
-        <div class="item-notes"><textarea data-key="a3-campbell" placeholder="Notes..."></textarea></div>
+
+        <div class="stalled-list">Pending: Peloton (due Mar 31 &mdash; Leah scheduling) | Stalled: Visa, Microsoft, Hilton, Delta</div>
       </div>
 
-      <!-- Novartis -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Novartis</span>
-          <span class="item-status status-evaluation">Evaluation</span>
+      <!-- SIFT -->
+      <div class="lab-section">
+        <div class="lab-header">
+          <span class="lab-tag sift">SIFT</span>
+          <span class="lab-name">Semantic Inference for Targeting</span>
+          <span class="lab-partner">Cognitiv</span>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Deep dives stage. Video generation project for 200-300 annual FDA label changes.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Dave Carey reviewing ISI video use case feasibility</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Scope needs clarification</div>
-        <div class="item-sources"><span class="source source-call">Deep dives</span></div>
-        <div class="item-notes"><textarea data-key="a3-novartis" placeholder="Notes..."></textarea></div>
-      </div>
 
-      <!-- Compact stalled items -->
-      <div class="item-compact">
-        <span class="item-name">Peloton</span>
-        <span class="item-status status-stalled">Stalled - FY2027</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">SC Johnson</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">The Hartford</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">Chipotle</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ===== AURA ===== -->
-  <div class="section" id="sec-aura">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-tag tag-aura">AURA</span>
-      <span class="section-title">AI Uncovering Responsive Audiences</span>
-      <span class="section-count">26 active</span>
-      <span class="section-partner">Claritas / Rex Briggs</span>
-    </div>
-    <div class="section-body">
-
-      <!-- AT&T -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">AT&amp;T</span>
-          <span class="item-status status-pending">Pending Follow-Up</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Back on Track</span>
+            <span class="item-status status-active">Active</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> No longer paused &mdash; "zero to one" vendor</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> GM call (ask Alec). Shortlist: Delta, DraftKings, 1-800 Flowers, SC Johnson</div>
+          <div class="item-notes"><textarea data-key="sift-main" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Pixel implementation progressing (Mar 6 email). Hassan responded to compliance questions. Feb 19 call &mdash; very interested in AURA+CAP combined approach, starting AURA first.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Hassan sent follow-up &mdash; check for response. Cookie details + full pixel code requested from Claritas. Christopher Stanger (new senior hire) ambitious about scaling.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Clarify impression minimums (min 10M over 4 weeks). Rex occupied.</div>
-        <div class="item-sources"><span class="source source-email">Mar 6 email</span><span class="source source-call">Feb 19 call</span></div>
-        <div class="item-notes"><textarea data-key="aura-att" placeholder="Notes..."></textarea></div>
       </div>
 
-      <!-- GM Buick/GMC -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">GM (Buick/GMC)</span>
-          <span class="item-status status-active">Moving</span>
+      <!-- ACE -->
+      <div class="lab-section">
+        <div class="lab-header">
+          <span class="lab-tag ace">ACE</span>
+          <span class="lab-name">AI-Driven Creative Effectiveness</span>
+          <span class="lab-partner">VidMob / Celtra</span>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Feb 18 call &mdash; moving forward. Testing Buick or GMC. Pronghorn + Dynata brand lift surveys integration.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Christine to connect Pronghorn segments to Dynata. Goal: 15-25% conversion rate increase.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Dynamic audience expansion delayed 6 months to stabilize rollout.</div>
-        <div class="item-sources"><span class="source source-call">Feb 18 call</span></div>
-        <div class="item-notes"><textarea data-key="aura-gm" placeholder="Notes..."></textarea></div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">VidMob / Kroger</span>
+            <span class="item-status status-delayed">Delayed</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Kay re-engaged</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Video creative intelligence, CCS summer target, completion ~May</div>
+          <div class="item-notes"><textarea data-key="ace-vidmob-kroger" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Celtra</span>
+            <span class="item-status status-stalled">Stalled</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Vania left; CTO Miha meeting held. Halo Intelligence alternative</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Q: Celtra clients = MMA members?</div>
+          <div class="item-notes"><textarea data-key="ace-celtra" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">AT&amp;T (Parthiv)</span>
+            <span class="item-status status-review">Alternative</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Own solution, won't use VidMob/Celtra &mdash; need alternative path</div>
+          <div class="item-notes"><textarea data-key="ace-att" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Intuit / Celtra</span>
+            <span class="item-status status-stalled">Stalled</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Test failed, asked 3x</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Need next steps for Intuit</div>
+          <div class="item-notes"><textarea data-key="ace-intuit-celtra" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Peloton ACE</span>
+            <span class="item-status status-due">Due Today</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Confirm Vas reached out</div>
+          <div class="item-notes"><textarea data-key="ace-peloton" placeholder="Notes..."></textarea></div>
+        </div>
       </div>
 
-      <!-- Peloton AURA -->
-      <div class="item-compact">
-        <span class="item-name">Peloton</span>
-        <span class="item-status status-deadline">Due Mar 31</span>
-        <span style="color:var(--muted);font-size:.8rem">Leah to schedule AURA deep-dive with Rex and Peloton team</span>
-      </div>
+      <!-- ARC -->
+      <div class="lab-section">
+        <div class="lab-header">
+          <span class="lab-tag arc">ARC</span>
+          <span class="lab-name">AEO via Reddit</span>
+          <span class="lab-partner">Reddit</span>
+        </div>
 
-      <!-- Stalled -->
-      <div class="item-compact">
-        <span class="item-name">Visa</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">Microsoft</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">Hilton</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">Delta</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">Universal Orlando</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Reddit Research</span>
+            <span class="item-status status-progress">In Progress</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Baselines: auto, travel, anti-aging, beauty</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Mid-Q2 results. Brown University potential. Rex unavailable until post-training</div>
+          <div class="item-notes"><textarea data-key="arc-reddit" placeholder="Notes..."></textarea></div>
+        </div>
       </div>
 
     </div>
   </div>
 
-  <!-- ===== SIFT ===== -->
-  <div class="section" id="sec-sift">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-tag tag-sift">SIFT</span>
-      <span class="section-title">Semantic Inference for Targeting</span>
-      <span class="section-count">3 active</span>
-      <span class="section-partner">Cognitiv</span>
+  <!-- ========================================== -->
+  <!-- KNOWLEDGE CENTER (~8 min) -->
+  <!-- ========================================== -->
+  <div class="section" id="sec-knowledge">
+    <div class="section-header" onclick="toggleSection('sec-knowledge')">
+      <div class="section-title">Knowledge Center <span class="time-est">~8 min</span></div>
+      <span class="section-toggle" id="toggle-sec-knowledge">&#9660;</span>
     </div>
-    <div class="section-body">
+    <div class="section-body" id="body-sec-knowledge">
 
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Status: Back on track</span>
-          <span class="item-status status-active">Active</span>
+      <div class="sub-section">
+        <h4>Training Programs</h4>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">DAMit VII</span>
+            <span class="item-status status-due">Mar 30 / Review Today</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Dan Whiting sent prep email proof for review TODAY</div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Stats: 9,334 reg / 5,061 attendees / 2,129 certs</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Need more Credly certs. Rex: AI self-updating system with Cal Poly</div>
+          <div class="item-sources">
+            <span class="source source-email">Email Mar 23</span>
+          </div>
+          <div class="item-notes"><textarea data-key="kc-damit" placeholder="Notes..."></textarea></div>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> No longer paused. Proceeding.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Call with GM (ask Alec for details). Brand interest confirmation needed before scheduling.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Shortlist: Delta, DraftKings, 1-800 Flowers, SC Johnson. "Zero to one" &mdash; another vendor to evaluate.</div>
-        <div class="item-sources"><span class="source source-call">Status update</span><span class="source source-action">Alec action</span></div>
-        <div class="item-notes"><textarea data-key="sift-status" placeholder="Notes..."></textarea></div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">MAC (AI Certification)</span>
+            <span class="item-status status-progress">Building</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> White Belt ready, Yellow near done, Green Belt March</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> ChatGPT clone ~$0.50/user. Alec requested training slides access (Mar 23)</div>
+          <div class="item-notes"><textarea data-key="kc-mac" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">MAF (AI Fluency &mdash; Internal)</span>
+            <span class="item-status status-progress">Active</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> 96% AI policy pass, 90% training done</div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Alec: AI-AF Office Hours, Granola workspace</div>
+          <div class="item-notes"><textarea data-key="kc-maf" placeholder="Notes..."></textarea></div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h4>Research Initiatives</h4>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Agentic AI Survey</span>
+            <span class="item-status status-active">Launching</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Vas programming survey, launch soon</div>
+          <div class="item-notes"><textarea data-key="kc-agentic" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Benchmark Study</span>
+            <span class="item-status status-review">Review</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 9 draft review</div>
+          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Jerome flagged data validity</div>
+          <div class="item-notes"><textarea data-key="kc-benchmark" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">CoLoop</span>
+            <span class="item-status status-new">New</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Mar 24 demo &mdash; qualitative research platform</div>
+          <div class="item-notes"><textarea data-key="kc-coloop" placeholder="Notes..."></textarea></div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h4>Papers &amp; Guides</h4>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Rex Paper</span>
+            <span class="item-status status-active">Backburner</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> AI workforce &mdash; on hold</div>
+          <div class="item-notes"><textarea data-key="kc-rex-paper" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">Okra (OKR Tool)</span>
+            <span class="item-status status-progress">Ready</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-done">&#10003;</span> OKR tool ready, constitutional alignment</div>
+          <div class="item-notes"><textarea data-key="kc-okra" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">BCG Operating Model</span>
+            <span class="item-status status-review">Status?</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Check status</div>
+          <div class="item-notes"><textarea data-key="kc-bcg" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">RAIL Guides</span>
+            <span class="item-status status-review">Status?</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Check status</div>
+          <div class="item-notes"><textarea data-key="kc-rail" placeholder="Notes..."></textarea></div>
+        </div>
+
+        <div class="item">
+          <div class="item-header">
+            <span class="item-name">GPT for Marketing</span>
+            <span class="item-status status-progress">WIP</span>
+          </div>
+          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Empirical Generalization GPT</div>
+          <div class="item-notes"><textarea data-key="kc-gpt-marketing" placeholder="Notes..."></textarea></div>
+        </div>
       </div>
 
     </div>
   </div>
 
-  <!-- ===== ACE ===== -->
-  <div class="section" id="sec-ace">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-tag tag-ace">ACE</span>
-      <span class="section-title">AI-Driven Creative Effectiveness</span>
-      <span class="section-count">11 active &middot; 1 completed</span>
-      <span class="section-partner">VidMob, Celtra</span>
+  <!-- ========================================== -->
+  <!-- COMMUNITY (~7 min) -->
+  <!-- ========================================== -->
+  <div class="section" id="sec-community">
+    <div class="section-header" onclick="toggleSection('sec-community')">
+      <div class="section-title">Community <span class="time-est">~7 min</span></div>
+      <span class="section-toggle" id="toggle-sec-community">&#9660;</span>
     </div>
-    <div class="section-body">
-
-      <!-- VidMob / Kroger -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">VidMob / Kroger</span>
-          <span class="item-status status-delayed">Delayed</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Kay re-engaged VidMob + Adelaide. Kickoff call delayed due to coordination.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Video creative intelligence for Kroger (evolving Kellanova work). Target: CCS summer event. Completion ~May.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Coordination issues persist</div>
-        <div class="item-sources"><span class="source source-email">Kay update</span></div>
-        <div class="item-notes"><textarea data-key="ace-vidmob" placeholder="Notes..."></textarea></div>
-      </div>
-
-      <!-- Celtra -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Celtra</span>
-          <span class="item-status status-stalled">Stalled</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Key contact Vania left. First model lacked data.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Meeting with CTO Miha. Halo Intelligence as possible alternative (Vas to demo).</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Q: Who are Celtra clients that are also MMA members?</div>
-        <div class="item-sources"><span class="source source-action">Vas action</span></div>
-        <div class="item-notes"><textarea data-key="ace-celtra" placeholder="Notes..."></textarea></div>
-      </div>
-
-      <!-- Compact items -->
-      <div class="item-compact">
-        <span class="item-name">AT&amp;T (Parthiv)</span>
-        <span class="item-status status-info">Info</span>
-        <span style="color:var(--muted);font-size:.8rem">Has own solution, won't use VidMob/Celtra. Need alternative.</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">Intuit / Celtra</span>
-        <span class="item-status status-stalled">Stalled</span>
-        <span style="color:var(--muted);font-size:.8rem">Test failed. Asked 3x, no confirmation. Need to re-engage.</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">Peloton</span>
-        <span class="item-status status-due">Due Today</span>
-        <span style="color:var(--muted);font-size:.8rem">Confirm Vas reached out for ACE deep-dive scheduling</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">ALC Poll Interest</span>
-        <span class="item-status status-info">Info</span>
-        <span style="color:var(--muted);font-size:.8rem">Joe Veverka (Microsoft), Amy Wakelam (Bayer), Heather Steinhart (Del City), Shannon Doubleday (Hilton)</span>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ===== ARC ===== -->
-  <div class="section" id="sec-arc">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-tag tag-arc">ARC</span>
-      <span class="section-title">AEO via Reddit Communities</span>
-      <span class="section-count">5 active</span>
-      <span class="section-partner">Reddit</span>
-    </div>
-    <div class="section-body">
-
-      <!-- Reddit Research -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Reddit Research</span>
-          <span class="item-status status-progress">In Progress</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Data sharing progressing. Baselines: automotive, travel, anti-aging, beauty. Project rebooted after staff changes.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Refocused on CEO Summit deliverables. Expected mid-Q2 results.</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Rex temporarily unavailable. Brown University Information Futures Lab potential partner.</div>
-        <div class="item-sources"><span class="source source-email">Data sharing</span></div>
-        <div class="item-notes"><textarea data-key="arc-reddit" placeholder="Notes..."></textarea></div>
-      </div>
-
-      <div class="item-compact">
-        <span class="item-name">GM</span>
-        <span class="item-status status-stalled">Stalled 14d</span>
-        <span style="color:var(--muted);font-size:.8rem">Exploration</span>
-      </div>
-
-    </div>
-  </div>
-
-</div><!-- end labs panel -->
-
-<!-- ========== KNOWLEDGE CENTER TAB ========== -->
-<div class="tab-panel" id="panel-knowledge">
-
-  <div class="stats-bar">
-    <div class="stat-card"><div class="stat-value">10K+</div><div class="stat-label">Registrations</div></div>
-    <div class="stat-card"><div class="stat-value">5,061</div><div class="stat-label">Attendees</div></div>
-    <div class="stat-card"><div class="stat-value">2,129</div><div class="stat-label">Certificates</div></div>
-    <div class="stat-card"><div class="stat-value">96%</div><div class="stat-label">AI Policy Pass</div></div>
-  </div>
-
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-title">Programs &amp; Curriculum</span>
-      <span class="section-count">3 items</span>
-    </div>
-    <div class="section-body">
-
-      <!-- DAMit -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">DAMit &mdash; Decoding AI for Marketers</span>
-          <span class="item-status status-review">Mar 30 - Review Today</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Rex developing AI self-updating training system with Cal Poly students. Dan Whiting sent prep email proof for DAMit VII (Mar 23) &mdash; needs Hassan's review TODAY.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> March 30 session. Target 3,000 registrations 2026 (+50%). Purchase more Credly certs (exceeded 2K).</div>
-        <div class="item-detail"><span class="marker marker-help">&#9888;</span> Hassan needs to review and approve prep email proof from Dan</div>
-        <div class="item-sources"><span class="source source-email">Dan email Mar 23</span><span class="source source-action">Hassan review</span></div>
-        <div class="item-notes"><textarea data-key="kc-damit" placeholder="Notes..."></textarea></div>
-      </div>
-
-      <!-- MAC -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">MAC &mdash; Marketing AI Certification</span>
-          <span class="item-status status-deadline">Deadline Passed - Mar 15</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> White Belt ready. Yellow Belt near done. MMA ChatGPT clone built (~$0.50/user). Alec requested access to training slides (Mar 23).</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Green Belt (30-40hrs) in March. On-demand content, 10 tests, AI auto-grading.</div>
-        <div class="item-sources"><span class="source source-email">Alec request Mar 23</span></div>
-        <div class="item-notes"><textarea data-key="kc-mac" placeholder="Notes..."></textarea></div>
-      </div>
-
-      <!-- MAF -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">MAF &mdash; MMA AI Foundry (Internal)</span>
-          <span class="item-status status-active">Active</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> 96% passed AI policy, 90% completed training. Alec set up AI-AF Office Hours. Created Granola workspace for team.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Zapier workflow rollout + AI agent pilots continuing</div>
-        <div class="item-sources"><span class="source source-call">Internal</span></div>
-        <div class="item-notes"><textarea data-key="kc-maf" placeholder="Notes..."></textarea></div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-title">Research &amp; Publications</span>
-      <span class="section-count">8 items</span>
-    </div>
-    <div class="section-body">
-
-      <!-- State of Agentic AI -->
-      <div class="item-compact">
-        <span class="item-name">State of Agentic AI</span>
-        <span class="item-status status-progress">In Progress</span>
-        <span style="color:var(--muted);font-size:.8rem">IOPEX + Monks. Vas programming survey. Launch expected soon.</span>
-      </div>
-
-      <!-- Benchmark Study -->
-      <div class="item-compact">
-        <span class="item-name">Benchmark Study</span>
-        <span class="item-status status-progress">In Progress</span>
-        <span style="color:var(--muted);font-size:.8rem">MediaRadar / Adelaide / 314 Research. Mar 9 draft reviewed. Jerome flagged data validity at granular cuts.</span>
-      </div>
-
-      <!-- CoLoop -->
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">CoLoop</span>
-          <span class="item-status status-new">New</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 24 demo call (31 min). Platform for qualitative research with CMOs.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Evaluate for ALTT member research</div>
-        <div class="item-sources"><span class="source source-call">Demo Mar 24</span></div>
-        <div class="item-notes"><textarea data-key="kc-coloop" placeholder="Notes..."></textarea></div>
-      </div>
-
-      <!-- Compact research items -->
-      <div class="item-compact">
-        <span class="item-name">AI Workforce Paper (Rex)</span>
-        <span class="item-status status-info">Backburner</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">Okra (OKR Tool)</span>
-        <span class="item-status status-info">Ready</span>
-        <span style="color:var(--muted);font-size:.8rem">Rex advised reconnect with Cameron</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">BCG Operating Model</span>
-        <span class="item-status status-info">Status?</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">RAIL Guides</span>
-        <span class="item-status status-info">Status?</span>
-      </div>
-      <div class="item-compact">
-        <span class="item-name">GPT for Marketing Generalizations</span>
-        <span class="item-status status-progress">WIP</span>
-        <span style="color:var(--muted);font-size:.8rem">Empirical Generalization GPT</span>
-      </div>
-
-    </div>
-  </div>
-
-</div><!-- end knowledge panel -->
-
-<!-- ========== COMMUNITY TAB ========== -->
-<div class="tab-panel" id="panel-community">
-
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-title">Events &amp; Calendar</span>
-      <span class="section-count">4 items</span>
-    </div>
-    <div class="section-body">
+    <div class="section-body" id="body-sec-community">
 
       <div class="item">
         <div class="item-header">
           <span class="item-name">ALC Schedule 2026</span>
-          <span class="item-status status-active">Active</span>
+          <span class="item-status status-active">Confirmed</span>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Q1 done.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Q2 POSSIBLE May 12-13. Q3 Sept 1-3. Q4 Nov 17-19.</div>
-        <div class="item-sources"><span class="source source-call">Schedule set</span></div>
+        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Q1 done</div>
+        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Q2: May 12-13 | Q3: Sept 1-3 | Q4: Nov 17-19</div>
         <div class="item-notes"><textarea data-key="comm-alc" placeholder="Notes..."></textarea></div>
       </div>
 
       <div class="item">
         <div class="item-header">
-          <span class="item-name">CATS Event &mdash; May 14</span>
-          <span class="item-status status-pending">Pending</span>
+          <span class="item-name">CATS</span>
+          <span class="item-status status-execution">May 14</span>
         </div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Pending Meta facility. 120+ registrations. Waitlist + member priority.</div>
-        <div class="item-sources"><span class="source source-email">Registration data</span></div>
+        <div class="item-detail"><span class="marker marker-done">&#10003;</span> 120+ registrations, Meta facility pending, waitlist active</div>
         <div class="item-notes"><textarea data-key="comm-cats" placeholder="Notes..."></textarea></div>
       </div>
 
       <div class="item">
         <div class="item-header">
-          <span class="item-name">Great Debates &mdash; June 20</span>
-          <span class="item-status status-progress">In Progress</span>
+          <span class="item-name">Great Debates</span>
+          <span class="item-status status-active">June 20</span>
         </div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> 6-7 part webinar series. Dan coordinating speakers. Hassan adding brand names.</div>
-        <div class="item-sources"><span class="source source-action">Hassan + Dan</span></div>
+        <div class="item-detail"><span class="marker marker-next">&rarr;</span> 6-7 part webinar, Dan coordinating speakers</div>
         <div class="item-notes"><textarea data-key="comm-debates" placeholder="Notes..."></textarea></div>
       </div>
-
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Bodhium Labs / Kartik Hosanagar</span>
-          <span class="item-status status-new">New</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 20 call with Greg &mdash; AI-driven commerce/generative engine optimization discussion</div>
-        <div class="item-sources"><span class="source source-call">Call Mar 20</span></div>
-        <div class="item-notes"><textarea data-key="comm-bodhium" placeholder="Notes..."></textarea></div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">
-      <span class="chevron">&#9660;</span>
-      <span class="section-title">Channels &amp; Engagement</span>
-      <span class="section-count">4 items</span>
-    </div>
-    <div class="section-body">
 
       <div class="item">
         <div class="item-header">
           <span class="item-name">Slack Community</span>
           <span class="item-status status-launching">Launching</span>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Strategy deck v3 finalized. Alec creating NA AI Foundry channel. David Berkowitz discussion.</div>
-        <div class="item-sources"><span class="source source-action">Alec action</span></div>
+        <div class="item-detail"><span class="marker marker-done">&#10003;</span> v3 deck finalized</div>
+        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Alec: NA AI Foundry channel. David Berkowitz onboarding</div>
         <div class="item-notes"><textarea data-key="comm-slack" placeholder="Notes..."></textarea></div>
-      </div>
-
-      <div class="item-compact">
-        <span class="item-name">Awards</span>
-        <span class="item-status status-info">TBD</span>
-      </div>
-
-      <div class="item-compact">
-        <span class="item-name">Reddit Community</span>
-        <span class="item-status status-info">Info</span>
-        <span style="color:var(--muted);font-size:.8rem">Non-members, biz dev, thought leadership</span>
       </div>
 
       <div class="item">
@@ -904,286 +705,350 @@ a:hover{text-decoration:underline}
           <span class="item-name">Talent</span>
           <span class="item-status status-active">Active</span>
         </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Adam Raines new head. 8-10 positions. AI screening tools.</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Rex: belt courses as self-qualifiers.</div>
-        <div class="item-sources"><span class="source source-call">Internal</span></div>
+        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Adam Raines: 8-10 positions, AI screening, belt courses as qualifiers</div>
         <div class="item-notes"><textarea data-key="comm-talent" placeholder="Notes..."></textarea></div>
+      </div>
+
+      <div class="item">
+        <div class="item-header">
+          <span class="item-name">Bodhium Labs</span>
+          <span class="item-status status-new">New</span>
+        </div>
+        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 20 call with Greg</div>
+        <div class="item-detail"><span class="marker marker-next">&rarr;</span> AI commerce / GEO &mdash; evaluate fit</div>
+        <div class="item-notes"><textarea data-key="comm-bodhium" placeholder="Notes..."></textarea></div>
       </div>
 
     </div>
   </div>
 
-</div><!-- end community panel -->
+  <!-- ========================================== -->
+  <!-- ACTION ITEMS (~5 min) -->
+  <!-- ========================================== -->
+  <div class="section" id="sec-actions">
+    <div class="section-header" onclick="toggleSection('sec-actions')">
+      <div class="section-title">Action Items <span class="time-est">~5 min</span></div>
+      <span class="section-toggle" id="toggle-sec-actions">&#9660;</span>
+    </div>
+    <div class="section-body" id="body-sec-actions">
 
-<!-- ========== ACTION ITEMS TAB ========== -->
-<div class="tab-panel" id="panel-actions">
+      <div class="action-group">
+        <h4>Hassan <span class="count">11</span></h4>
+        <div class="action-item">
+          <input type="checkbox" id="h1" data-key="action-h1">
+          <label for="h1">Review DAMit VII prep email proof (Dan)</label>
+          <span class="action-tag today">TODAY</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h2" data-key="action-h2">
+          <label for="h2">Claritas blanket agreement &mdash; discuss re-up with Greg</label>
+          <span class="action-tag today">URGENT</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h3" data-key="action-h3">
+          <label for="h3">GCE contract &mdash; monitor DPA review by Heba</label>
+          <span class="action-tag monitor">MONITOR</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h4" data-key="action-h4">
+          <label for="h4">GroundTruth &mdash; deadline today</label>
+          <span class="action-tag today">TODAY</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h5" data-key="action-h5">
+          <label for="h5">Clorox &mdash; schedule intro call</label>
+          <span class="action-tag schedule">SCHEDULE</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h6" data-key="action-h6">
+          <label for="h6">Marriott &mdash; schedule call</label>
+          <span class="action-tag schedule">SCHEDULE</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h7" data-key="action-h7">
+          <label for="h7">Peloton ACE &mdash; confirm Vas outreach</label>
+          <span class="action-tag confirm">CONFIRM</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h8" data-key="action-h8">
+          <label for="h8">AT&amp;T AURA &mdash; check follow-up response</label>
+          <span class="action-tag confirm">CONFIRM</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h9" data-key="action-h9">
+          <label for="h9">Campbell &mdash; escalation (14d stalled)</label>
+          <span class="action-tag escalation">ESCALATION</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h10" data-key="action-h10">
+          <label for="h10">Custom Ink &mdash; schedule follow-up</label>
+          <span class="action-tag schedule">SCHEDULE</span>
+        </div>
+        <div class="action-item">
+          <input type="checkbox" id="h11" data-key="action-h11">
+          <label for="h11">Intuit A3 &mdash; legal review</label>
+          <span class="action-tag monitor">MONITOR</span>
+        </div>
+      </div>
 
-  <div class="action-group">
-    <div class="action-group-title">Hassan's Priority Items</div>
-    <div class="action-item"><span class="action-num">1</span><span class="action-text">Review DAMit VII prep email proof (Dan Whiting asking TODAY)</span><span class="action-owner">Hassan</span></div>
-    <div class="action-item"><span class="action-num">2</span><span class="action-text">Claritas CAP blanket agreement expired &mdash; discuss re-up with Greg (Don Sklenka email Mar 23)</span><span class="action-owner">Hassan + Greg</span></div>
-    <div class="action-item"><span class="action-num">3</span><span class="action-text">GCE contract &mdash; DPA progressing, monitor Heba's review</span><span class="action-owner">Hassan</span></div>
-    <div class="action-item"><span class="action-num">4</span><span class="action-text">GroundTruth &mdash; deadline today: verify data lag with Rex, CAB presentation</span><span class="action-owner">Hassan + Rex</span></div>
-    <div class="action-item"><span class="action-num">5</span><span class="action-text">Clorox &mdash; schedule intro call with Jade via Amanda</span><span class="action-owner">Hassan</span></div>
-    <div class="action-item"><span class="action-num">6</span><span class="action-text">Marriott &mdash; schedule call with Michelle</span><span class="action-owner">Hassan</span></div>
-    <div class="action-item"><span class="action-num">7</span><span class="action-text">Peloton ACE &mdash; confirm Vas reached out</span><span class="action-owner">Hassan + Vas</span></div>
-    <div class="action-item"><span class="action-num">8</span><span class="action-text">AT&amp;T AURA &mdash; check for response to follow-up</span><span class="action-owner">Hassan</span></div>
-    <div class="action-item"><span class="action-num">9</span><span class="action-text">Campbell &mdash; 14d stalled, needs escalation</span><span class="action-owner">Hassan</span></div>
-    <div class="action-item"><span class="action-num">10</span><span class="action-text">Custom Ink &mdash; schedule follow-up with Phil Auerbach</span><span class="action-owner">Hassan</span></div>
-    <div class="action-item"><span class="action-num">11</span><span class="action-text">Intuit A3 &mdash; legal review of AI-generated content</span><span class="action-owner">Hassan</span></div>
+      <div class="team-actions">
+        <div class="team-card">
+          <h5>Greg</h5>
+          <ul>
+            <li>AmFam CMO letter</li>
+            <li>Norm green light</li>
+            <li>Roku re-engagement</li>
+            <li>Claritas contract re-up</li>
+          </ul>
+        </div>
+        <div class="team-card">
+          <h5>Rex</h5>
+          <ul>
+            <li>White paper</li>
+            <li>AmFam forensic</li>
+            <li>Training curriculum</li>
+            <li>Data scientists</li>
+          </ul>
+        </div>
+        <div class="team-card">
+          <h5>Alec</h5>
+          <ul>
+            <li>SIFT/GM calls</li>
+            <li>AI-AF Office Hours</li>
+            <li>NA AI Foundry channel</li>
+          </ul>
+        </div>
+        <div class="team-card">
+          <h5>Vas</h5>
+          <ul>
+            <li>Celtra/VidMob outreach</li>
+            <li>Peloton ACE</li>
+            <li>Reddit</li>
+            <li>CoLoop eval</li>
+          </ul>
+        </div>
+        <div class="team-card">
+          <h5>Leah</h5>
+          <ul>
+            <li>Peloton AURA scheduling</li>
+            <li>Board deck distribution</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meeting-notes" style="margin-top:20px">
+        <h4 style="font-size:.85rem;font-weight:600;color:var(--blue);margin-bottom:8px">Live Meeting Notes</h4>
+        <textarea data-key="meeting-notes" placeholder="Type meeting notes here..."></textarea>
+      </div>
+
+    </div>
   </div>
 
-  <div class="action-group">
-    <div class="action-group-title">Greg Stuart</div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">AmFam CMO letter to Sharina Smith for data cooperation</span><span class="action-owner">Greg</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Norm green light (GM CTV expansion)</span><span class="action-owner">Greg</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Re-engage Roku as MMA member</span><span class="action-owner">Greg</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Claritas CAP blanket contract re-up decision</span><span class="action-owner">Greg</span></div>
-  </div>
-
-  <div class="action-group">
-    <div class="action-group-title">Rex Briggs</div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">White paper on lift challenges &mdash; present analysis on lower impact experiments</span><span class="action-owner">Rex</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Forensic audit AmFam (if data provided)</span><span class="action-owner">Rex</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Training curriculum (DAMit self-updating system)</span><span class="action-owner">Rex</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Data scientists negotiation &mdash; 2 from Mike (Claritas)</span><span class="action-owner">Rex</span></div>
-  </div>
-
-  <div class="action-group">
-    <div class="action-group-title">Alec Foster</div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">SIFT/GM calls &mdash; provide details to Hassan</span><span class="action-owner">Alec</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">AI-AF Office Hours &mdash; continue running</span><span class="action-owner">Alec</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">NA AI Foundry Slack channel creation</span><span class="action-owner">Alec</span></div>
-  </div>
-
-  <div class="action-group">
-    <div class="action-group-title">Vas</div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Celtra/VidMob outreach &mdash; Halo Intelligence demo</span><span class="action-owner">Vas</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Peloton ACE deep-dive scheduling</span><span class="action-owner">Vas</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Reddit monitoring (ARC lab)</span><span class="action-owner">Vas</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">CoLoop platform evaluation</span><span class="action-owner">Vas</span></div>
-  </div>
-
-  <div class="action-group">
-    <div class="action-group-title">Leah</div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Peloton AURA deep-dive scheduling with Rex</span><span class="action-owner">Leah</span></div>
-    <div class="action-item"><span class="action-num">&bull;</span><span class="action-text">Board deck distribution</span><span class="action-owner">Leah</span></div>
-  </div>
-
-  <!-- Meeting Notes -->
-  <div class="meeting-notes-area">
-    <h3>Meeting Notes &mdash; Live</h3>
-    <textarea data-key="meeting-notes" placeholder="Type meeting notes here. Auto-saves every 600ms..."></textarea>
-  </div>
-
-</div><!-- end actions panel -->
-
-</div><!-- end content -->
+</main>
 
 <script>
-/* ===== WEEK MANAGEMENT ===== */
-let currentWeekOffset = 0;
+/* ===== Week Navigation ===== */
+let weekOffset = 0;
+const STORAGE_PREFIX = 'altt-agenda-';
 
 function getMonday(d) {
-  const date = new Date(d);
-  const day = date.getDay();
-  const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-  date.setDate(diff);
-  date.setHours(0, 0, 0, 0);
-  return date;
+  const dt = new Date(d);
+  const day = dt.getDay();
+  const diff = dt.getDate() - day + (day === 0 ? -6 : 1);
+  dt.setDate(diff);
+  dt.setHours(0, 0, 0, 0);
+  return dt;
 }
 
-function addWeeks(date, weeks) {
-  const d = new Date(date);
-  d.setDate(d.getDate() + weeks * 7);
-  return d;
-}
-
-function formatDate(d) {
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+function getCurrentMonday() {
+  const now = new Date();
+  const monday = getMonday(now);
+  monday.setDate(monday.getDate() + weekOffset * 7);
+  return monday;
 }
 
 function getWeekKey() {
-  const monday = addWeeks(getMonday(new Date()), currentWeekOffset);
-  const y = monday.getFullYear();
-  const m = String(monday.getMonth() + 1).padStart(2, '0');
-  const day = String(monday.getDate()).padStart(2, '0');
-  return 'altt-' + y + '-' + m + '-' + day;
+  const m = getCurrentMonday();
+  return m.toISOString().slice(0, 10);
+}
+
+function formatWeekLabel() {
+  const m = getCurrentMonday();
+  const f = new Date(m);
+  f.setDate(f.getDate() + 4);
+  const opts = { month: 'short', day: 'numeric' };
+  const mStr = m.toLocaleDateString('en-US', opts);
+  const fStr = f.toLocaleDateString('en-US', opts);
+  const year = m.getFullYear();
+  return `Week of ${mStr} – ${fStr}, ${year}`;
 }
 
 function updateWeekDisplay() {
-  const monday = addWeeks(getMonday(new Date()), currentWeekOffset);
-  const friday = new Date(monday);
-  friday.setDate(friday.getDate() + 4);
-  document.getElementById('weekLabel').textContent =
-    'Week of ' + formatDate(monday) + ' \u2013 ' + formatDate(friday);
-
-  const todayMonday = getMonday(new Date());
-  const isPast = todayMonday.getTime() > monday.getTime();
-  const banner = document.getElementById('readonlyBanner');
-  banner.classList.toggle('visible', isPast);
-
-  document.querySelectorAll('.item-notes textarea, .meeting-notes-area textarea').forEach(function(ta) {
-    if (isPast) {
-      ta.classList.add('readonly');
-      ta.setAttribute('readonly', 'readonly');
-    } else {
-      ta.classList.remove('readonly');
-      ta.removeAttribute('readonly');
-    }
-  });
-
+  document.getElementById('weekLabel').textContent = formatWeekLabel();
   loadNotes();
+  updateReadOnly();
 }
 
-function prevWeek() { currentWeekOffset--; updateWeekDisplay(); }
-function nextWeek() { currentWeekOffset++; updateWeekDisplay(); }
-function jumpToday() { currentWeekOffset = 0; updateWeekDisplay(); }
+function prevWeek() { weekOffset--; updateWeekDisplay(); }
+function nextWeek() { weekOffset++; updateWeekDisplay(); }
+function jumpToday() { weekOffset = 0; updateWeekDisplay(); }
 
-/* ===== AUTO-SAVE (600ms debounce) ===== */
-let saveTimer = null;
+/* ===== Read-Only Mode ===== */
+function isCurrentWeek() {
+  const todayMonday = getMonday(new Date()).toISOString().slice(0, 10);
+  return getWeekKey() === todayMonday;
+}
+
+function updateReadOnly() {
+  const ro = !isCurrentWeek();
+  const banner = document.getElementById('readonlyBanner');
+  banner.classList.toggle('visible', ro);
+  document.querySelectorAll('textarea').forEach(ta => {
+    ta.readOnly = ro;
+    ta.style.opacity = ro ? '.6' : '1';
+  });
+  document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.disabled = ro;
+    cb.style.opacity = ro ? '.6' : '1';
+  });
+}
+
+/* ===== Storage ===== */
+function getStorageKey() {
+  return STORAGE_PREFIX + getWeekKey();
+}
 
 function saveNotes() {
-  const key = getWeekKey();
   const data = {};
-  document.querySelectorAll('textarea[data-key]').forEach(function(ta) {
-    if (ta.value.trim()) {
-      data[ta.getAttribute('data-key')] = ta.value;
-    }
+  document.querySelectorAll('textarea[data-key]').forEach(ta => {
+    if (ta.value.trim()) data[ta.dataset.key] = ta.value;
+  });
+  document.querySelectorAll('input[type=checkbox][data-key]').forEach(cb => {
+    if (cb.checked) data[cb.dataset.key] = true;
   });
   try {
-    localStorage.setItem(key, JSON.stringify(data));
-    showSaveIndicator();
-  } catch (e) { /* quota exceeded fallback */ }
+    localStorage.setItem(getStorageKey(), JSON.stringify(data));
+    showSaved();
+  } catch (e) { console.warn('Save failed:', e); }
 }
 
 function loadNotes() {
-  const key = getWeekKey();
-  let data = {};
   try {
-    const raw = localStorage.getItem(key);
-    if (raw) data = JSON.parse(raw);
-  } catch (e) {}
-  document.querySelectorAll('textarea[data-key]').forEach(function(ta) {
-    ta.value = data[ta.getAttribute('data-key')] || '';
+    const raw = localStorage.getItem(getStorageKey());
+    const data = raw ? JSON.parse(raw) : {};
+    document.querySelectorAll('textarea[data-key]').forEach(ta => {
+      ta.value = data[ta.dataset.key] || '';
+    });
+    document.querySelectorAll('input[type=checkbox][data-key]').forEach(cb => {
+      cb.checked = !!data[cb.dataset.key];
+    });
+  } catch (e) { console.warn('Load failed:', e); }
+}
+
+/* ===== Debounced Auto-Save ===== */
+let saveTimer = null;
+function debouncedSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveNotes, 600);
+}
+
+function showSaved() {
+  const ind = document.getElementById('saveInd');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 1500);
+}
+
+/* ===== Section Toggle ===== */
+function toggleSection(id) {
+  const body = document.getElementById('body-' + id);
+  const toggle = document.getElementById('toggle-' + id);
+  const collapsed = body.classList.toggle('collapsed');
+  toggle.innerHTML = collapsed ? '&#9654;' : '&#9660;';
+}
+
+function toggleAllSections(expand) {
+  document.querySelectorAll('.section').forEach(sec => {
+    const id = sec.id;
+    const body = document.getElementById('body-' + id);
+    const toggle = document.getElementById('toggle-' + id);
+    if (expand) {
+      body.classList.remove('collapsed');
+      toggle.innerHTML = '&#9660;';
+    } else {
+      body.classList.add('collapsed');
+      toggle.innerHTML = '&#9654;';
+    }
   });
 }
 
-function showSaveIndicator() {
-  const el = document.getElementById('saveIndicator');
-  el.classList.add('show');
-  setTimeout(function() { el.classList.remove('show'); }, 1500);
-}
-
-document.addEventListener('input', function(e) {
-  if (e.target.tagName === 'TEXTAREA' && e.target.hasAttribute('data-key')) {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveNotes, 600);
-  }
-});
-
-/* ===== TABS ===== */
-function switchTab(tabId) {
-  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelector('.tab[data-tab="' + tabId + '"]').classList.add('active');
-  document.getElementById('panel-' + tabId).classList.add('active');
-}
-
-/* ===== COLLAPSE / EXPAND ===== */
-function toggleSection(header) {
-  header.classList.toggle('collapsed');
-}
-
-function collapseAll() {
-  document.querySelectorAll('.section-header').forEach(function(h) { h.classList.add('collapsed'); });
-}
-
-function expandAll() {
-  document.querySelectorAll('.section-header').forEach(function(h) { h.classList.remove('collapsed'); });
-}
-
-/* ===== EXPORT MARKDOWN ===== */
+/* ===== Export Markdown ===== */
 function exportMarkdown() {
-  const monday = addWeeks(getMonday(new Date()), currentWeekOffset);
-  let md = '# ALTT Weekly Agenda \u2014 Week of ' + formatDate(monday) + '\n\n';
-  md += 'Data as of: ' + new Date().toLocaleString() + '\n\n';
+  const weekLabel = document.getElementById('weekLabel').textContent;
+  let md = `# ALTT Weekly Agenda\n## ${weekLabel}\n\n`;
 
-  document.querySelectorAll('.section').forEach(function(sec) {
-    const header = sec.querySelector('.section-header');
-    const tag = header.querySelector('.section-tag');
-    const title = header.querySelector('.section-title');
-    const count = header.querySelector('.section-count');
-    md += '## ' + (tag ? tag.textContent + ' \u2014 ' : '') + title.textContent;
-    if (count) md += ' (' + count.textContent + ')';
-    md += '\n\n';
+  document.querySelectorAll('.section').forEach(sec => {
+    const title = sec.querySelector('.section-title').textContent.trim();
+    md += `---\n### ${title}\n\n`;
 
-    sec.querySelectorAll('.item').forEach(function(item) {
+    sec.querySelectorAll('.item').forEach(item => {
       const name = item.querySelector('.item-name');
       const status = item.querySelector('.item-status');
-      md += '### ' + name.textContent;
-      if (status) md += ' [' + status.textContent + ']';
-      md += '\n';
-
-      item.querySelectorAll('.item-detail').forEach(function(d) {
-        md += d.textContent.trim() + '\n';
+      if (name) {
+        md += `**${name.textContent}**`;
+        if (status) md += ` [${status.textContent}]`;
+        md += '\n';
+      }
+      item.querySelectorAll('.item-detail').forEach(d => {
+        const marker = d.querySelector('.marker');
+        const sym = marker ? (marker.classList.contains('marker-done') ? '  v ' : marker.classList.contains('marker-next') ? '  > ' : '  ! ') : '  - ';
+        md += sym + d.textContent.trim() + '\n';
       });
-
-      const ta = item.querySelector('textarea[data-key]');
+      const ta = item.querySelector('textarea');
       if (ta && ta.value.trim()) {
-        md += '\n**Notes:** ' + ta.value.trim() + '\n';
+        md += `  _Notes: ${ta.value.trim()}_\n`;
       }
       md += '\n';
     });
 
-    sec.querySelectorAll('.item-compact').forEach(function(item) {
-      const name = item.querySelector('.item-name');
-      const status = item.querySelector('.item-status');
-      md += '- **' + name.textContent + '**';
-      if (status) md += ' [' + status.textContent + ']';
-      const extra = item.querySelector('span[style]');
-      if (extra) md += ' \u2014 ' + extra.textContent;
-      md += '\n';
+    sec.querySelectorAll('.action-item').forEach(ai => {
+      const cb = ai.querySelector('input[type=checkbox]');
+      const lbl = ai.querySelector('label');
+      const tag = ai.querySelector('.action-tag');
+      if (lbl) {
+        md += `- [${cb && cb.checked ? 'x' : ' '}] ${lbl.textContent}`;
+        if (tag) md += ` [${tag.textContent}]`;
+        md += '\n';
+      }
     });
 
-    md += '\n';
+    const meetingNotes = sec.querySelector('.meeting-notes textarea');
+    if (meetingNotes && meetingNotes.value.trim()) {
+      md += `\n**Meeting Notes:**\n${meetingNotes.value.trim()}\n`;
+    }
   });
 
-  // Action items
-  md += '## Action Items\n\n';
-  document.querySelectorAll('.action-group').forEach(function(g) {
-    const title = g.querySelector('.action-group-title');
-    md += '### ' + title.textContent + '\n';
-    g.querySelectorAll('.action-item').forEach(function(ai) {
-      const text = ai.querySelector('.action-text').textContent;
-      const owner = ai.querySelector('.action-owner');
-      md += '- ' + text;
-      if (owner) md += ' (' + owner.textContent + ')';
-      md += '\n';
-    });
-    md += '\n';
-  });
-
-  // Meeting notes
-  const meetingTa = document.querySelector('textarea[data-key="meeting-notes"]');
-  if (meetingTa && meetingTa.value.trim()) {
-    md += '## Meeting Notes\n\n' + meetingTa.value.trim() + '\n';
-  }
-
-  // Download
   const blob = new Blob([md], { type: 'text/markdown' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'ALTT_Agenda_' + monday.toISOString().slice(0, 10) + '.md';
-  document.body.appendChild(a);
+  a.download = `ALTT_Agenda_${getWeekKey()}.md`;
   a.click();
-  document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-/* ===== INIT ===== */
+/* ===== Event Listeners ===== */
+document.addEventListener('input', e => {
+  if (e.target.matches('textarea[data-key]') || e.target.matches('input[type=checkbox][data-key]')) {
+    debouncedSave();
+  }
+});
+document.addEventListener('change', e => {
+  if (e.target.matches('input[type=checkbox][data-key]')) {
+    debouncedSave();
+  }
+});
+
+/* ===== Init ===== */
 updateWeekDisplay();
 </script>
 </body>
