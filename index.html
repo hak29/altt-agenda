@@ -129,21 +129,21 @@ a:hover { text-decoration: underline; }
 /* ── MAIN ── */
 .main { max-width: 1100px; margin: 0 auto; padding: 20px 20px 60px; }
 
-/* ── STATUS GRID ── */
+/* ── STATUS GRID (compact ticker) ── */
 .status-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-  margin-bottom: 20px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 16px;
 }
 .status-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 12px 14px;
-  display: flex; gap: 10px; align-items: flex-start;
-  font-size: 0.82rem; line-height: 1.45;
+  border-radius: 14px; padding: 4px 10px;
+  display: inline-flex; gap: 6px; align-items: center;
+  font-size: 0.7rem; line-height: 1.3; white-space: nowrap;
 }
-.status-card strong { color: var(--text); }
+.status-card strong { color: var(--text); font-size: 0.7rem; }
 .dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  flex-shrink: 0; margin-top: 4px;
+  width: 6px; height: 6px; border-radius: 50%;
+  flex-shrink: 0;
 }
 .dot-green { background: var(--green); }
 .dot-amber { background: var(--amber); }
@@ -539,7 +539,7 @@ a:hover { text-decoration: underline; }
     <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>
     <button onclick="exportMarkdown()">Export MD</button>
-    <button onclick="toggleScript()" style="background:var(--gold);color:#000;border-color:var(--gold);font-weight:600">&#9654; Call Script</button>
+    <button onclick="downloadScript()">Script</button>
     <button onclick="toggleLog()">&#128221; Change Log</button>
     <span class="spacer"></span>
     <span class="read-only-banner" id="readOnlyBanner">READ-ONLY (past week)</span>
@@ -551,43 +551,16 @@ a:hover { text-decoration: underline; }
      ════════════════════════════════════════════════════════════════════ -->
 <div class="main">
 
-<!-- ── QUICK STATUS ── -->
+<!-- ── QUICK STATUS (compact pills) ── -->
 <div class="status-grid">
-  <!-- Row 1 -->
-  <div class="status-card">
-    <span class="dot dot-amber"></span>
-    <div><strong>AmFam</strong> &mdash; Greg letter to CMO Sharina Smith still pending. Board-level. 28.8% lift but data reconciliation blocking.</div>
-  </div>
-  <div class="status-card">
-    <span class="dot dot-amber"></span>
-    <div><strong>GCE Contract</strong> &mdash; Heba Shrourou (GCE Procurement) Mar 23. Heba confirmed receipt. Mid-April launch target.</div>
-  </div>
-  <div class="status-card">
-    <span class="dot dot-amber"></span>
-    <div><strong>SIFT</strong> &mdash; No longer paused &mdash; proceeding. Call scheduled with GM. Ask Alec for details.</div>
-  </div>
-  <!-- Row 2 -->
-  <div class="status-card">
-    <span class="dot dot-green"></span>
-    <div><strong>DAMit VII Prep</strong> &mdash; Proof email reviewed today (Mar 24). Hassan approved Dan's draft. Ready to blast.</div>
-  </div>
-  <div class="status-card">
-    <span class="dot dot-amber"></span>
-    <div><strong>ALTT Survey Launch</strong> &mdash; Targeting early-mid this week. Outreach configured. Auto-forwarding rules set.</div>
-  </div>
-  <div class="status-card">
-    <span class="dot dot-green"></span>
-    <div><strong>Custom Ink</strong> <span class="badge badge-new">New</span> &mdash; Phil Auerbach strong interest. Scoping calls being scheduled.</div>
-  </div>
-  <!-- Row 3 -->
-  <div class="status-card">
-    <span class="dot dot-amber"></span>
-    <div><strong>Peloton</strong> &mdash; Booked through June. AI pilot planned next fiscal year. Follow-up needed.</div>
-  </div>
-  <div class="status-card">
-    <span class="dot dot-red"></span>
-    <div><strong>David Berkowitz Email</strong> &mdash; Greg flagged for discussion on today's agenda (from Mar 10 meeting).</div>
-  </div>
+  <div class="status-card"><span class="dot dot-amber"></span><strong>AmFam</strong> CMO letter pending</div>
+  <div class="status-card"><span class="dot dot-amber"></span><strong>GCE</strong> mid-April launch</div>
+  <div class="status-card"><span class="dot dot-amber"></span><strong>SIFT</strong> back on track</div>
+  <div class="status-card"><span class="dot dot-green"></span><strong>DAMit VII</strong> 1,150 reg</div>
+  <div class="status-card"><span class="dot dot-amber"></span><strong>Survey</strong> launching this week</div>
+  <div class="status-card"><span class="dot dot-green"></span><strong>Custom Ink</strong> new interest</div>
+  <div class="status-card"><span class="dot dot-amber"></span><strong>Peloton</strong> FY2027</div>
+  <div class="status-card"><span class="dot dot-red"></span><strong>Berkowitz</strong> Greg flagged</div>
 </div>
 
 <!-- ── REFERENCE: KPIs ── -->
@@ -632,12 +605,12 @@ a:hover { text-decoration: underline; }
 <!-- ══════════════════════════════════════════════════════════════════
      LABS SECTION
      ══════════════════════════════════════════════════════════════ -->
-<div class="section-header">Labs</div>
+<div class="section-header">A. Labs</div>
 
 <!-- ── CAP ── -->
 <div class="card" id="card-cap">
   <div class="card-header" onclick="toggleCard('card-cap')">
-    <div class="card-title">CAP <span class="lab-full">&mdash; Consortium for AI Personalization</span></div>
+    <div class="card-title">A.1 CAP <span class="lab-full">&mdash; Consortium for AI Personalization</span></div>
     <span class="card-chevron" id="chv-card-cap">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-cap">
@@ -645,7 +618,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-cap-claritas">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-claritas')">
-        <span class="sub-title">1. Claritas Blanket Agreement <span class="badge badge-urgent">URGENT</span></span>
+        <span class="sub-title">A.1.1 Claritas Blanket Agreement <span class="badge badge-urgent">URGENT</span></span>
         <span class="sub-chevron" id="chv-sub-cap-claritas">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-claritas">
@@ -656,7 +629,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-cap-gm">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-gm')">
-        <span class="sub-title">2. GM Update (Rex)</span>
+        <span class="sub-title">A.1.2 GM Update (Rex)</span>
         <span class="sub-chevron" id="chv-sub-cap-gm">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-gm">
@@ -667,7 +640,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-cap-amfam">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-amfam')">
-        <span class="sub-title">3. AmFam</span>
+        <span class="sub-title">A.1.3 AmFam</span>
         <span class="sub-chevron" id="chv-sub-cap-amfam">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-amfam">
@@ -678,7 +651,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-cap-possible">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-possible')">
-        <span class="sub-title">4. POSSIBLE Sessions (4 AI Sessions)</span>
+        <span class="sub-title">A.1.4 POSSIBLE Sessions (4 AI Sessions)</span>
         <span class="sub-chevron" id="chv-sub-cap-possible">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-possible">
@@ -694,18 +667,19 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-cap-paper">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-paper')">
-        <span class="sub-title">5. Impact Numbers / White Paper</span>
+        <span class="sub-title">A.1.5 Impact Numbers / White Paper</span>
         <span class="sub-chevron" id="chv-sub-cap-paper">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-paper">
         <div class="item-text">Rex draft in progress. Pre-launch checklist needed.</div>
+        <div class="item-text"><a href="https://docs.google.com/document/d/1bpAO1T3pmSjPPq-D6dOP19lFM1SLcUCelZyUpL3F4fM/edit?usp=sharing" target="_blank">Whitepaper: Pre-launch Checklist for Creatives (Rex)</a></div>
         <textarea class="notes" data-key="cap-paper" placeholder="Notes..."></textarea>
       </div>
     </div>
 
     <div class="sub-card" id="sub-cap-pipeline">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-pipeline')">
-        <span class="sub-title">6. New Pipeline</span>
+        <span class="sub-title">A.1.6 New Pipeline</span>
         <span class="sub-chevron" id="chv-sub-cap-pipeline">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-pipeline">
@@ -719,7 +693,7 @@ a:hover { text-decoration: underline; }
 <!-- ── A3 ── -->
 <div class="card" id="card-a3">
   <div class="card-header" onclick="toggleCard('card-a3')">
-    <div class="card-title">A3 <span class="lab-full">&mdash; Agentic AI Advertising</span></div>
+    <div class="card-title">A.2 A3 <span class="lab-full">&mdash; Agentic AI Advertising</span></div>
     <span class="badge badge-attention">Attention</span>
     <span class="card-chevron" id="chv-card-a3">&rsaquo;</span>
   </div>
@@ -728,7 +702,7 @@ a:hover { text-decoration: underline; }
     <!-- Intuit + Monks -->
     <div class="sub-card" id="sub-a3-intuit">
       <div class="sub-card-header" onclick="toggleSub('sub-a3-intuit')">
-        <span class="sub-title">Intuit + Monks <span class="badge badge-attention">Attention</span></span>
+        <span class="sub-title">A.2.1 Intuit + Monks <span class="badge badge-attention">Attention</span></span>
         <span class="sub-chevron" id="chv-sub-a3-intuit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-a3-intuit">
@@ -751,7 +725,7 @@ a:hover { text-decoration: underline; }
     <!-- Campbell + Monks -->
     <div class="sub-card" id="sub-a3-campbell">
       <div class="sub-card-header" onclick="toggleSub('sub-a3-campbell')">
-        <span class="sub-title">Campbell + Monks <span class="badge badge-attention">Attention</span></span>
+        <span class="sub-title">A.2.2 Campbell + Monks <span class="badge badge-attention">Attention</span></span>
         <span class="sub-chevron" id="chv-sub-a3-campbell">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-a3-campbell">
@@ -766,7 +740,7 @@ a:hover { text-decoration: underline; }
     <!-- Novartis -->
     <div class="sub-card" id="sub-a3-novartis">
       <div class="sub-card-header" onclick="toggleSub('sub-a3-novartis')">
-        <span class="sub-title">Novartis</span>
+        <span class="sub-title">A.2.3 Novartis</span>
         <span class="sub-chevron" id="chv-sub-a3-novartis">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-a3-novartis">
@@ -792,14 +766,14 @@ a:hover { text-decoration: underline; }
 <!-- ── AURA ── -->
 <div class="card" id="card-aura">
   <div class="card-header" onclick="toggleCard('card-aura')">
-    <div class="card-title">AURA <span class="lab-full">&mdash; AI Uncovering Responsive Audiences</span></div>
+    <div class="card-title">A.3 AURA <span class="lab-full">&mdash; AI Uncovering Responsive Audiences</span></div>
     <span class="card-chevron" id="chv-card-aura">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-aura">
 
     <div class="sub-card" id="sub-aura-att">
       <div class="sub-card-header" onclick="toggleSub('sub-aura-att')">
-        <span class="sub-title">AT&amp;T</span>
+        <span class="sub-title">A.3.1 AT&amp;T</span>
         <span class="sub-chevron" id="chv-sub-aura-att">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-aura-att">
@@ -810,7 +784,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-aura-gm">
       <div class="sub-card-header" onclick="toggleSub('sub-aura-gm')">
-        <span class="sub-title">GM (Buick/GMC)</span>
+        <span class="sub-title">A.3.2 GM (Buick/GMC)</span>
         <span class="sub-chevron" id="chv-sub-aura-gm">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-aura-gm">
@@ -835,7 +809,7 @@ a:hover { text-decoration: underline; }
 <!-- ── SIFT ── -->
 <div class="card" id="card-sift">
   <div class="card-header" onclick="toggleCard('card-sift')">
-    <div class="card-title">SIFT <span class="lab-full">&mdash; Semantic Inference for Targeting (Cognitiv)</span></div>
+    <div class="card-title">A.4 SIFT <span class="lab-full">&mdash; Semantic Inference for Targeting (Cognitiv)</span></div>
     <span class="badge badge-attention">Attention</span>
     <span class="card-chevron" id="chv-card-sift">&rsaquo;</span>
   </div>
@@ -853,14 +827,14 @@ a:hover { text-decoration: underline; }
 <!-- ── ACE ── -->
 <div class="card" id="card-ace">
   <div class="card-header" onclick="toggleCard('card-ace')">
-    <div class="card-title">ACE <span class="lab-full">&mdash; AI-Driven Creative Effectiveness</span></div>
+    <div class="card-title">A.5 ACE <span class="lab-full">&mdash; AI-Driven Creative Effectiveness</span></div>
     <span class="card-chevron" id="chv-card-ace">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-ace">
 
     <div class="sub-card" id="sub-ace-vidmob">
       <div class="sub-card-header" onclick="toggleSub('sub-ace-vidmob')">
-        <span class="sub-title">VidMob / Kroger</span>
+        <span class="sub-title">A.5.1 VidMob / Kroger</span>
         <span class="sub-chevron" id="chv-sub-ace-vidmob">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-ace-vidmob">
@@ -871,7 +845,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-ace-celtra">
       <div class="sub-card-header" onclick="toggleSub('sub-ace-celtra')">
-        <span class="sub-title">Celtra</span>
+        <span class="sub-title">A.5.2 Celtra</span>
         <span class="sub-chevron" id="chv-sub-ace-celtra">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-ace-celtra">
@@ -882,7 +856,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-ace-att">
       <div class="sub-card-header" onclick="toggleSub('sub-ace-att')">
-        <span class="sub-title">AT&amp;T (Parthiv)</span>
+        <span class="sub-title">A.5.3 AT&amp;T (Parthiv)</span>
         <span class="sub-chevron" id="chv-sub-ace-att">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-ace-att">
@@ -893,7 +867,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-ace-intuit">
       <div class="sub-card-header" onclick="toggleSub('sub-ace-intuit')">
-        <span class="sub-title">Intuit / Celtra</span>
+        <span class="sub-title">A.5.4 Intuit / Celtra</span>
         <span class="sub-chevron" id="chv-sub-ace-intuit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-ace-intuit">
@@ -904,7 +878,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-ace-peloton">
       <div class="sub-card-header" onclick="toggleSub('sub-ace-peloton')">
-        <span class="sub-title">Peloton ACE <span class="badge badge-today">DUE TODAY</span></span>
+        <span class="sub-title">A.5.5 Peloton ACE <span class="badge badge-today">DUE TODAY</span></span>
         <span class="sub-chevron" id="chv-sub-ace-peloton">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-ace-peloton">
@@ -918,13 +892,13 @@ a:hover { text-decoration: underline; }
 <!-- ── ARC ── -->
 <div class="card" id="card-arc">
   <div class="card-header" onclick="toggleCard('card-arc')">
-    <div class="card-title">ARC <span class="lab-full">&mdash; AEO via Reddit</span></div>
+    <div class="card-title">A.6 ARC <span class="lab-full">&mdash; AEO via Reddit</span></div>
     <span class="card-chevron" id="chv-card-arc">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-arc">
     <div class="sub-card" id="sub-arc-reddit">
       <div class="sub-card-header" onclick="toggleSub('sub-arc-reddit')">
-        <span class="sub-title">Reddit Research</span>
+        <span class="sub-title">A.6.1 Reddit Research</span>
         <span class="sub-chevron" id="chv-sub-arc-reddit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-arc-reddit">
@@ -938,11 +912,11 @@ a:hover { text-decoration: underline; }
 <!-- ══════════════════════════════════════════════════════════════════
      KNOWLEDGE CENTER
      ══════════════════════════════════════════════════════════════ -->
-<div class="section-header">Knowledge Center</div>
+<div class="section-header">B. Knowledge Center</div>
 
 <div class="card" id="card-kc">
   <div class="card-header" onclick="toggleCard('card-kc')">
-    <div class="card-title">Knowledge Center</div>
+    <div class="card-title">B. Knowledge Center</div>
     <span class="card-chevron" id="chv-card-kc">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-kc">
@@ -952,7 +926,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-damit">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-damit')">
-        <span class="sub-title">DAMit VII <span class="badge badge-today">Mar 30 / 1,150 Reg</span></span>
+        <span class="sub-title">B.1.1 DAMit VII <span class="badge badge-today">Mar 30 / 1,150 Reg</span></span>
         <span class="sub-chevron" id="chv-sub-kc-damit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-damit">
@@ -966,7 +940,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-mac">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-mac')">
-        <span class="sub-title">MAC &mdash; AI Belt Certification</span>
+        <span class="sub-title">B.1.2 MAC &mdash; AI Belt Certification</span>
         <span class="sub-chevron" id="chv-sub-kc-mac">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-mac">
@@ -977,7 +951,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-maf">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-maf')">
-        <span class="sub-title">MAF &mdash; AI Foundry</span>
+        <span class="sub-title">B.1.3 MAF &mdash; AI Foundry</span>
         <span class="sub-chevron" id="chv-sub-kc-maf">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-maf">
@@ -991,7 +965,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-survey">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-survey')">
-        <span class="sub-title">Agentic AI Survey</span>
+        <span class="sub-title">B.2.1 Agentic AI Survey</span>
         <span class="sub-chevron" id="chv-sub-kc-survey">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-survey">
@@ -1002,7 +976,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-benchmark">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-benchmark')">
-        <span class="sub-title">Benchmark Study</span>
+        <span class="sub-title">B.2.2 Benchmark Study</span>
         <span class="sub-chevron" id="chv-sub-kc-benchmark">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-benchmark">
@@ -1013,7 +987,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-coloop">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-coloop')">
-        <span class="sub-title">CoLoop <span class="badge badge-new">New</span></span>
+        <span class="sub-title">B.2.3 CoLoop <span class="badge badge-new">New</span></span>
         <span class="sub-chevron" id="chv-sub-kc-coloop">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-coloop">
@@ -1027,7 +1001,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-papers">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-papers')">
-        <span class="sub-title">Active Papers</span>
+        <span class="sub-title">B.3.1 Active Papers</span>
         <span class="sub-chevron" id="chv-sub-kc-papers">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-papers">
@@ -1047,18 +1021,18 @@ a:hover { text-decoration: underline; }
 <!-- ══════════════════════════════════════════════════════════════════
      COMMUNITY
      ══════════════════════════════════════════════════════════════ -->
-<div class="section-header">Community</div>
+<div class="section-header">C. Community</div>
 
 <div class="card" id="card-community">
   <div class="card-header" onclick="toggleCard('card-community')">
-    <div class="card-title">Community &amp; Events</div>
+    <div class="card-title">C. Community &amp; Events</div>
     <span class="card-chevron" id="chv-card-community">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-community">
 
     <div class="sub-card" id="sub-comm-alc">
       <div class="sub-card-header" onclick="toggleSub('sub-comm-alc')">
-        <span class="sub-title">ALC Schedule 2026</span>
+        <span class="sub-title">C.1 ALC Schedule 2026</span>
         <span class="sub-chevron" id="chv-sub-comm-alc">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-comm-alc">
@@ -1069,7 +1043,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-comm-cats">
       <div class="sub-card-header" onclick="toggleSub('sub-comm-cats')">
-        <span class="sub-title">CATS &mdash; May 14</span>
+        <span class="sub-title">C.2 CATS &mdash; May 14</span>
         <span class="sub-chevron" id="chv-sub-comm-cats">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-comm-cats">
@@ -1080,7 +1054,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-comm-debates">
       <div class="sub-card-header" onclick="toggleSub('sub-comm-debates')">
-        <span class="sub-title">Great Debates &mdash; June 20</span>
+        <span class="sub-title">C.3 Great Debates &mdash; June 20</span>
         <span class="sub-chevron" id="chv-sub-comm-debates">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-comm-debates">
@@ -1091,7 +1065,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-comm-slack">
       <div class="sub-card-header" onclick="toggleSub('sub-comm-slack')">
-        <span class="sub-title">Slack Community</span>
+        <span class="sub-title">C.4 Slack Community</span>
         <span class="sub-chevron" id="chv-sub-comm-slack">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-comm-slack">
@@ -1102,7 +1076,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-comm-talent">
       <div class="sub-card-header" onclick="toggleSub('sub-comm-talent')">
-        <span class="sub-title">Talent &mdash; Adam Raines</span>
+        <span class="sub-title">C.5 Talent &mdash; Adam Raines</span>
         <span class="sub-chevron" id="chv-sub-comm-talent">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-comm-talent">
@@ -1113,7 +1087,7 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-comm-bodhium">
       <div class="sub-card-header" onclick="toggleSub('sub-comm-bodhium')">
-        <span class="sub-title">Bodhium Labs <span class="badge badge-new">New</span></span>
+        <span class="sub-title">C.6 Bodhium Labs <span class="badge badge-new">New</span></span>
         <span class="sub-chevron" id="chv-sub-comm-bodhium">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-comm-bodhium">
@@ -1127,11 +1101,11 @@ a:hover { text-decoration: underline; }
 <!-- ══════════════════════════════════════════════════════════════════
      ACTION ITEMS
      ══════════════════════════════════════════════════════════════ -->
-<div class="section-header">Action Items</div>
+<div class="section-header">D. Action Items</div>
 
 <div class="card" id="card-actions">
   <div class="card-header" onclick="toggleCard('card-actions')">
-    <div class="card-title">Action Items</div>
+    <div class="card-title">D. Action Items</div>
     <span class="card-chevron" id="chv-card-actions">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-actions">
@@ -1677,10 +1651,64 @@ a:hover { text-decoration: underline; }
     try { localStorage.setItem('altt-edits-' + getWeekKey(), JSON.stringify(edits)); } catch(e) {}
   }
 
-  /* ── Call Script Toggle ── */
-  window.toggleScript = function() {
-    const ov = document.getElementById('scriptOverlay');
-    ov.classList.toggle('open');
+  /* ── Call Script Download ── */
+  window.downloadScript = function() {
+    const wk = getWeekKey();
+    let s = 'ALTT WEEKLY CHECK-IN — CALL SCRIPT\n';
+    s += '=' .repeat(50) + '\n';
+    s += 'Week: ' + wk + '\n\n';
+
+    s += '1. OPENING (~1 min)\n';
+    s += '   SAY: "Hey everyone. Let\'s jump in — we have a lot to cover."\n';
+    s += '   SAY: "Quick context: last real meeting was March 10. March 17 was brief. Let\'s catch up."\n\n';
+
+    s += '2. A. LABS — A.1 CAP (~5 min)\n';
+    s += '   SAY: "CAP is covered in the weekly CAP call — just high-level flags here."\n';
+    s += '   ASK GREG: "Any update on the AmFam CMO letter to Sharina Smith?"\n';
+    s += '   FLAG: Claritas blanket agreement still expired. Blocks new experiments.\n';
+    s += '   ASK: "GCE contract — Heba confirmed mid-April. Anything we need to do?"\n';
+    s += '   SAY: "Custom Ink / Phil Auerbach — strong interest. Scoping calls being set up."\n\n';
+
+    s += '3. A. LABS — A.2 A3 (Intuit + Campbell) (~5 min)\n';
+    s += '   SAY: "Intuit/Monks: we\'re on Call #4 — persona refinement. Lone Wolf concept selected."\n';
+    s += '   SAY: "Three personas: Marcus Chen ($6.5M), Nia Robinson ($3.2M), Dr. Rodriguez ($8M — flagged as unrealistic, swapping)."\n';
+    s += '   SAY: "Rough cut target ~April 1. Legal review needed for AI content."\n';
+    s += '   SAY: "Campbell/Monks: In execution. Need update from team on creative development."\n';
+    s += '   ASK: "Novartis — Dave Carey ISI feasibility for video generation. Any word?"\n\n';
+
+    s += '4. A. LABS — A.3 AURA (~5 min)\n';
+    s += '   ASK: "AT&T — I sent a follow-up. Any response? Pixel implementation status?"\n';
+    s += '   SAY: "Christopher Stanger is ambitious about scaling. 10M impressions over 4 weeks needed."\n';
+    s += '   ASK: "GM AURA — testing Buick or GMC. 15-25% conversion target. Status?"\n\n';
+
+    s += '5. A. LABS — A.4 SIFT + A.5 ACE (~3 min)\n';
+    s += '   SAY: "SIFT is no longer paused — back on track with Cognitiv."\n';
+    s += '   ASK ALEC: "Details on GM SIFT call?"\n';
+    s += '   SAY: "ACE: VidMob/Kroger targeting CCS summer. Celtra stalled — Vania left."\n';
+    s += '   ASK: "AT&T ACE — they built internally. What\'s our alternative vendor?"\n\n';
+
+    s += '6. B. KNOWLEDGE CENTER (~5 min)\n';
+    s += '   SAY: "DAMit VII: 1,150 registrations! Prep email blasting today. March 30 session."\n';
+    s += '   SAY: "MAC certification: belts progressing. 10K+ registrations."\n';
+    s += '   SAY: "Agentic AI survey — launching this week."\n';
+    s += '   ASK: "Benchmark study — Jerome flagged data validity. Any resolution?"\n\n';
+
+    s += '7. C. COMMUNITY (~3 min)\n';
+    s += '   ASK GREG: "David Berkowitz email — you flagged this. What do we need to discuss?"\n';
+    s += '   SAY: "Slack community: strategy deck v3 finalized. Alec coordinating launch."\n';
+    s += '   SAY: "CATS May 14: 120+ registrations, waitlist being set up."\n';
+    s += '   SAY: "POSSIBLE: 4 AI sessions — CAP Main Stage, CAP Roundtable, ALTT Labs, ALTT Community."\n\n';
+
+    s += '8. WRAP-UP (~2 min)\n';
+    s += '   SAY: "Let me quickly recap action items..."\n';
+    s += '   SAY: "Anything else before we close?"\n';
+
+    const blob = new Blob([s], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ALTT-Call-Script-' + wk + '.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
   };
 
   /* ── Change Log ── */
