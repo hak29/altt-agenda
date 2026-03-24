@@ -524,7 +524,7 @@ a:hover { text-decoration: underline; }
     <span class="attendee">Greg <span class="role role-ceo">CEO</span></span>
     <span class="attendee">Vas</span>
     <span class="attendee">Alec</span>
-    <span class="attendee">Leo <span class="role role-new">NEW</span></span>
+    <span class="attendee">Leah</span>
   </div>
 
   <!-- Context bar -->
@@ -606,7 +606,8 @@ a:hover { text-decoration: underline; }
 <!-- ══════════════════════════════════════════════════════════════════
      LABS SECTION
      ══════════════════════════════════════════════════════════════ -->
-<div class="section-header">A. Labs</div>
+<div class="section-header" style="cursor:pointer;" onclick="toggleSection('sec-labs')">A. Labs <span id="chv-sec-labs" style="font-size:0.7em;color:var(--muted);margin-left:6px;">&#9660;</span></div>
+<div id="sec-labs">
 
 <!-- ── CAP ── -->
 <div class="card" id="card-cap">
@@ -948,6 +949,8 @@ a:hover { text-decoration: underline; }
 <!-- ══════════════════════════════════════════════════════════════════
      KNOWLEDGE CENTER
      ══════════════════════════════════════════════════════════════ -->
+</div><!-- /sec-labs -->
+
 <div class="card" id="card-kc" style="margin-top:24px;">
   <div class="card-header" onclick="toggleCard('card-kc')">
     <div class="card-title">B. Knowledge Center</div>
@@ -1155,62 +1158,72 @@ a:hover { text-decoration: underline; }
   </div>
   <div class="card-body" id="body-card-actions">
 
-    <h3 style="font-size:0.9rem;font-weight:600;margin:4px 0 8px;">Hassan (11 items)</h3>
+    <h3 style="font-size:0.9rem;font-weight:600;margin:4px 0 8px;">Hassan</h3>
     <div class="action-section">
       <div class="action-item">
         <input type="checkbox" data-key="act-h1">
-        <span class="action-num">1.</span>
-        <span class="action-text">Confirm Vas outreach to Peloton for ACE <span class="tag tag-today">TODAY</span></span>
+        <span class="action-num">D.1</span>
+        <span class="action-text">Claritas blanket agreement re-up &mdash; follow up Don Sklenka <span class="tag tag-urgent">URGENT</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h2">
-        <span class="action-num">2.</span>
-        <span class="action-text">Review DAMit VII proof email from Dan &mdash; approve blast <span class="tag tag-today">TODAY</span></span>
+        <span class="action-num">D.2</span>
+        <span class="action-text">GCE contract &mdash; confirm mid-April launch with Heba <span class="tag tag-monitor">MONITOR</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h3">
-        <span class="action-num">3.</span>
-        <span class="action-text">Follow up on Claritas blanket agreement re-up (Don Sklenka) <span class="tag tag-urgent">URGENT</span></span>
+        <span class="action-num">D.3</span>
+        <span class="action-text">A3/Intuit: track legal review for AI content + persona revenue fix <span class="tag tag-fup">FUP</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h4">
-        <span class="action-num">4.</span>
-        <span class="action-text">Launch ALTT agentic AI survey with Vas <span class="tag tag-schedule">SCHEDULE</span></span>
+        <span class="action-num">D.4</span>
+        <span class="action-text">AURA AT&amp;T: follow up on pixel implementation + Christopher Stanger <span class="tag tag-fup">FUP</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h5">
-        <span class="action-num">5.</span>
-        <span class="action-text">GCE contract &mdash; confirm mid-April launch timeline with Heba <span class="tag tag-monitor">MONITOR</span></span>
+        <span class="action-num">D.5</span>
+        <span class="action-text">AURA GM: check status Buick/GMC test setup <span class="tag tag-fup">FUP</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h6">
-        <span class="action-num">6.</span>
-        <span class="action-text">Brief team on Campbell + Monks A3 execution status <span class="tag tag-confirm">CONFIRM</span></span>
+        <span class="action-num">D.6</span>
+        <span class="action-text">Campbell/Monks A3: brief team on creative dev status <span class="tag tag-confirm">CONFIRM</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h7">
-        <span class="action-num">7.</span>
-        <span class="action-text">Schedule scoping calls with Phil Auerbach (Custom Ink) <span class="tag tag-schedule">SCHEDULE</span></span>
+        <span class="action-num">D.7</span>
+        <span class="action-text">Custom Ink / Phil Auerbach: schedule scoping calls <span class="tag tag-schedule">SCHEDULE</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h8">
-        <span class="action-num">8.</span>
-        <span class="action-text">David Berkowitz email &mdash; prepare for Greg discussion <span class="tag tag-escalation">ESCALATION</span></span>
+        <span class="action-num">D.8</span>
+        <span class="action-text">ALTT survey launch with Vas <span class="tag tag-schedule">SCHEDULE</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h9">
-        <span class="action-num">9.</span>
-        <span class="action-text">Track Peloton follow-up for FY2027 pipeline <span class="tag tag-monitor">MONITOR</span></span>
+        <span class="action-num">D.9</span>
+        <span class="action-text">DAMit VII: confirm recording schedule (Mon/Tue + rest of week) <span class="tag tag-confirm">CONFIRM</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h10">
-        <span class="action-num">10.</span>
-        <span class="action-text">Attend CoLoop demo (Mar 24) <span class="tag tag-today">TODAY</span></span>
+        <span class="action-num">D.10</span>
+        <span class="action-text">DAMit VII: resolve 1000 limit issue <span class="tag tag-urgent">URGENT</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h11">
-        <span class="action-num">11.</span>
-        <span class="action-text">SIFT &mdash; identify second vendor for "zero to one" evaluation <span class="tag tag-fup">FUP</span></span>
+        <span class="action-num">D.11</span>
+        <span class="action-text">Share slides with GS &mdash; 3 labs, 1 per session (with Alec) <span class="tag tag-confirm">CONFIRM</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h12">
+        <span class="action-num">D.12</span>
+        <span class="action-text">SIFT: identify second vendor for "zero to one" <span class="tag tag-fup">FUP</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h13">
+        <span class="action-num">D.13</span>
+        <span class="action-text">Peloton: track FY2027 pipeline <span class="tag tag-monitor">MONITOR</span></span>
       </div>
     </div>
 
@@ -1695,6 +1708,20 @@ a:hover { text-decoration: underline; }
     });
     try { localStorage.setItem('altt-edits-' + getWeekKey(), JSON.stringify(edits)); } catch(e) {}
   }
+
+  /* ── Toggle Sections (A. Labs, etc.) ── */
+  window.toggleSection = function(id) {
+    const el = document.getElementById(id);
+    const chv = document.getElementById('chv-' + id);
+    if (!el) return;
+    if (el.style.display === 'none') {
+      el.style.display = '';
+      if (chv) chv.innerHTML = '&#9660;';
+    } else {
+      el.style.display = 'none';
+      if (chv) chv.innerHTML = '&#9654;';
+    }
+  };
 
   /* ── Save Notes File ── */
   window.saveNotesFile = function() {
