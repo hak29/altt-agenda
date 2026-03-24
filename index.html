@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALTT Weekly Agenda</title>
+<style>
+:root {
+  --bg:#0a0f1a; --surface:#0f1628; --surface2:#162038; --surface3:#1d2a4a;
+  --border:#253560; --text:#e8ecf4; --muted:#8892b0; --dim:#4a5580;
+  --accent:#ffa400; --accent2:#ffb833; --gold:#ffa400;
+  --navy:#0f1628; --navy2:#162038; --navy3:#1b2847;
+  --orange:#ff6b35; --green:#22c55e; --red:#ef4444; --amber:#f59e0b;
+  --purple:#8b5cf6; --blue:#3b82f6; --emerald:#10b981; --pink:#ec4899;
+  --radius:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* Header */
+.hdr{background:linear-gradient(135deg,#0a1025,#0f1a3a,#0a1025);border-bottom:1px solid var(--border);padding:12px 20px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand h1{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.brand h1 em{font-style:normal;color:var(--gold)}
+.brand .tag{font-size:10px;background:rgba(255,164,0,.12);color:var(--gold);padding:2px 8px;border-radius:10px;font-weight:600}
+.week-nav{display:flex;align-items:center;gap:6px}
+.week-nav button{background:var(--surface2);border:1px solid var(--border);color:var(--text);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.week-nav button:hover{background:var(--surface3);border-color:var(--accent)}
+.week-nav .date{font-size:13px;font-weight:600;min-width:120px;text-align:center}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;cursor:pointer;font-weight:500;white-space:nowrap}
+.btn:hover{background:var(--surface3);border-color:var(--accent)}
+.btn-p{background:linear-gradient(135deg,#ffa400,#e69300);border-color:#ffa400;color:#000;font-weight:600}
+.btn-p:hover{background:linear-gradient(135deg,#ffb833,#ffa400)}
+.btn-g{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--green)}
+
+/* Tabs */
+.tabs{display:flex;gap:0;margin-top:10px;border-bottom:2px solid var(--border)}
+.tab{padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;display:flex;align-items:center;gap:6px}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab .ct{font-size:10px;background:var(--surface3);padding:1px 6px;border-radius:8px}
+.tab.active .ct{background:rgba(255,164,0,.15);color:var(--gold)}
+
+/* Main */
+.main{max-width:960px;margin:0 auto;padding:16px 20px 80px}
+
+/* Panel */
+.panel{display:none}.panel.active{display:block}
+
+/* Section card */
+.sec{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:border-color .15s}
+.sec:hover{border-color:#2a3f70}
+.sec-h{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none}
+.sec-h:hover{background:linear-gradient(90deg,var(--surface2),var(--surface3))}
+.chv{font-size:10px;color:var(--dim);transition:transform .15s;min-width:12px}
+.sec.shut .chv{transform:rotate(-90deg)}
+.sec.shut .sec-b{display:none}
+.sec-h h3{font-size:14px;font-weight:600;flex:1}
+.lab-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.3px}
+.lab-CAP{background:rgba(255,107,53,.15);color:var(--orange)}
+.lab-A3{background:rgba(139,92,246,.15);color:var(--purple)}
+.lab-AURA{background:rgba(59,130,246,.15);color:var(--blue)}
+.lab-SIFT{background:rgba(245,158,11,.15);color:var(--amber)}
+.lab-ACE{background:rgba(16,185,129,.15);color:var(--emerald)}
+.lab-ARC{background:rgba(236,72,153,.15);color:var(--pink)}
+.cnt{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--surface3);color:var(--muted)}
+.sec-b{padding:0 14px 10px}
+
+/* Items */
+.itm{padding:7px 0;border-bottom:1px solid rgba(42,51,71,.5)}.itm:last-child{border-bottom:none}
+.itm-h{font-size:13px;font-weight:600;margin-bottom:1px;display:flex;align-items:center;gap:6px}
+.itm-h a{color:var(--accent);text-decoration:none}.itm-h a:hover{text-decoration:underline}
+.flag{font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700}
+.flag-new{background:rgba(34,197,94,.12);color:var(--green)}
+.flag-act{background:rgba(239,68,68,.12);color:var(--red)}
+.flag-upd{background:rgba(245,158,11,.12);color:var(--amber)}
+.flag-done{background:rgba(79,140,255,.12);color:var(--accent)}
+.det{font-size:12px;color:var(--muted);padding-left:14px;margin:1px 0}.det b{color:var(--text);font-weight:500}
+.src{font-size:11px;margin:3px 0 0 14px;padding:4px 8px;border-radius:0 4px 4px 0}
+.src-call{border-left:2px solid var(--green);background:rgba(34,197,94,.05)}
+.src-email{border-left:2px solid var(--amber);background:rgba(245,158,11,.05)}
+.src-task{border-left:2px solid var(--red);background:rgba(239,68,68,.05)}
+.src-pipe{border-left:2px solid var(--accent);background:rgba(79,140,255,.05)}
+.src-lbl{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-right:4px}
+
+/* Notes */
+.n{margin-top:4px;width:100%;min-height:26px;padding:5px 8px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:12px;font-family:inherit;resize:vertical}
+.n:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgba(255,164,0,.1)}
+.n::placeholder{color:var(--dim);opacity:.5}
+
+/* Summary bar */
+.summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;display:flex;gap:16px;flex-wrap:wrap}
+.summary .stat{text-align:center;flex:1;min-width:80px}
+.summary .stat .num{font-size:20px;font-weight:700;background:linear-gradient(135deg,#ffa400,#ffcc66);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.summary .stat .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+/* Toast */
+.toast{position:fixed;bottom:16px;right:16px;padding:6px 14px;background:var(--green);color:#fff;border-radius:6px;font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:200}
+.toast.show{opacity:1}
+
+/* Mobile */
+@media(max-width:640px){
+  .hdr{padding:10px 12px}
+  .main{padding:10px 12px 60px}
+  .tab{padding:6px 10px;font-size:12px}
+  .summary{gap:8px}
+  .summary .stat .num{font-size:16px}
+  .actions{gap:4px}
+  .btn{padding:4px 8px;font-size:11px}
+}
+
+@media print{
+  .hdr{position:static}.btn,.actions,.week-nav{display:none!important}
+  body{background:#fff;color:#111}
+  .sec{border:1px solid #ddd;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="brand">
+      <h1><em>ALTT</em> Weekly Agenda</h1>
+      <span class="tag">MMA GLOBAL</span>
+    </div>
+    <div class="week-nav">
+      <button onclick="changeWeek(-1)" title="Previous week">&larr;</button>
+      <span class="date" id="weekDate"></span>
+      <button onclick="changeWeek(1)" title="Next week">&rarr;</button>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="toggleAll(false)">Expand</button>
+      <button class="btn" onclick="toggleAll(true)">Collapse</button>
+      <button class="btn btn-p" onclick="save()">&#10003; Save</button>
+      <button class="btn btn-g" onclick="exportMD()">&#8595; Export</button>
+    </div>
+  </div>
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="labs" onclick="switchTab('labs')">Labs <span class="ct" id="ct-labs"></span></div>
+    <div class="tab" data-tab="knowledge" onclick="switchTab('knowledge')">Knowledge Center <span class="ct" id="ct-knowledge"></span></div>
+    <div class="tab" data-tab="community" onclick="switchTab('community')">Community <span class="ct" id="ct-community"></span></div>
+    <div class="tab" data-tab="actions" onclick="switchTab('actions')">Action Items <span class="ct" id="ct-actions"></span></div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- =================== LABS =================== -->
+<div class="panel active" id="panel-labs">
+
+<div class="summary">
+  <div class="stat"><div class="num">6</div><div class="lbl">Active Labs</div></div>
+  <div class="stat"><div class="num">29+</div><div class="lbl">Experiments</div></div>
+  <div class="stat"><div class="num">160%</div><div class="lbl">Avg Lift (CAP)</div></div>
+  <div class="stat"><div class="num">18</div><div class="lbl">Brands</div></div>
+</div>
+
+<!-- CAP -->
+<div class="sec" id="s-cap">
+  <div class="sec-h" onclick="tog(this)">
+    <span class="chv">&#9660;</span>
+    <span class="lab-tag lab-CAP">CAP</span>
+    <h3>Consortium for AI Personalization</h3>
+    <span class="cnt" id="cnt-cap"></span>
+  </div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">GM <span class="flag flag-act">ACTION</span></div>
+      <div class="det">Mar 10: GS to ping Norm for green light. Contract signing + media plan pending.</div>
+      <div class="det"><b>GMC CTV expansion:</b> Roku + Amazon Prime, brand KPI (new), 4x impressions, longer period, $1M+ budget</div>
+      <div class="det"><b>AURA crossover:</b> Buick or GMC test planned</div>
+      <div class="det">PMAX/Advantage+ measurement approach designed for GM</div>
+      <div class="src src-call"><span class="src-lbl">Mar 10 Call</span> Rex reported technical challenges with Innovid. Campaign targets April launch.</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-gm"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Choice Hotels <span class="flag flag-done">WRAPPED</span></div>
+      <div class="det">Final wrap-up: <b>$21M revenue, 24% conversion lift</b> via AI-driven targeting</div>
+      <div class="det">5 segments over-indexed in net new bookings &mdash; Claritas providing one-pagers</div>
+      <div class="det">Frequency: avg 2 impressions/user below ideal. Larger formats outperformed (up to 3.2x lift)</div>
+      <div class="det">75% purchases same day &mdash; focus media on early week evenings</div>
+      <div class="det"><b>Next:</b> CTV, video, other channel experiments. Bridgette FUP with Courtney on total spend.</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-choice"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">AmFam <span class="flag flag-act">ACTION</span></div>
+      <div class="det">28.8% lift achieved but data reconciliation issues block deeper analysis</div>
+      <div class="det">Mar 10: Greg to write to CMO Sharina Smith requesting full data cooperation</div>
+      <div class="det">Hassan to write detailed briefing note to facilitate follow-up</div>
+      <div class="det">Rex: forensic audit needed; data source must be verified before launch</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-amfam"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Campbell <span class="flag flag-upd">UPDATED</span></div>
+      <div class="det">Feb 23: CAP overview to Marci Raible, Megan O'Brien, Emily Thomas Theobald, Chris Tutor</div>
+      <div class="det">29 experiments, 18 brands, 160% avg lift presented</div>
+      <div class="det">Identifying campaign for 4-week sprint ($35K, ~40M impressions)</div>
+      <div class="det">Challenge: proxy for sales signal (Circana). Rex noted mixed initial interest.</div>
+      <div class="det">Feb 27 joint call with Monks (cross-ref A3). Hassan to brief team.</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-campbell"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">AT&amp;T</div>
+      <div class="det">Want AURA + CAP together; recommendation: start AURA first for cleaner data</div>
+      <div class="det">New senior hire Christopher Stanger ambitious about scaling</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-att"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">GCE <span class="flag flag-upd">CONTRACT</span></div>
+      <div class="det">CTV video brand lift study &mdash; contract revisions being negotiated</div>
+      <div class="det">Mar 10: Hassan managing signing, clearing outstanding revisions</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-gce"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Board Meeting</div>
+      <div class="det">Brands: Popeyes | Hilton | Kroger</div>
+      <div class="det">Leah ensuring deck info shared, distributing videos to Hassan + Rex</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-board"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">CAP vs Claritas</div>
+      <div class="det">Need side-by-side comparison defining what each brings</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-vs-claritas"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Impact Numbers Analysis <span class="flag flag-act">REX</span></div>
+      <div class="det"><a href="https://docs.google.com/document/d/1bpAO1T3pmSjPPq-D6dOP19lFM1SLcUCelZyUpL3F4fM/edit" target="_blank">Prelaunch Checklist for Creatives</a> &mdash; Rex draft white paper shared</div>
+      <div class="det">Root causes: conversion density, KPI selection, creative diversity</div>
+      <div class="det">AI scoring system in development for pre-launch quality checks</div>
+      <div class="det">Negotiating with Mike (Claritas) for 2 data scientists reporting to Rex</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-impact"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">GroundTruth Partnership</div>
+      <div class="det">Done with Claritas. Don asking which MMA member is best fit. Maybe targeted reach.</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-groundtruth"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">PMAX / Advantage+</div>
+      <div class="det">Working beyond Claritas tech. Measurement approach designed for GM.</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-pmax"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">CAP Main Stage + Roundtable (POSSIBLE)</div>
+      <div class="det">Which brands present? Finalize speakers and format.</div>
+      <textarea class="n" placeholder="Notes..." data-key="cap-stage"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="sec" id="s-a3">
+  <div class="sec-h" onclick="tog(this)">
+    <span class="chv">&#9660;</span>
+    <span class="lab-tag lab-A3">A3</span>
+    <h3>Agentic AI Advertising</h3>
+  </div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">Intuit <span class="flag flag-upd">ACTIVE</span></div>
+      <div class="det">Weekly calls Feb 27 &ndash; Apr 3 (completion in 2-3 weeks as of Mar 10)</div>
+      <div class="det">Slack channel set up. "Mike Monk's Intuit" tool for brief writing + ideation.</div>
+      <div class="det">Intuit Intelligence product &mdash; data analysis linked to QuickBooks</div>
+      <div class="src src-call"><span class="src-lbl">Mar 10</span> Steady progress. No overarching system approach &mdash; more focused efforts.</div>
+      <textarea class="n" placeholder="Notes..." data-key="a3-intuit"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Campbell + Monks <span class="flag flag-act">FUP NEEDED</span></div>
+      <div class="det">Feb 27 joint call &mdash; Hassan to brief team on outcomes</div>
+      <div class="det">Cross-ref with CAP Campbell section</div>
+      <textarea class="n" placeholder="Notes..." data-key="a3-campbell"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- AURA -->
+<div class="sec" id="s-aura">
+  <div class="sec-h" onclick="tog(this)">
+    <span class="chv">&#9660;</span>
+    <span class="lab-tag lab-AURA">AURA</span>
+    <h3>AI Uncovering Responsive Audiences</h3>
+  </div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">AT&amp;T <span class="flag flag-act">PENDING</span></div>
+      <div class="det">Mar 3: no update, ping Chris again for follow-ups</div>
+      <div class="det">Feb 19: Very interested. Min 10M impressions, 4 weeks</div>
+      <div class="det">Prism Segmentation: 68 categories, phased targeting</div>
+      <div class="det">Audio ads allow real-time updates; display manual. Christopher Stanger scaling.</div>
+      <div class="det">Hassan to clarify impression minimums (Rex occupied)</div>
+      <div class="src src-email"><span class="src-lbl">Mar 6 Email</span> Pixel implementation progressing. Compliance Qs addressed. Cookie details requested from Claritas.</div>
+      <textarea class="n" placeholder="Notes..." data-key="aura-att"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">GM <span class="flag flag-upd">MOVING</span></div>
+      <div class="det">Feb 18 call &mdash; moving forward. Testing Buick or GMC.</div>
+      <div class="det">Goal: 15-25% conversion rate increase. Pronghorn + Dynata brand lift surveys.</div>
+      <div class="det">Dynamic audience expansion delayed 6 months to stabilize rollout.</div>
+      <div class="det">Kalpana Yanamadala continuing Moveable Middles as future AURA test.</div>
+      <textarea class="n" placeholder="Notes..." data-key="aura-gm"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SIFT -->
+<div class="sec" id="s-sift">
+  <div class="sec-h" onclick="tog(this)">
+    <span class="chv">&#9660;</span>
+    <span class="lab-tag lab-SIFT">SIFT</span>
+    <h3>Semantic Inference for Targeting (Cognitiv)</h3>
+  </div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">Status: Back on track <span class="flag flag-new">ACTIVE</span></div>
+      <div class="det">No longer paused &mdash; proceeding. Call scheduled with GM (ask Alec).</div>
+      <div class="det">Feb 23: Justin paused after first prospect. 2nd batch: only Kenvue responded.</div>
+      <div class="det"><b>Shortlist:</b> Delta | DraftKings | 1-800 Flowers | SC Johnson</div>
+      <div class="det">Mar 3: Hold off scheduling GM until brand interest confirmed (Alec)</div>
+      <div class="det">Zero to one &mdash; another vendor to evaluate</div>
+      <textarea class="n" placeholder="Notes..." data-key="sift-main"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ACE -->
+<div class="sec" id="s-ace">
+  <div class="sec-h" onclick="tog(this)">
+    <span class="chv">&#9660;</span>
+    <span class="lab-tag lab-ACE">ACE</span>
+    <h3>AI-Driven Creative Effectiveness</h3>
+  </div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">VidMob / Kroger <span class="flag flag-upd">DELAYED</span></div>
+      <div class="det">Kickoff call delayed due to coordination issues. Kay re-engaged VidMob + Adelaide.</div>
+      <div class="det">Plan: Video creative intelligence for Kroger (evolving Kellanova work)</div>
+      <div class="det">Target: have something for CCS summer event. VidMob study completion ~May.</div>
+      <textarea class="n" placeholder="Notes..." data-key="ace-kroger"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Celtra <span class="flag flag-act">STALLED</span></div>
+      <div class="det">Key contact Vania left. Scheduling meeting with CTO Miha.</div>
+      <div class="det">First model lacked data. Limited MMA member client overlap.</div>
+      <div class="det">Mar 3: Considering Halo Intelligence as alternative (Vas to demo)</div>
+      <div class="det"><b>Q: Who are Celtra clients that are also MMA members?</b></div>
+      <textarea class="n" placeholder="Notes..." data-key="ace-celtra"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">AT&amp;T (Parthiv)</div>
+      <div class="det">Threw ball back to us on vendor recommendation. Have own solution, won't use VidMob/Celtra.</div>
+      <div class="det">Vas: lack of confidence in current vendors building fast enough. Need alternative.</div>
+      <textarea class="n" placeholder="Notes..." data-key="ace-att"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Intuit / Celtra <span class="flag flag-act">STALLED</span></div>
+      <div class="det">Celtra test failed. Asked 3x about another test, no confirmation.</div>
+      <div class="det">Need to get back to Intuit with next steps.</div>
+      <textarea class="n" placeholder="Notes..." data-key="ace-intuit"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">ALC Poll Interest List</div>
+      <div class="det">Joe Veverka (Microsoft), Amy Wakelam (Bayer), Heather Steinhart (Del City), Shannon Doubleday (Hilton)</div>
+      <div class="det">Does anybody work with VidMob where we have POC?</div>
+      <textarea class="n" placeholder="Notes..." data-key="ace-poll"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ARC -->
+<div class="sec" id="s-arc">
+  <div class="sec-h" onclick="tog(this)">
+    <span class="chv">&#9660;</span>
+    <span class="lab-tag lab-ARC">ARC</span>
+    <h3>AEO via Reddit Communities</h3>
+  </div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">Reddit Research <span class="flag flag-upd">IN PROGRESS</span></div>
+      <div class="det">Data sharing progressing. Baseline: automotive + travel. Also anti-aging + beauty.</div>
+      <div class="det">Studying brand visibility on AI search via Reddit presence</div>
+      <div class="det">Expected mid-Q2 for results. Check with Vas on latest.</div>
+      <div class="det">Mar 3: project rebooted after staff changes. Refocused on CEO Summit deliverables.</div>
+      <div class="det">Rex temporarily unavailable &mdash; will review after training.</div>
+      <div class="det">Potential collaboration with Brown University Information Futures Lab</div>
+      <textarea class="n" placeholder="Notes..." data-key="arc-reddit"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)">
+    <span class="chv">&#9660;</span>
+    <h3>Labs Strategy &amp; Other</h3>
+  </div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">Labs positioning + go-to-market</div>
+      <textarea class="n" placeholder="Notes..." data-key="labs-gtm"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Continuing ed: share experiments with professors?</div>
+      <textarea class="n" placeholder="Notes..." data-key="labs-professors"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">CAP Insights Series &mdash; webinar? TBD</div>
+      <textarea class="n" placeholder="Notes..." data-key="labs-webinar"></textarea>
+    </div>
+  </div>
+</div>
+
+</div><!-- /panel-labs -->
+
+<!-- =================== KNOWLEDGE CENTER =================== -->
+<div class="panel" id="panel-knowledge">
+
+<div class="summary">
+  <div class="stat"><div class="num">10K+</div><div class="lbl">Total Registrations</div></div>
+  <div class="stat"><div class="num">5,061</div><div class="lbl">Unique Attendees</div></div>
+  <div class="stat"><div class="num">2,129</div><div class="lbl">Certificates</div></div>
+  <div class="stat"><div class="num">96%</div><div class="lbl">AI Policy Pass Rate</div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>DAMit &mdash; Decoding AI for Marketing</h3><span class="flag flag-upd">MAR 30</span></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">Next session: March 30</div>
+      <div class="det">Certification parts 1, 2, 3 (2025-2026). Target: 3,000 registrations 2026 (50% increase).</div>
+      <div class="det">Stats (Feb 26): 9,334 total reg | 8,335 unique | 5,061 attendees | 2,129 certificates</div>
+      <div class="det"><b>Need to purchase more Credly certificates</b> (exceeded 2,000 pool)</div>
+      <div class="det">Mar 3: Adobe server load concern for launch Monday. Hassan to draft note for Laura Belage.</div>
+      <div class="det">Mar 10: Rex testing curriculum with volunteers before training week</div>
+      <div class="src src-call"><span class="src-lbl">Mar 10</span> Rex developing AI self-updating training system with Cal Poly students. Role-specific modules planned.</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-damit"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>MAC &mdash; Marketing AI Certification</h3></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="det">Feb 10 announced at offsite. Deadline March 15.</div>
+      <div class="det">AI Thursdays started Feb 26. Rex: Tech Tue/Thu + 2-3hr Fri buddy system.</div>
+      <div class="det">White Belt (~10hrs) ready | Yellow Belt (~20hrs) near done | Green Belt (30-40hrs) March</div>
+      <div class="det">On-demand content, 10 tests, AI auto-grading</div>
+      <div class="det">Mar 3: MMA ChatGPT clone built to avoid paid account requirement (~$0.50/user)</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-mac"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>MAF &mdash; MMA AI Foundry (Internal)</h3></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="det">Alec leading Zapier workflow rollout + AI agent pilots</div>
+      <div class="det">96% passed AI policy assessment, 90% completed training</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-maf"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>Research</h3></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">State of Agentic AI (IOPEX + Monks)</div>
+      <div class="det">Mar 3: Vas programming survey with marketing inputs. Launch late next week.</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-agentic"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Benchmark Study (MediaRadar / Adelaide / 314 Research)</div>
+      <div class="src src-call"><span class="src-lbl">Mar 9</span> Reviewed draft. Jerome flagged data validity at granular cuts. Adelaide AU integration explored.</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-benchmark"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">GPT for Marketing Generalizations</div>
+      <div class="det">EG: Empirical Generalization GPT (WIP)</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-eg-gpt"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>Guides &amp; Papers</h3></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">Paper (Rex): How to setup an AI workforce</div>
+      <div class="det">With vs without AI (backburner). Rex to send draft paper.</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-paper"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Okra (OKR tracking tool)</div>
+      <div class="det">Ready. Constitutional alignment approach. Rex advised Hassan to reconnect with Cameron on OKR agent.</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-okra"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">BCG Operating Model &mdash; Status?</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-bcg"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">RAIL Guides?</div>
+      <textarea class="n" placeholder="Notes..." data-key="kc-rail"></textarea>
+    </div>
+  </div>
+</div>
+
+</div><!-- /panel-knowledge -->
+
+<!-- =================== COMMUNITY =================== -->
+<div class="panel" id="panel-community">
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>ALC Meeting Schedule 2026</h3></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="det">Q1: MATT 2/24, ALTT 2/17-18, Quarterly 2/25 &#10003;</div>
+      <div class="det">Q2: MATT &amp; ALTT &mdash; POSSIBLE encore May 12-13</div>
+      <div class="det">Q3: MATT &amp; ALTT &mdash; Sept 1-3</div>
+      <div class="det">Q4: MATT &amp; ALTT &mdash; Nov 17-19</div>
+      <textarea class="n" placeholder="Notes..." data-key="com-schedule"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>CATS Event &mdash; May 14</h3><span class="flag flag-upd">120+ REG</span></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="det">Pending Meta facility confirmation. Capacity ~50-65.</div>
+      <div class="det">120+ registrations received. Waitlist being implemented. Member priority.</div>
+      <textarea class="n" placeholder="Notes..." data-key="com-cats"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>Great Debates: The Real AI Challenge</h3></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="det">Starting June 20. 6-7 part webinar series on personalization &amp; AI.</div>
+      <div class="det">Dan Whiting coordinating speakers. Hassan adding brand speaker names.</div>
+      <textarea class="n" placeholder="Notes..." data-key="com-debates"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>Slack Community</h3><span class="flag flag-new">LAUNCHING</span></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">David Berkowitz &mdash; discuss today (Greg flagged)</div>
+      <div class="det">Strategy deck v3 finalized. Launch plan in progress.</div>
+      <div class="det">Alec coordinating. Creating NA AI Foundry channel.</div>
+      <textarea class="n" placeholder="Notes..." data-key="com-slack"></textarea>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>Other Community</h3></div>
+  <div class="sec-b">
+    <div class="itm">
+      <div class="itm-h">Awards</div>
+      <textarea class="n" placeholder="Notes..." data-key="com-awards"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">Reddit community for MMA (non-members, biz dev, thought leadership)</div>
+      <textarea class="n" placeholder="Notes..." data-key="com-reddit"></textarea>
+    </div>
+    <div class="itm">
+      <div class="itm-h">MMA Talent Acquisition</div>
+      <div class="det">Mar 10: Adam Raines new head of talent. 8-10 open positions. AI tools for screening.</div>
+      <div class="det">Rex: use belt courses as candidate self-qualifiers</div>
+      <textarea class="n" placeholder="Notes..." data-key="com-talent"></textarea>
+    </div>
+  </div>
+</div>
+
+</div><!-- /panel-community -->
+
+<!-- =================== ACTION ITEMS =================== -->
+<div class="panel" id="panel-actions">
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>Hassan's Open Action Items</h3><span class="flag flag-act">PRIORITY</span></div>
+  <div class="sec-b">
+    <div class="itm"><div class="itm-h">1. Write AmFam briefing note for Greg</div><div class="det">Enable follow-up with CMO Sharina Smith on data cooperation</div><textarea class="n" placeholder="Status..." data-key="act-amfam"></textarea></div>
+    <div class="itm"><div class="itm-h">2. GCE contract &mdash; manage signing</div><div class="det">CTV brand lift study. Clear outstanding revisions.</div><textarea class="n" placeholder="Status..." data-key="act-gce"></textarea></div>
+    <div class="itm"><div class="itm-h">3. Campbell/Monks A3 &mdash; brief team on Feb 27 call</div><textarea class="n" placeholder="Status..." data-key="act-campbell"></textarea></div>
+    <div class="itm"><div class="itm-h">4. AT&amp;T AURA &mdash; clarify impression minimums</div><textarea class="n" placeholder="Status..." data-key="act-att"></textarea></div>
+    <div class="itm"><div class="itm-h">5. AURA + A3 partner follow-ups (AT&amp;T, GM, Sift)</div><textarea class="n" placeholder="Status..." data-key="act-partners"></textarea></div>
+    <div class="itm"><div class="itm-h">6. Rex AI workflow collab &mdash; feedback loops</div><textarea class="n" placeholder="Status..." data-key="act-rex"></textarea></div>
+    <div class="itm"><div class="itm-h">7. DAMit briefing note to Laura Belage (Adobe servers)</div><textarea class="n" placeholder="Status..." data-key="act-damit"></textarea></div>
+    <div class="itm"><div class="itm-h">8. Support Adam Raines in talent acquisition</div><textarea class="n" placeholder="Status..." data-key="act-talent"></textarea></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>Others' Action Items</h3></div>
+  <div class="sec-b">
+    <div class="itm"><div class="det"><b>Greg:</b> Write to AmFam CMO | Ping Norm on GM | Re-engage Roku as MMA member | Support Adam</div></div>
+    <div class="itm"><div class="det"><b>Rex:</b> Share white paper on lift challenges | Forensic audit AmFam | Train curriculum with volunteers | Data scientists negotiation</div></div>
+    <div class="itm"><div class="det"><b>Alec:</b> Track GM/Sift calls | Confirm brand interest before scheduling | NA AI Foundry channel</div></div>
+    <div class="itm"><div class="det"><b>Vas:</b> Celtra/VidMob member outreach | Reddit research monitoring | Halo Intelligence demo | Agentic survey programming</div></div>
+    <div class="itm"><div class="det"><b>Leah:</b> Board deck distribution | Videos to Hassan + Rex</div></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h" onclick="tog(this)"><span class="chv">&#9660;</span><h3>Meeting Notes &mdash; Live</h3><span class="flag flag-new">TODAY</span></div>
+  <div class="sec-b">
+    <textarea class="n" placeholder="Capture notes from today's call here..." data-key="act-live" rows="10"></textarea>
+  </div>
+</div>
+
+</div><!-- /panel-actions -->
+
+</div><!-- /main -->
+
+<div class="toast" id="toast">Saved!</div>
+
+<script>
+// Week management
+let currentDate = new Date();
+function getMonday(d){const dt=new Date(d);const day=dt.getDay();const diff=dt.getDate()-day+(day===0?-6:1);dt.setDate(diff);dt.setHours(0,0,0,0);return dt}
+function formatDate(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+function weekKey(){const m=getMonday(currentDate);return 'altt-'+m.toISOString().slice(0,10)}
+function updateWeekDisplay(){
+  const m=getMonday(currentDate);
+  const f=new Date(m);f.setDate(f.getDate()+4);
+  document.getElementById('weekDate').textContent=formatDate(m)+' - '+formatDate(f);
+  document.title='ALTT Agenda | '+formatDate(m);
+}
+function changeWeek(dir){currentDate.setDate(currentDate.getDate()+(dir*7));updateWeekDisplay();load()}
+
+// Tabs
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+id));
+}
+
+// Sections
+function tog(h){h.parentElement.classList.toggle('shut')}
+function toggleAll(shut){document.querySelectorAll('.sec').forEach(s=>shut?s.classList.add('shut'):s.classList.remove('shut'))}
+
+// Persistence
+function save(){
+  const d={};
+  document.querySelectorAll('.n').forEach(el=>{if(el.value.trim())d[el.dataset.key]=el.value});
+  localStorage.setItem(weekKey(),JSON.stringify(d));
+  flash();
+}
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem(weekKey())||'{}');
+    document.querySelectorAll('.n').forEach(el=>{el.value=d[el.dataset.key]||''});
+  }catch(e){}
+  updateCounts();
+}
+function flash(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1000)}
+
+// Auto-save
+let timer;
+document.addEventListener('input',e=>{if(e.target.classList.contains('n')){clearTimeout(timer);timer=setTimeout(save,600)}});
+
+// Counts
+function updateCounts(){
+  const labs=document.querySelectorAll('#panel-labs .itm').length;
+  const kc=document.querySelectorAll('#panel-knowledge .itm').length;
+  const com=document.querySelectorAll('#panel-community .itm').length;
+  const act=document.querySelectorAll('#panel-actions .itm').length;
+  document.getElementById('ct-labs').textContent=labs;
+  document.getElementById('ct-knowledge').textContent=kc;
+  document.getElementById('ct-community').textContent=com;
+  document.getElementById('ct-actions').textContent=act;
+}
+
+// Export
+function exportMD(){
+  let md='# ALTT Weekly Agenda\n';
+  md+='**Week of '+document.getElementById('weekDate').textContent+'**\n\n';
+  document.querySelectorAll('.panel').forEach(panel=>{
+    const tab=panel.id.replace('panel-','');
+    md+='\n## '+tab.toUpperCase()+'\n\n';
+    panel.querySelectorAll('.sec').forEach(sec=>{
+      const h=sec.querySelector('.sec-h h3');if(h)md+='### '+h.textContent.trim()+'\n';
+      sec.querySelectorAll('.itm').forEach(item=>{
+        const ih=item.querySelector('.itm-h');if(ih)md+='**'+ih.textContent.trim()+'**\n';
+        item.querySelectorAll('.det').forEach(d=>md+='- '+d.textContent.trim()+'\n');
+        item.querySelectorAll('.src').forEach(s=>md+='> '+s.textContent.trim()+'\n');
+        const n=item.querySelector('.n');if(n&&n.value.trim())md+='\n*Notes:* '+n.value.trim()+'\n';
+        md+='\n';
+      });
+    });
+    md+='---\n';
+  });
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));
+  a.download='ALTT-Agenda-'+weekKey()+'.md';a.click();
+}
+
+// Init
+updateWeekDisplay();
+load();
+updateCounts();
+</script>
+</body>
+</html>
