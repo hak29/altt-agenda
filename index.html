@@ -354,6 +354,39 @@ a:hover { text-decoration: underline; }
   .card-header { padding: 12px 14px; }
   .sub-card-header { padding: 10px 12px; }
 }
+
+/* ── EDIT CONTROLS ── */
+.sub-card-header { position: relative; }
+.edit-btns {
+  display: none; gap: 4px; margin-left: auto; flex-shrink: 0;
+}
+.sub-card:hover .edit-btns, .card-body:hover > .add-row-btn { display: flex; }
+.edit-btns button, .add-row-btn {
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--muted); width: 24px; height: 24px; border-radius: 4px;
+  cursor: pointer; font-size: 0.7rem; display: flex; align-items: center;
+  justify-content: center; transition: all 0.15s; padding: 0;
+}
+.edit-btns button:hover { color: var(--text); border-color: var(--border-highlight); }
+.edit-btns .btn-del:hover { color: var(--red); border-color: var(--red); }
+.add-row-btn {
+  display: none; width: 100%; height: 30px; margin-top: 8px;
+  font-size: 0.75rem; color: var(--muted); gap: 4px;
+  background: transparent; border: 1px dashed var(--border);
+}
+.add-row-btn:hover { color: var(--green); border-color: var(--green); }
+.sub-card.editing .sub-title { display: none; }
+.sub-card.editing .edit-title {
+  display: block; flex: 1; background: var(--bg); border: 1px solid var(--border-highlight);
+  color: var(--text); padding: 4px 8px; border-radius: 4px; font-size: 0.82rem;
+  font-family: inherit; font-weight: 500;
+}
+.edit-title { display: none; }
+.sub-card.editing .item-text { cursor: text; }
+.sub-card.editing .item-text[contenteditable] {
+  outline: none; border-bottom: 1px dashed var(--border-highlight);
+  padding-bottom: 2px;
+}
 </style>
 </head>
 <body>
@@ -1313,8 +1346,114 @@ a:hover { text-decoration: underline; }
     URL.revokeObjectURL(a.href);
   };
 
+  /* ── Edit Controls ── */
+  function initEditControls() {
+    // Add edit/delete buttons to every sub-card header
+    document.querySelectorAll('.sub-card-header').forEach(hdr => {
+      if (hdr.querySelector('.edit-btns')) return;
+      const btns = document.createElement('div');
+      btns.className = 'edit-btns';
+      btns.innerHTML = '<button class="btn-edit" title="Edit" onclick="event.stopPropagation();editItem(this)">&#9998;</button><button class="btn-del" title="Delete" onclick="event.stopPropagation();deleteItem(this)">&times;</button>';
+      hdr.appendChild(btns);
+      // Add editable input (hidden by default)
+      const title = hdr.querySelector('.sub-title');
+      if (title) {
+        const input = document.createElement('input');
+        input.className = 'edit-title';
+        input.value = title.textContent.replace(/\s*(URGENT|ATTENTION|NEW)$/, '').trim();
+        input.addEventListener('keydown', e => { if (e.key === 'Enter') finishEdit(hdr.closest('.sub-card')); });
+        input.addEventListener('blur', () => setTimeout(() => finishEdit(hdr.closest('.sub-card')), 150));
+        title.after(input);
+      }
+    });
+    // Add "+ Add Item" button at bottom of each card-body that contains sub-cards
+    document.querySelectorAll('.card-body').forEach(body => {
+      if (body.querySelector('.add-row-btn') || !body.querySelector('.sub-card')) return;
+      const btn = document.createElement('button');
+      btn.className = 'add-row-btn';
+      btn.innerHTML = '+ Add Item';
+      btn.onclick = () => addItem(body);
+      body.appendChild(btn);
+    });
+  }
+
+  window.editItem = function(btn) {
+    const card = btn.closest('.sub-card');
+    card.classList.add('editing');
+    const input = card.querySelector('.edit-title');
+    if (input) { input.focus(); input.select(); }
+    // Make item-text elements editable
+    card.querySelectorAll('.item-text').forEach(t => t.contentEditable = 'true');
+  };
+
+  window.finishEdit = function(card) {
+    if (!card || !card.classList.contains('editing')) return;
+    card.classList.remove('editing');
+    const input = card.querySelector('.edit-title');
+    const title = card.querySelector('.sub-title');
+    if (input && title) {
+      const badge = title.querySelector('.badge');
+      title.textContent = input.value + ' ';
+      if (badge) title.appendChild(badge);
+    }
+    card.querySelectorAll('.item-text').forEach(t => t.contentEditable = 'false');
+    saveEdits();
+  };
+
+  window.deleteItem = function(btn) {
+    const card = btn.closest('.sub-card');
+    const name = card.querySelector('.sub-title')?.textContent?.trim() || 'this item';
+    if (confirm('Delete "' + name + '"?')) {
+      card.remove();
+      saveEdits();
+    }
+  };
+
+  window.addItem = function(body) {
+    const id = 'sub-new-' + Date.now();
+    const div = document.createElement('div');
+    div.className = 'sub-card';
+    div.id = id;
+    div.innerHTML = `
+      <div class="sub-card-header" onclick="toggleSub('${id}')">
+        <span class="sub-title">New Item</span>
+        <input class="edit-title" value="New Item">
+        <div class="edit-btns">
+          <button class="btn-edit" title="Edit" onclick="event.stopPropagation();editItem(this)">&#9998;</button>
+          <button class="btn-del" title="Delete" onclick="event.stopPropagation();deleteItem(this)">&times;</button>
+        </div>
+        <span class="sub-chevron" id="chv-${id}">&#8250;</span>
+      </div>
+      <div class="sub-card-body" id="body-${id}" style="display:none">
+        <div class="item-text" contenteditable="true">Click to add details...</div>
+        <textarea class="notes" data-key="${id}" placeholder="Notes..."></textarea>
+      </div>`;
+    const addBtn = body.querySelector('.add-row-btn');
+    if (addBtn) body.insertBefore(div, addBtn);
+    else body.appendChild(div);
+    // Auto-enter edit mode
+    setTimeout(() => {
+      div.classList.add('editing');
+      const input = div.querySelector('.edit-title');
+      if (input) { input.focus(); input.select(); }
+    }, 50);
+  };
+
+  function saveEdits() {
+    // Save structural edits (deletions, additions, renames) to localStorage
+    const edits = {};
+    document.querySelectorAll('.sub-card').forEach(sc => {
+      const title = sc.querySelector('.sub-title')?.textContent?.trim();
+      const texts = [];
+      sc.querySelectorAll('.item-text').forEach(t => texts.push(t.textContent));
+      if (title) edits[sc.id] = { title, texts, deleted: false };
+    });
+    try { localStorage.setItem('altt-edits-' + getWeekKey(), JSON.stringify(edits)); } catch(e) {}
+  }
+
   /* ── Init ── */
   updateWeekDisplay();
+  initEditControls();
 })();
 </script>
 </body>
