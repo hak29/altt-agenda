@@ -3,1053 +3,1319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ALTT Weekly Agenda — MMA Global</title>
+<title>ALTT Weekly Check-in — MMA Global</title>
 <style>
-:root{
---bg:#0a0f1a;--surface:#0f1628;--surface2:#162038;--surface3:#1d2a4a;
---border:#253560;--text:#e8ecf4;--muted:#8892b0;--dim:#4a5580;
---gold:#ffa400;--gold2:#ffb833;
---blue:#6b8acd;--blue-dim:#4a6ba0;
---navy:#0f1628;--navy2:#162038;--navy3:#1b2847;
---green:#22c55e;--red:#ef4444;--amber:#f59e0b;
---purple:#8b5cf6;--blue-bright:#3b82f6;--emerald:#10b981;--pink:#ec4899;
---orange:#ff6b35;
---radius:8px;--radius-lg:12px;
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2333;
+  --border: #30363d;
+  --border-highlight: #484f58;
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --dim: #484f58;
+  --gold: #f0b429;
+  --green: #3fb950;
+  --red: #f85149;
+  --amber: #d29922;
+  --purple: #a371f7;
+  --blue-bright: #58a6ff;
+  --emerald: #2ea043;
+  --pink: #db61a2;
+  --orange: #f0883e;
+  --radius: 6px;
+  --radius-lg: 10px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:15px;scroll-behavior:smooth}
-body{font-family:'Segoe UI',Aptos,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
-a{color:var(--blue);text-decoration:none}
-a:hover{text-decoration:underline}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  min-height: 100vh;
+}
+a { color: var(--blue-bright); text-decoration: none; }
+a:hover { text-decoration: underline; }
 
 /* Scrollbar */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--blue-dim)}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-/* Header */
-.header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;position:sticky;top:0;z-index:100}
-.header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.header-brand{display:flex;align-items:center;gap:12px}
-.header-brand h1{font-size:1.35rem;font-weight:700;color:var(--gold)}
-.header-brand h1 span{color:var(--text);font-weight:400;font-size:.9rem;margin-left:6px}
-.header-meta{font-size:.75rem;color:var(--muted)}
+/* ── HEADER ── */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px 12px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.logo-circle {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: #21262d; border: 2px solid var(--border-highlight);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.65rem; letter-spacing: 0.5px;
+  color: var(--gold);
+}
+.brand-text h1 {
+  font-size: 1.4rem; font-weight: 700; color: var(--text); line-height: 1.2;
+}
+.brand-text .subtitle {
+  font-size: 0.78rem; color: var(--muted); font-weight: 400;
+}
 
-/* Week Nav */
-.week-nav{display:flex;align-items:center;gap:8px}
-.week-nav button{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:var(--radius);cursor:pointer;font-size:.82rem;transition:all .15s}
-.week-nav button:hover{background:var(--surface3);border-color:var(--blue)}
-.week-nav .btn-today{background:var(--gold);color:#000;border-color:var(--gold);font-weight:600}
-.week-nav .btn-today:hover{background:var(--gold2)}
-.week-label{font-size:.95rem;font-weight:600;min-width:220px;text-align:center}
+/* Week nav */
+.week-nav { display: flex; align-items: center; gap: 6px; }
+.week-nav button {
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); padding: 5px 10px; border-radius: var(--radius);
+  cursor: pointer; font-size: 0.85rem; transition: all 0.15s;
+}
+.week-nav button:hover { background: #272e38; border-color: var(--border-highlight); }
+.week-label { text-align: center; min-width: 160px; }
+.week-label .week-code { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+.week-label .week-date { font-size: 0.9rem; font-weight: 600; color: var(--gold); }
+.week-label .week-time { font-size: 0.75rem; color: var(--muted); }
+
+/* Attendees */
+.attendees { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.attendee {
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 3px 10px; border-radius: 20px; font-size: 0.78rem;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.role {
+  font-size: 0.6rem; font-weight: 700; padding: 1px 5px;
+  border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.role-lead { background: var(--green); color: #000; }
+.role-ceo { background: var(--gold); color: #000; }
+.role-new { background: var(--green); color: #000; }
+
+/* Context bar */
+.context-bar {
+  margin-top: 10px; padding: 8px 14px;
+  background: var(--surface2); border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.78rem; color: var(--muted); line-height: 1.5;
+}
 
 /* Toolbar */
-.toolbar{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
-.toolbar button{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:var(--radius);cursor:pointer;font-size:.78rem;transition:all .15s}
-.toolbar button:hover{color:var(--text);border-color:var(--blue)}
-.save-indicator{font-size:.72rem;color:var(--green);margin-left:auto;opacity:0;transition:opacity .3s}
-.save-indicator.show{opacity:1}
+.toolbar {
+  display: flex; align-items: center; gap: 6px; margin-top: 10px; flex-wrap: wrap;
+}
+.toolbar button {
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--muted); padding: 4px 10px; border-radius: var(--radius);
+  cursor: pointer; font-size: 0.72rem; transition: all 0.15s;
+}
+.toolbar button:hover { color: var(--text); border-color: var(--border-highlight); }
+.btn-today {
+  background: var(--gold) !important; color: #000 !important;
+  border-color: var(--gold) !important; font-weight: 600 !important;
+}
+.toolbar .spacer { flex: 1; }
+.read-only-banner {
+  display: none; background: var(--amber); color: #000;
+  padding: 2px 8px; border-radius: var(--radius); font-size: 0.7rem; font-weight: 600;
+}
 
-/* Read-only Banner */
-.readonly-banner{display:none;background:var(--surface3);border:1px solid var(--amber);border-radius:var(--radius);padding:10px 16px;margin:12px 24px 0;font-size:.82rem;color:var(--amber);text-align:center}
-.readonly-banner.visible{display:block}
+/* ── MAIN ── */
+.main { max-width: 1100px; margin: 0 auto; padding: 20px 20px 60px; }
 
-/* Main Content */
-.main{max-width:960px;margin:0 auto;padding:20px 24px 80px}
+/* ── STATUS GRID ── */
+.status-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  margin-bottom: 20px;
+}
+.status-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 12px 14px;
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 0.82rem; line-height: 1.45;
+}
+.status-card strong { color: var(--text); }
+.dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 4px;
+}
+.dot-green { background: var(--green); }
+.dot-amber { background: var(--amber); }
+.dot-red { background: var(--red); }
 
-/* KPI Bar */
-.kpi-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:16px}
-.kpi-bar h3{font-size:.8rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:600}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-.kpi-item{display:flex;align-items:baseline;gap:8px;font-size:.85rem}
-.kpi-item .kpi-num{color:var(--gold);font-weight:700;font-size:1rem}
-.kpi-item .kpi-label{color:var(--text)}
+/* ── CARDS (universal collapsible) ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); margin-bottom: 10px;
+  overflow: hidden;
+}
+.card-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px; cursor: pointer; user-select: none;
+  transition: background 0.1s;
+}
+.card-header:hover { background: var(--surface2); }
+.card-title {
+  flex: 1; font-size: 1rem; font-weight: 600;
+}
+.card-title .lab-full {
+  font-weight: 400; color: var(--muted); font-size: 0.85rem; margin-left: 4px;
+}
+.card-chevron {
+  font-size: 1.1rem; color: var(--muted); transition: transform 0.2s;
+  width: 20px; text-align: center; flex-shrink: 0;
+}
+.card-chevron.open { transform: rotate(90deg); }
+.card-body { padding: 0 16px 14px; display: none; }
+.card-body.open { display: block; }
 
-/* Stats Bar */
-.stats-bar{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;flex:1;min-width:120px;text-align:center}
-.stat-num{font-size:1.3rem;font-weight:700;color:var(--gold)}
-.stat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+/* Badges */
+.badge {
+  font-size: 0.6rem; font-weight: 700; padding: 2px 7px;
+  border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+.badge-attention { background: var(--orange); color: #000; }
+.badge-ref { background: var(--dim); color: var(--text); }
+.badge-urgent { background: var(--red); color: #fff; }
+.badge-new { background: var(--green); color: #000; }
+.badge-today { background: var(--gold); color: #000; }
 
-/* Attention Alert */
-.attention-bar{background:var(--surface);border:1px solid var(--red);border-radius:var(--radius);padding:12px 18px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
-.attention-bar .att-item{font-size:.85rem;color:var(--text)}
-.attention-bar .att-item strong{color:var(--red)}
-.attention-bar .att-item.deadline strong{color:var(--amber)}
+/* Reference section (KPIs, Major Projects) */
+.ref-card { margin-bottom: 8px; }
+.ref-card .card-header { padding: 8px 16px; }
+.ref-card .card-title { font-size: 0.88rem; }
+.kpi-row {
+  display: flex; gap: 12px; flex-wrap: wrap; padding-top: 4px;
+}
+.kpi-item {
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 8px 14px; border-radius: var(--radius); font-size: 0.82rem;
+  flex: 1; min-width: 140px; text-align: center;
+}
+.kpi-item strong { color: var(--gold); }
+.pill-group { margin-bottom: 8px; }
+.pill-group-label {
+  font-size: 0.65rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+}
+.pill {
+  display: inline-block; background: var(--surface2);
+  border: 1px solid var(--border); padding: 3px 10px;
+  border-radius: 14px; font-size: 0.72rem; margin: 2px 3px 2px 0;
+  color: var(--text);
+}
 
-/* Section */
-.section{margin-bottom:28px}
-.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;user-select:none}
-.section-header:hover{background:var(--surface2)}
-.section-title{font-size:1.05rem;font-weight:700;color:var(--blue);display:flex;align-items:center;gap:10px}
-.section-title .time-est{font-size:.72rem;color:var(--muted);font-weight:400;background:var(--surface2);padding:2px 8px;border-radius:10px}
-.section-toggle{color:var(--muted);font-size:.8rem;transition:transform .2s}
-.section-body{background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:16px}
-.section-body.collapsed{display:none}
+/* ── SECTION HEADERS ── */
+.section-header {
+  font-size: 1.15rem; font-weight: 700; margin: 28px 0 12px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
 
-/* Lab Sub-Section */
-.lab-section{margin-bottom:20px}
-.lab-section:last-child{margin-bottom:0}
-.lab-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.lab-tag{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 10px;border-radius:10px;color:#fff}
-.lab-tag.cap{background:var(--orange)}
-.lab-tag.a3{background:var(--purple)}
-.lab-tag.aura{background:var(--blue-bright)}
-.lab-tag.sift{background:var(--amber);color:#000}
-.lab-tag.ace{background:var(--emerald)}
-.lab-tag.arc{background:var(--pink)}
-.lab-name{font-size:.9rem;font-weight:600;color:var(--text)}
-.lab-partner{font-size:.75rem;color:var(--muted)}
+/* ── AGENDA ITEMS (inside lab cards) ── */
+.sub-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); margin: 8px 0; overflow: hidden;
+}
+.sub-card-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; cursor: pointer; user-select: none;
+  font-size: 0.88rem; font-weight: 600;
+}
+.sub-card-header:hover { background: rgba(255,255,255,0.03); }
+.sub-card-body { padding: 0 12px 10px; display: none; }
+.sub-card-body.open { display: block; }
+.sub-chevron {
+  font-size: 0.95rem; color: var(--muted); transition: transform 0.2s;
+  width: 16px; text-align: center; flex-shrink: 0;
+}
+.sub-chevron.open { transform: rotate(90deg); }
+.sub-title { flex: 1; }
 
-/* Items */
-.item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
-.item:last-child{margin-bottom:0}
-.item-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap}
-.item-name{font-weight:600;font-size:.9rem;color:var(--text)}
-.item-status{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:8px}
-.status-action{background:rgba(59,130,246,.15);color:var(--blue-bright);border:1px solid rgba(59,130,246,.3)}
-.status-urgent{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
-.status-pending{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
-.status-execution{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
-.status-evaluation{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3)}
-.status-active{background:rgba(107,138,205,.15);color:var(--blue);border:1px solid rgba(107,138,205,.3)}
-.status-stalled{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
-.status-delayed{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
-.status-progress{background:rgba(16,185,129,.15);color:var(--emerald);border:1px solid rgba(16,185,129,.3)}
-.status-review{background:rgba(107,138,205,.15);color:var(--blue);border:1px solid rgba(107,138,205,.3)}
-.status-due{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);animation:pulse-due 2s infinite}
-.status-new{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3)}
-.status-launching{background:rgba(16,185,129,.15);color:var(--emerald);border:1px solid rgba(16,185,129,.3)}
-@keyframes pulse-due{0%,100%{opacity:1}50%{opacity:.6}}
+/* Section labels: ACCOMPLISHED / NEXT / HELP */
+.section-label {
+  font-size: 0.65rem; font-weight: 700; padding: 2px 7px;
+  border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px;
+  display: inline-block; margin: 6px 0 2px;
+}
+.section-label.done { background: var(--green); color: #000; }
+.section-label.next { background: var(--blue-bright); color: #000; }
+.section-label.help { background: var(--red); color: #fff; }
+.section-label.stalled { background: var(--dim); color: var(--muted); }
 
-.item-detail{font-size:.82rem;color:var(--muted);padding:2px 0;padding-left:20px;position:relative}
-.marker{position:absolute;left:0;top:3px;font-size:.75rem;width:16px;text-align:center}
-.marker-done{color:var(--green)}
-.marker-next{color:var(--blue)}
-.marker-help{color:var(--red)}
+.item-text {
+  font-size: 0.82rem; color: var(--text); padding: 2px 0 2px 4px;
+  line-height: 1.5;
+}
+.item-text-muted { color: var(--muted); }
 
-.item-sources{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.source{font-size:.65rem;padding:2px 6px;border-radius:4px;background:var(--surface3);color:var(--muted);border:1px solid var(--border)}
-.source-call{border-color:rgba(107,138,205,.3);color:var(--blue)}
-.source-email{border-color:rgba(16,185,129,.3);color:var(--emerald)}
-.source-slack{border-color:rgba(139,92,246,.3);color:var(--purple)}
+/* Sources */
+.item-sources { margin-top: 4px; }
+.source {
+  font-size: 0.65rem; padding: 2px 6px; border-radius: 3px;
+  display: inline-block; margin-right: 4px;
+}
+.source-call { background: var(--purple); color: #fff; }
+.source-email { background: var(--blue-bright); color: #000; }
+.source-slack { background: var(--pink); color: #fff; }
+.source-notion { background: var(--dim); color: var(--text); }
 
-.item-notes{margin-top:8px}
-.item-notes textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:8px 10px;font-size:.8rem;font-family:inherit;resize:vertical;min-height:32px;transition:border-color .15s}
-.item-notes textarea:focus{outline:none;border-color:var(--blue)}
-.item-notes textarea::placeholder{color:var(--dim)}
+/* Notes textarea */
+.notes {
+  width: 100%; min-height: 50px; margin-top: 6px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 8px 10px;
+  color: var(--text); font-family: inherit; font-size: 0.8rem;
+  resize: vertical; line-height: 1.45;
+}
+.notes:focus { border-color: var(--gold); outline: none; }
+.notes[readonly] { opacity: 0.5; cursor: not-allowed; }
 
 /* Stalled list */
-.stalled-list{font-size:.78rem;color:var(--dim);padding:4px 0 0 8px;font-style:italic}
+.stalled-list {
+  font-size: 0.78rem; color: var(--muted); padding: 4px 0;
+}
+.stalled-list span {
+  display: inline-block; margin-right: 10px;
+}
 
-/* Sub-items (for Knowledge/Community) */
-.sub-section{margin-top:14px}
-.sub-section h4{font-size:.82rem;color:var(--blue);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+/* ── ACTION ITEMS ── */
+.action-section { counter-reset: action-counter; }
+.action-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 5px 0; font-size: 0.82rem;
+}
+.action-item input[type="checkbox"] {
+  margin-top: 3px; accent-color: var(--gold); flex-shrink: 0;
+}
+.action-num {
+  color: var(--muted); font-size: 0.75rem; min-width: 20px; margin-top: 1px;
+}
+.action-text { flex: 1; }
+.tag {
+  font-size: 0.6rem; font-weight: 700; padding: 1px 5px;
+  border-radius: 3px; text-transform: uppercase; margin-left: 4px;
+  display: inline-block; vertical-align: middle;
+}
+.tag-today { background: var(--gold); color: #000; }
+.tag-urgent { background: var(--red); color: #fff; }
+.tag-monitor { background: var(--amber); color: #000; }
+.tag-schedule { background: var(--blue-bright); color: #000; }
+.tag-confirm { background: var(--purple); color: #fff; }
+.tag-escalation { background: var(--orange); color: #000; }
+.tag-fup { background: var(--dim); color: var(--text); }
 
-/* Action Items */
-.action-group{margin-bottom:16px}
-.action-group h4{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.action-group h4 .count{background:var(--surface3);color:var(--muted);font-size:.7rem;padding:1px 7px;border-radius:8px;font-weight:400}
-.action-item{display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:4px;font-size:.82rem}
-.action-item input[type=checkbox]{margin-top:3px;accent-color:var(--blue)}
-.action-item label{flex:1;color:var(--text);cursor:pointer}
-.action-item .action-tag{font-size:.65rem;padding:1px 6px;border-radius:4px;background:rgba(239,68,68,.15);color:var(--red);font-weight:600;white-space:nowrap}
-.action-item .action-tag.today{background:rgba(239,68,68,.2);color:var(--red)}
-.action-item .action-tag.monitor{background:rgba(245,158,11,.15);color:var(--amber)}
-.action-item .action-tag.schedule{background:rgba(107,138,205,.15);color:var(--blue)}
-.action-item .action-tag.confirm{background:rgba(16,185,129,.15);color:var(--emerald)}
-.action-item .action-tag.escalation{background:rgba(239,68,68,.15);color:var(--red)}
+/* Team cards (small) */
+.team-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px; margin-top: 8px;
+}
+.team-card {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px;
+}
+.team-card h4 {
+  font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;
+  color: var(--gold);
+}
+.team-card ul {
+  list-style: none; font-size: 0.78rem; color: var(--muted);
+}
+.team-card li { padding: 2px 0; }
 
-.team-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
-.team-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
-.team-card h5{font-size:.8rem;font-weight:600;color:var(--blue);margin-bottom:6px}
-.team-card li{font-size:.78rem;color:var(--muted);margin-bottom:3px;list-style:none;padding-left:12px;position:relative}
-.team-card li::before{content:">";position:absolute;left:0;color:var(--blue)}
+/* Live notes */
+.live-notes {
+  width: 100%; min-height: 120px; margin-top: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px;
+  color: var(--text); font-family: inherit; font-size: 0.82rem;
+  resize: vertical;
+}
+.live-notes:focus { border-color: var(--gold); outline: none; }
 
-/* Meeting Notes */
-.meeting-notes textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:12px 14px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:120px}
-.meeting-notes textarea:focus{outline:none;border-color:var(--blue)}
-.meeting-notes textarea::placeholder{color:var(--dim)}
-
-/* Responsive */
-@media(max-width:640px){
-  .header{padding:12px 16px}
-  .main{padding:16px}
-  .stats-bar{gap:8px}
-  .stat{min-width:80px;padding:8px 10px}
-  .stat-num{font-size:1.1rem}
-  .kpi-grid{grid-template-columns:1fr}
-  .team-actions{grid-template-columns:1fr}
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .status-grid { grid-template-columns: 1fr; }
+  .header-top { flex-direction: column; align-items: flex-start; }
+  .week-nav { width: 100%; justify-content: space-between; }
+  .kpi-row { flex-direction: column; }
+  .team-grid { grid-template-columns: 1fr; }
+  .main { padding: 12px 10px 40px; }
+}
+@media (max-width: 500px) {
+  html { font-size: 14px; }
+  .card-header { padding: 12px 14px; }
+  .sub-card-header { padding: 10px 12px; }
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
+<!-- ════════════════════════════════════════════════════════════════════════
+     HEADER
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="header">
   <div class="header-top">
     <div class="header-brand">
-      <h1>ALTT <span>Weekly Agenda</span></h1>
-      <span class="header-meta">MMA Global &middot; AI Leadership Think Tank</span>
+      <div class="logo-circle">ALTT</div>
+      <div class="brand-text">
+        <h1>ALTT Weekly Check-in</h1>
+        <div class="subtitle">AI Leadership Think Tank &mdash; Agenda</div>
+      </div>
     </div>
     <div class="week-nav">
-      <button onclick="prevWeek()">&#9664; Prev</button>
-      <span class="week-label" id="weekLabel"></span>
-      <button onclick="nextWeek()">Next &#9654;</button>
+      <button onclick="changeWeek(-1)" title="Previous week">&lsaquo;</button>
+      <div class="week-label">
+        <div class="week-code" id="weekCode">2026-W13</div>
+        <div class="week-date" id="weekDate">Tue, March 24, 2026</div>
+        <div class="week-time">1:00 PM ET</div>
+      </div>
+      <button onclick="changeWeek(1)" title="Next week">&rsaquo;</button>
       <button class="btn-today" onclick="jumpToday()">Today</button>
     </div>
   </div>
-  <div class="toolbar">
-    <button onclick="toggleAllSections(true)">Expand All</button>
-    <button onclick="toggleAllSections(false)">Collapse All</button>
-    <button onclick="exportMarkdown()">Export MD</button>
-    <span class="save-indicator" id="saveInd">Saved</span>
-  </div>
-</header>
 
-<div class="readonly-banner" id="readonlyBanner">
-  You are viewing a past week. Notes are read-only.
+  <!-- Attendees -->
+  <div class="attendees">
+    <span class="attendee">Hassan <span class="role role-lead">LEAD</span></span>
+    <span class="attendee">Greg <span class="role role-ceo">CEO</span></span>
+    <span class="attendee">Vas</span>
+    <span class="attendee">Alec</span>
+    <span class="attendee">Leo <span class="role role-new">NEW</span></span>
+  </div>
+
+  <!-- Context bar -->
+  <div class="context-bar">
+    Last substantive meeting: <strong>March 10</strong>.
+    March 17 was 11 min / silent.
+    March 24 was canceled then rescheduled.
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <button onclick="expandAll()">Expand All</button>
+    <button onclick="collapseAll()">Collapse All</button>
+    <button onclick="exportMarkdown()">Export MD</button>
+    <span class="spacer"></span>
+    <span class="read-only-banner" id="readOnlyBanner">READ-ONLY (past week)</span>
+  </div>
 </div>
 
-<!-- MAIN -->
-<main class="main">
+<!-- ════════════════════════════════════════════════════════════════════════
+     MAIN CONTENT
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="main">
 
-  <!-- KPIs -->
-  <div class="kpi-bar">
-    <h3>2026 KPIs</h3>
-    <div class="kpi-grid">
-      <div class="kpi-item"><span class="kpi-num">20+</span><span class="kpi-label">new AI experiments across 6 labs</span></div>
-      <div class="kpi-item"><span class="kpi-num">10,000+</span><span class="kpi-label">training registrations (DAMit + MAC)</span></div>
-      <div class="kpi-item"><span class="kpi-num">Launch</span><span class="kpi-label">community platform (Slack + events)</span></div>
-      <div class="kpi-item"><span class="kpi-num">3+</span><span class="kpi-label">research papers / guides published</span></div>
+<!-- ── QUICK STATUS ── -->
+<div class="status-grid">
+  <!-- Row 1 -->
+  <div class="status-card">
+    <span class="dot dot-amber"></span>
+    <div><strong>AmFam</strong> &mdash; Greg letter to CMO Sharina Smith still pending. Board-level. 28.8% lift but data reconciliation blocking.</div>
+  </div>
+  <div class="status-card">
+    <span class="dot dot-amber"></span>
+    <div><strong>GCE Contract</strong> &mdash; Heba Shrourou (GCE Procurement) Mar 23. Heba confirmed receipt. Mid-April launch target.</div>
+  </div>
+  <div class="status-card">
+    <span class="dot dot-amber"></span>
+    <div><strong>SIFT</strong> &mdash; No longer paused &mdash; proceeding. Call scheduled with GM. Ask Alec for details.</div>
+  </div>
+  <!-- Row 2 -->
+  <div class="status-card">
+    <span class="dot dot-green"></span>
+    <div><strong>DAMit VII Prep</strong> &mdash; Proof email reviewed today (Mar 24). Hassan approved Dan's draft. Ready to blast.</div>
+  </div>
+  <div class="status-card">
+    <span class="dot dot-amber"></span>
+    <div><strong>ALTT Survey Launch</strong> &mdash; Targeting early-mid this week. Outreach configured. Auto-forwarding rules set.</div>
+  </div>
+  <div class="status-card">
+    <span class="dot dot-green"></span>
+    <div><strong>Custom Ink</strong> <span class="badge badge-new">New</span> &mdash; Phil Auerbach strong interest. Scoping calls being scheduled.</div>
+  </div>
+  <!-- Row 3 -->
+  <div class="status-card">
+    <span class="dot dot-amber"></span>
+    <div><strong>Peloton</strong> &mdash; Booked through June. AI pilot planned next fiscal year. Follow-up needed.</div>
+  </div>
+  <div class="status-card">
+    <span class="dot dot-red"></span>
+    <div><strong>David Berkowitz Email</strong> &mdash; Greg flagged for discussion on today's agenda (from Mar 10 meeting).</div>
+  </div>
+</div>
+
+<!-- ── REFERENCE: KPIs ── -->
+<div class="card ref-card" id="card-kpis">
+  <div class="card-header" onclick="toggleCard('card-kpis')">
+    <div class="card-title">2026 KPIs <span class="badge badge-ref">Reference</span></div>
+    <span class="card-chevron" id="chv-card-kpis">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-kpis">
+    <div class="kpi-row">
+      <div class="kpi-item"><strong>20+</strong> experiments</div>
+      <div class="kpi-item"><strong>10,000+</strong> registrations</div>
+      <div class="kpi-item"><strong>Community</strong> launch</div>
+      <div class="kpi-item"><strong>3+</strong> papers</div>
     </div>
   </div>
+</div>
 
-  <!-- Stats Bar -->
-  <div class="stats-bar">
-    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Active Labs</div></div>
-    <div class="stat"><div class="stat-num">97</div><div class="stat-label">Total Experiments</div></div>
-    <div class="stat"><div class="stat-num">29</div><div class="stat-label">CAP Completed</div></div>
-    <div class="stat"><div class="stat-num">9,334</div><div class="stat-label">DAMit Registrations</div></div>
-    <div class="stat"><div class="stat-num">+160%</div><div class="stat-label">CAP Avg Lift</div></div>
+<!-- ── REFERENCE: Major Projects ── -->
+<div class="card ref-card" id="card-projects">
+  <div class="card-header" onclick="toggleCard('card-projects')">
+    <div class="card-title">Major Projects <span class="badge badge-ref">Reference</span></div>
+    <span class="card-chevron" id="chv-card-projects">&rsaquo;</span>
   </div>
-
-  <!-- Attention Alert -->
-  <div class="attention-bar">
-    <div class="att-item"><strong>10</strong> experiments need attention</div>
-    <div class="att-item deadline"><strong>6</strong> deadlines this week</div>
-    <div class="att-item"><strong>2</strong> urgent items</div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- LABS (~25 min) -->
-  <!-- ========================================== -->
-  <div class="section" id="sec-labs">
-    <div class="section-header" onclick="toggleSection('sec-labs')">
-      <div class="section-title">Labs <span class="time-est">~25 min</span></div>
-      <span class="section-toggle" id="toggle-sec-labs">&#9660;</span>
+  <div class="card-body" id="body-card-projects">
+    <div class="pill-group">
+      <div class="pill-group-label">Core Programs</div>
+      <span class="pill">CAP</span><span class="pill">A3</span><span class="pill">AURA</span>
+      <span class="pill">SIFT</span><span class="pill">ACE</span><span class="pill">ARC</span>
     </div>
-    <div class="section-body" id="body-sec-labs">
-
-      <!-- CAP -->
-      <div class="lab-section">
-        <div class="lab-header">
-          <span class="lab-tag cap">CAP</span>
-          <span class="lab-name">Creative AI Personalization</span>
-          <span class="lab-partner">Claritas / Rex Briggs</span>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">GM Update (from Rex)</span>
-            <span class="item-status status-action">Action</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 19: brand name usage resolved + fee structure aligned</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Norm green light needed, CTV expansion Roku + Prime, AURA crossover</div>
-          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Greg re-engage Roku contact</div>
-          <div class="item-sources">
-            <span class="source source-call">Call Mar 19</span>
-          </div>
-          <div class="item-notes"><textarea data-key="cap-gm-update" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Claritas CAP Blanket Agreement</span>
-            <span class="item-status status-urgent">Urgent</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Don Sklenka flagged Mar 23: agreement expired Dec 31</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Re-up decision needed &mdash; covers ALL CAP experiments</div>
-          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Greg: decision on renewal terms</div>
-          <div class="item-sources">
-            <span class="source source-email">Email Mar 23</span>
-          </div>
-          <div class="item-notes"><textarea data-key="cap-blanket-agreement" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">AmFam Data Cooperation</span>
-            <span class="item-status status-pending">Pending</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Briefing note written for Greg</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Greg to write CMO Sharina Smith</div>
-          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Board relationship at risk if delayed</div>
-          <div class="item-notes"><textarea data-key="cap-amfam" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">POSSIBLE Sessions</span>
-            <span class="item-status status-review">Review</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Which brands present? Finalize speakers + format</div>
-          <div class="item-notes"><textarea data-key="cap-possible" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Impact Numbers / Rex White Paper</span>
-            <span class="item-status status-active">Strategic</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Rex shared draft: conversion density, KPI selection, creative diversity</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Pre-launch checklist, 2 data scientists from Mike</div>
-          <div class="item-notes"><textarea data-key="cap-whitepaper" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">CAP vs Claritas Positioning</span>
-            <span class="item-status status-review">Review</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Side-by-side comparison needed for clarity</div>
-          <div class="item-notes"><textarea data-key="cap-positioning" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">New Pipeline</span>
-            <span class="item-status status-active">Pipeline</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> <strong>Clorox</strong> &mdash; schedule intro via Amanda</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> <strong>Marriott</strong> &mdash; call with Michelle, POSSIBLE event</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> <strong>Ford</strong> &mdash; Don interested, scheduling</div>
-          <div class="item-notes"><textarea data-key="cap-pipeline" placeholder="Notes..."></textarea></div>
-        </div>
-      </div>
-
-      <!-- A3 -->
-      <div class="lab-section">
-        <div class="lab-header">
-          <span class="lab-tag a3">A3</span>
-          <span class="lab-name">Agentic AI Advertising</span>
-          <span class="lab-partner">Monks</span>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Intuit</span>
-            <span class="item-status status-execution">Execution</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 20 Call #3: creative concept selected</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Call #4: persona refinement, concept approval, legal review AI content, rough cut ~Apr 1</div>
-          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Legal review needed; persona $8M flagged</div>
-          <div class="item-sources">
-            <span class="source source-call">Call Mar 20</span>
-          </div>
-          <div class="item-notes"><textarea data-key="a3-intuit" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Campbell + Monks</span>
-            <span class="item-status status-execution">Execution</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> In progress with Monks</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Track progress, Hassan brief team</div>
-          <div class="item-notes"><textarea data-key="a3-campbell" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Novartis</span>
-            <span class="item-status status-evaluation">Evaluation</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Video generation for FDA label changes &mdash; Dave Carey ISI feasibility</div>
-          <div class="item-notes"><textarea data-key="a3-novartis" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="stalled-list">Stalled: Peloton (FY2027), SC Johnson, The Hartford, Chipotle</div>
-      </div>
-
-      <!-- AURA -->
-      <div class="lab-section">
-        <div class="lab-header">
-          <span class="lab-tag aura">AURA</span>
-          <span class="lab-name">AI Uncovering Responsive Audiences</span>
-          <span class="lab-partner">Claritas</span>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">AT&amp;T</span>
-            <span class="item-status status-pending">Pending FUP</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Pixel implementation progressing (Mar 6), Hassan sent follow-up</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Check response from Christopher Stanger, cookie details from Claritas</div>
-          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Clarify 10M impression minimum</div>
-          <div class="item-sources">
-            <span class="source source-email">Email Mar 6</span>
-          </div>
-          <div class="item-notes"><textarea data-key="aura-att" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">GM (Buick/GMC)</span>
-            <span class="item-status status-active">Moving</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Feb 18: testing Buick/GMC, 15-25% conversion target, Pronghorn + Dynata</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Christine connect segments</div>
-          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Dynamic expansion delayed 6 months</div>
-          <div class="item-sources">
-            <span class="source source-call">Call Feb 18</span>
-          </div>
-          <div class="item-notes"><textarea data-key="aura-gm" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="stalled-list">Pending: Peloton (due Mar 31 &mdash; Leah scheduling) | Stalled: Visa, Microsoft, Hilton, Delta</div>
-      </div>
-
-      <!-- SIFT -->
-      <div class="lab-section">
-        <div class="lab-header">
-          <span class="lab-tag sift">SIFT</span>
-          <span class="lab-name">Semantic Inference for Targeting</span>
-          <span class="lab-partner">Cognitiv</span>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Back on Track</span>
-            <span class="item-status status-active">Active</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> No longer paused &mdash; "zero to one" vendor</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> GM call (ask Alec). Shortlist: Delta, DraftKings, 1-800 Flowers, SC Johnson</div>
-          <div class="item-notes"><textarea data-key="sift-main" placeholder="Notes..."></textarea></div>
-        </div>
-      </div>
-
-      <!-- ACE -->
-      <div class="lab-section">
-        <div class="lab-header">
-          <span class="lab-tag ace">ACE</span>
-          <span class="lab-name">AI-Driven Creative Effectiveness</span>
-          <span class="lab-partner">VidMob / Celtra</span>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">VidMob / Kroger</span>
-            <span class="item-status status-delayed">Delayed</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Kay re-engaged</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Video creative intelligence, CCS summer target, completion ~May</div>
-          <div class="item-notes"><textarea data-key="ace-vidmob-kroger" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Celtra</span>
-            <span class="item-status status-stalled">Stalled</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Vania left; CTO Miha meeting held. Halo Intelligence alternative</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Q: Celtra clients = MMA members?</div>
-          <div class="item-notes"><textarea data-key="ace-celtra" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">AT&amp;T (Parthiv)</span>
-            <span class="item-status status-review">Alternative</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Own solution, won't use VidMob/Celtra &mdash; need alternative path</div>
-          <div class="item-notes"><textarea data-key="ace-att" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Intuit / Celtra</span>
-            <span class="item-status status-stalled">Stalled</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Test failed, asked 3x</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Need next steps for Intuit</div>
-          <div class="item-notes"><textarea data-key="ace-intuit-celtra" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Peloton ACE</span>
-            <span class="item-status status-due">Due Today</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Confirm Vas reached out</div>
-          <div class="item-notes"><textarea data-key="ace-peloton" placeholder="Notes..."></textarea></div>
-        </div>
-      </div>
-
-      <!-- ARC -->
-      <div class="lab-section">
-        <div class="lab-header">
-          <span class="lab-tag arc">ARC</span>
-          <span class="lab-name">AEO via Reddit</span>
-          <span class="lab-partner">Reddit</span>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Reddit Research</span>
-            <span class="item-status status-progress">In Progress</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Baselines: auto, travel, anti-aging, beauty</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Mid-Q2 results. Brown University potential. Rex unavailable until post-training</div>
-          <div class="item-notes"><textarea data-key="arc-reddit" placeholder="Notes..."></textarea></div>
-        </div>
-      </div>
-
+    <div class="pill-group">
+      <div class="pill-group-label">Training</div>
+      <span class="pill">DAMit</span><span class="pill">MAC (AI Belt Certification)</span><span class="pill">MAF (AI Foundry)</span>
+    </div>
+    <div class="pill-group">
+      <div class="pill-group-label">Events</div>
+      <span class="pill">CATS</span><span class="pill">Great Debates</span><span class="pill">POSSIBLE</span><span class="pill">ALC Quarterly</span>
     </div>
   </div>
+</div>
 
-  <!-- ========================================== -->
-  <!-- KNOWLEDGE CENTER (~8 min) -->
-  <!-- ========================================== -->
-  <div class="section" id="sec-knowledge">
-    <div class="section-header" onclick="toggleSection('sec-knowledge')">
-      <div class="section-title">Knowledge Center <span class="time-est">~8 min</span></div>
-      <span class="section-toggle" id="toggle-sec-knowledge">&#9660;</span>
+<!-- ══════════════════════════════════════════════════════════════════
+     LABS SECTION
+     ══════════════════════════════════════════════════════════════ -->
+<div class="section-header">Labs</div>
+
+<!-- ── CAP ── -->
+<div class="card" id="card-cap">
+  <div class="card-header" onclick="toggleCard('card-cap')">
+    <div class="card-title">CAP <span class="lab-full">&mdash; Consortium for AI Personalization</span></div>
+    <span class="card-chevron" id="chv-card-cap">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-cap">
+    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:8px;">Deep dives happen in the weekly CAP call. High-level items only.</p>
+
+    <div class="sub-card" id="sub-cap-claritas">
+      <div class="sub-card-header" onclick="toggleSub('sub-cap-claritas')">
+        <span class="sub-title">1. Claritas Blanket Agreement <span class="badge badge-urgent">URGENT</span></span>
+        <span class="sub-chevron" id="chv-sub-cap-claritas">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-cap-claritas">
+        <div class="item-text">Don Sklenka: expired Dec 31. Re-up decision needed. Blocks all Claritas-dependent experiments.</div>
+        <textarea class="notes" data-key="cap-claritas" placeholder="Notes..."></textarea>
+      </div>
     </div>
-    <div class="section-body" id="body-sec-knowledge">
 
-      <div class="sub-section">
-        <h4>Training Programs</h4>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">DAMit VII</span>
-            <span class="item-status status-due">Mar 30 / Review Today</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Dan Whiting sent prep email proof for review TODAY</div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Stats: 9,334 reg / 5,061 attendees / 2,129 certs</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Need more Credly certs. Rex: AI self-updating system with Cal Poly</div>
-          <div class="item-sources">
-            <span class="source source-email">Email Mar 23</span>
-          </div>
-          <div class="item-notes"><textarea data-key="kc-damit" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">MAC (AI Certification)</span>
-            <span class="item-status status-progress">Building</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> White Belt ready, Yellow near done, Green Belt March</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> ChatGPT clone ~$0.50/user. Alec requested training slides access (Mar 23)</div>
-          <div class="item-notes"><textarea data-key="kc-mac" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">MAF (AI Fluency &mdash; Internal)</span>
-            <span class="item-status status-progress">Active</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> 96% AI policy pass, 90% training done</div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Alec: AI-AF Office Hours, Granola workspace</div>
-          <div class="item-notes"><textarea data-key="kc-maf" placeholder="Notes..."></textarea></div>
-        </div>
+    <div class="sub-card" id="sub-cap-gm">
+      <div class="sub-card-header" onclick="toggleSub('sub-cap-gm')">
+        <span class="sub-title">2. GM Update (Rex)</span>
+        <span class="sub-chevron" id="chv-sub-cap-gm">&rsaquo;</span>
       </div>
-
-      <div class="sub-section">
-        <h4>Research Initiatives</h4>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Agentic AI Survey</span>
-            <span class="item-status status-active">Launching</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Vas programming survey, launch soon</div>
-          <div class="item-notes"><textarea data-key="kc-agentic" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Benchmark Study</span>
-            <span class="item-status status-review">Review</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 9 draft review</div>
-          <div class="item-detail"><span class="marker marker-help">&#9888;</span> Jerome flagged data validity</div>
-          <div class="item-notes"><textarea data-key="kc-benchmark" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">CoLoop</span>
-            <span class="item-status status-new">New</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Mar 24 demo &mdash; qualitative research platform</div>
-          <div class="item-notes"><textarea data-key="kc-coloop" placeholder="Notes..."></textarea></div>
-        </div>
+      <div class="sub-card-body" id="body-sub-cap-gm">
+        <div class="item-text">Norm green light. CTV expansion. AURA crossover potential.</div>
+        <textarea class="notes" data-key="cap-gm" placeholder="Notes..."></textarea>
       </div>
+    </div>
 
-      <div class="sub-section">
-        <h4>Papers &amp; Guides</h4>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Rex Paper</span>
-            <span class="item-status status-active">Backburner</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> AI workforce &mdash; on hold</div>
-          <div class="item-notes"><textarea data-key="kc-rex-paper" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">Okra (OKR Tool)</span>
-            <span class="item-status status-progress">Ready</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-done">&#10003;</span> OKR tool ready, constitutional alignment</div>
-          <div class="item-notes"><textarea data-key="kc-okra" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">BCG Operating Model</span>
-            <span class="item-status status-review">Status?</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Check status</div>
-          <div class="item-notes"><textarea data-key="kc-bcg" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">RAIL Guides</span>
-            <span class="item-status status-review">Status?</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Check status</div>
-          <div class="item-notes"><textarea data-key="kc-rail" placeholder="Notes..."></textarea></div>
-        </div>
-
-        <div class="item">
-          <div class="item-header">
-            <span class="item-name">GPT for Marketing</span>
-            <span class="item-status status-progress">WIP</span>
-          </div>
-          <div class="item-detail"><span class="marker marker-next">&rarr;</span> Empirical Generalization GPT</div>
-          <div class="item-notes"><textarea data-key="kc-gpt-marketing" placeholder="Notes..."></textarea></div>
-        </div>
+    <div class="sub-card" id="sub-cap-amfam">
+      <div class="sub-card-header" onclick="toggleSub('sub-cap-amfam')">
+        <span class="sub-title">3. AmFam</span>
+        <span class="sub-chevron" id="chv-sub-cap-amfam">&rsaquo;</span>
       </div>
+      <div class="sub-card-body" id="body-sub-cap-amfam">
+        <div class="item-text">Greg CMO letter to Sharina Smith pending. 28.8% lift. Data reconciliation issue.</div>
+        <textarea class="notes" data-key="cap-amfam" placeholder="Notes..."></textarea>
+      </div>
+    </div>
 
+    <div class="sub-card" id="sub-cap-possible">
+      <div class="sub-card-header" onclick="toggleSub('sub-cap-possible')">
+        <span class="sub-title">4. POSSIBLE Sessions</span>
+        <span class="sub-chevron" id="chv-sub-cap-possible">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-cap-possible">
+        <div class="item-text">Speakers + format TBD. Coordinate with events team.</div>
+        <textarea class="notes" data-key="cap-possible" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-cap-paper">
+      <div class="sub-card-header" onclick="toggleSub('sub-cap-paper')">
+        <span class="sub-title">5. Impact Numbers / White Paper</span>
+        <span class="sub-chevron" id="chv-sub-cap-paper">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-cap-paper">
+        <div class="item-text">Rex draft in progress. Pre-launch checklist needed.</div>
+        <textarea class="notes" data-key="cap-paper" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-cap-pipeline">
+      <div class="sub-card-header" onclick="toggleSub('sub-cap-pipeline')">
+        <span class="sub-title">6. New Pipeline</span>
+        <span class="sub-chevron" id="chv-sub-cap-pipeline">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-cap-pipeline">
+        <div class="item-text">Clorox, Marriott, Ford &mdash; active prospecting.</div>
+        <textarea class="notes" data-key="cap-pipeline" placeholder="Notes..."></textarea>
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- ========================================== -->
-  <!-- COMMUNITY (~7 min) -->
-  <!-- ========================================== -->
-  <div class="section" id="sec-community">
-    <div class="section-header" onclick="toggleSection('sec-community')">
-      <div class="section-title">Community <span class="time-est">~7 min</span></div>
-      <span class="section-toggle" id="toggle-sec-community">&#9660;</span>
+<!-- ── A3 ── -->
+<div class="card" id="card-a3">
+  <div class="card-header" onclick="toggleCard('card-a3')">
+    <div class="card-title">A3 <span class="lab-full">&mdash; Agentic AI Advertising</span></div>
+    <span class="badge badge-attention">Attention</span>
+    <span class="card-chevron" id="chv-card-a3">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-a3">
+
+    <!-- Intuit + Monks -->
+    <div class="sub-card" id="sub-a3-intuit">
+      <div class="sub-card-header" onclick="toggleSub('sub-a3-intuit')">
+        <span class="sub-title">Intuit + Monks <span class="badge badge-attention">Attention</span></span>
+        <span class="sub-chevron" id="chv-sub-a3-intuit">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-a3-intuit">
+        <span class="section-label done">ACCOMPLISHED</span>
+        <div class="item-text">Mar 20 Call #3: creative concept selected. Call #4: persona refinement.</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">Concept approval. Legal review AI content. Rough cut ~Apr 1.</div>
+        <span class="section-label help">HELP NEEDED</span>
+        <div class="item-text">Legal review needed for AI-generated content. Persona $8M flagged.</div>
+        <div class="item-sources"><span class="source source-call">Call Mar 20</span></div>
+        <textarea class="notes" data-key="a3-intuit" placeholder="Notes..."></textarea>
+      </div>
     </div>
-    <div class="section-body" id="body-sec-community">
 
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">ALC Schedule 2026</span>
-          <span class="item-status status-active">Confirmed</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Q1 done</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Q2: May 12-13 | Q3: Sept 1-3 | Q4: Nov 17-19</div>
-        <div class="item-notes"><textarea data-key="comm-alc" placeholder="Notes..."></textarea></div>
+    <!-- Campbell + Monks -->
+    <div class="sub-card" id="sub-a3-campbell">
+      <div class="sub-card-header" onclick="toggleSub('sub-a3-campbell')">
+        <span class="sub-title">Campbell + Monks <span class="badge badge-attention">Attention</span></span>
+        <span class="sub-chevron" id="chv-sub-a3-campbell">&rsaquo;</span>
       </div>
-
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">CATS</span>
-          <span class="item-status status-execution">May 14</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> 120+ registrations, Meta facility pending, waitlist active</div>
-        <div class="item-notes"><textarea data-key="comm-cats" placeholder="Notes..."></textarea></div>
+      <div class="sub-card-body" id="body-sub-a3-campbell">
+        <span class="section-label done">ACCOMPLISHED</span>
+        <div class="item-text">In execution with Monks.</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">Track progress. Hassan brief team.</div>
+        <textarea class="notes" data-key="a3-campbell" placeholder="Notes..."></textarea>
       </div>
+    </div>
 
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Great Debates</span>
-          <span class="item-status status-active">June 20</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> 6-7 part webinar, Dan coordinating speakers</div>
-        <div class="item-notes"><textarea data-key="comm-debates" placeholder="Notes..."></textarea></div>
+    <!-- Novartis -->
+    <div class="sub-card" id="sub-a3-novartis">
+      <div class="sub-card-header" onclick="toggleSub('sub-a3-novartis')">
+        <span class="sub-title">Novartis</span>
+        <span class="sub-chevron" id="chv-sub-a3-novartis">&rsaquo;</span>
       </div>
-
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Slack Community</span>
-          <span class="item-status status-launching">Launching</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> v3 deck finalized</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Alec: NA AI Foundry channel. David Berkowitz onboarding</div>
-        <div class="item-notes"><textarea data-key="comm-slack" placeholder="Notes..."></textarea></div>
+      <div class="sub-card-body" id="body-sub-a3-novartis">
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">Video generation for FDA label changes &mdash; Dave Carey ISI feasibility.</div>
+        <textarea class="notes" data-key="a3-novartis" placeholder="Notes..."></textarea>
       </div>
+    </div>
 
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Talent</span>
-          <span class="item-status status-active">Active</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> Adam Raines: 8-10 positions, AI screening, belt courses as qualifiers</div>
-        <div class="item-notes"><textarea data-key="comm-talent" placeholder="Notes..."></textarea></div>
+    <!-- Stalled -->
+    <div style="margin-top:8px;">
+      <span class="section-label stalled">STALLED</span>
+      <div class="stalled-list">
+        <span>Peloton (FY2027)</span>
+        <span>SC Johnson</span>
+        <span>Hartford</span>
+        <span>Chipotle</span>
       </div>
-
-      <div class="item">
-        <div class="item-header">
-          <span class="item-name">Bodhium Labs</span>
-          <span class="item-status status-new">New</span>
-        </div>
-        <div class="item-detail"><span class="marker marker-done">&#10003;</span> Mar 20 call with Greg</div>
-        <div class="item-detail"><span class="marker marker-next">&rarr;</span> AI commerce / GEO &mdash; evaluate fit</div>
-        <div class="item-notes"><textarea data-key="comm-bodhium" placeholder="Notes..."></textarea></div>
-      </div>
-
     </div>
   </div>
+</div>
 
-  <!-- ========================================== -->
-  <!-- ACTION ITEMS (~5 min) -->
-  <!-- ========================================== -->
-  <div class="section" id="sec-actions">
-    <div class="section-header" onclick="toggleSection('sec-actions')">
-      <div class="section-title">Action Items <span class="time-est">~5 min</span></div>
-      <span class="section-toggle" id="toggle-sec-actions">&#9660;</span>
+<!-- ── AURA ── -->
+<div class="card" id="card-aura">
+  <div class="card-header" onclick="toggleCard('card-aura')">
+    <div class="card-title">AURA <span class="lab-full">&mdash; AI Uncovering Responsive Audiences</span></div>
+    <span class="card-chevron" id="chv-card-aura">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-aura">
+
+    <div class="sub-card" id="sub-aura-att">
+      <div class="sub-card-header" onclick="toggleSub('sub-aura-att')">
+        <span class="sub-title">AT&amp;T</span>
+        <span class="sub-chevron" id="chv-sub-aura-att">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-aura-att">
+        <div class="item-text">Pending FUP. Pixel progressing. Christopher Stanger. 10M impressions.</div>
+        <textarea class="notes" data-key="aura-att" placeholder="Notes..."></textarea>
+      </div>
     </div>
-    <div class="section-body" id="body-sec-actions">
 
-      <div class="action-group">
-        <h4>Hassan <span class="count">11</span></h4>
-        <div class="action-item">
-          <input type="checkbox" id="h1" data-key="action-h1">
-          <label for="h1">Review DAMit VII prep email proof (Dan)</label>
-          <span class="action-tag today">TODAY</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h2" data-key="action-h2">
-          <label for="h2">Claritas blanket agreement &mdash; discuss re-up with Greg</label>
-          <span class="action-tag today">URGENT</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h3" data-key="action-h3">
-          <label for="h3">GCE contract &mdash; monitor DPA review by Heba</label>
-          <span class="action-tag monitor">MONITOR</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h4" data-key="action-h4">
-          <label for="h4">GroundTruth &mdash; deadline today</label>
-          <span class="action-tag today">TODAY</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h5" data-key="action-h5">
-          <label for="h5">Clorox &mdash; schedule intro call</label>
-          <span class="action-tag schedule">SCHEDULE</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h6" data-key="action-h6">
-          <label for="h6">Marriott &mdash; schedule call</label>
-          <span class="action-tag schedule">SCHEDULE</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h7" data-key="action-h7">
-          <label for="h7">Peloton ACE &mdash; confirm Vas outreach</label>
-          <span class="action-tag confirm">CONFIRM</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h8" data-key="action-h8">
-          <label for="h8">AT&amp;T AURA &mdash; check follow-up response</label>
-          <span class="action-tag confirm">CONFIRM</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h9" data-key="action-h9">
-          <label for="h9">Campbell &mdash; escalation (14d stalled)</label>
-          <span class="action-tag escalation">ESCALATION</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h10" data-key="action-h10">
-          <label for="h10">Custom Ink &mdash; schedule follow-up</label>
-          <span class="action-tag schedule">SCHEDULE</span>
-        </div>
-        <div class="action-item">
-          <input type="checkbox" id="h11" data-key="action-h11">
-          <label for="h11">Intuit A3 &mdash; legal review</label>
-          <span class="action-tag monitor">MONITOR</span>
-        </div>
+    <div class="sub-card" id="sub-aura-gm">
+      <div class="sub-card-header" onclick="toggleSub('sub-aura-gm')">
+        <span class="sub-title">GM (Buick/GMC)</span>
+        <span class="sub-chevron" id="chv-sub-aura-gm">&rsaquo;</span>
       </div>
-
-      <div class="team-actions">
-        <div class="team-card">
-          <h5>Greg</h5>
-          <ul>
-            <li>AmFam CMO letter</li>
-            <li>Norm green light</li>
-            <li>Roku re-engagement</li>
-            <li>Claritas contract re-up</li>
-          </ul>
-        </div>
-        <div class="team-card">
-          <h5>Rex</h5>
-          <ul>
-            <li>White paper</li>
-            <li>AmFam forensic</li>
-            <li>Training curriculum</li>
-            <li>Data scientists</li>
-          </ul>
-        </div>
-        <div class="team-card">
-          <h5>Alec</h5>
-          <ul>
-            <li>SIFT/GM calls</li>
-            <li>AI-AF Office Hours</li>
-            <li>NA AI Foundry channel</li>
-          </ul>
-        </div>
-        <div class="team-card">
-          <h5>Vas</h5>
-          <ul>
-            <li>Celtra/VidMob outreach</li>
-            <li>Peloton ACE</li>
-            <li>Reddit</li>
-            <li>CoLoop eval</li>
-          </ul>
-        </div>
-        <div class="team-card">
-          <h5>Leah</h5>
-          <ul>
-            <li>Peloton AURA scheduling</li>
-            <li>Board deck distribution</li>
-          </ul>
-        </div>
+      <div class="sub-card-body" id="body-sub-aura-gm">
+        <div class="item-text">Moving. 15-25% conversion target. Pronghorn + Dynata.</div>
+        <textarea class="notes" data-key="aura-gm" placeholder="Notes..."></textarea>
       </div>
+    </div>
 
-      <div class="meeting-notes" style="margin-top:20px">
-        <h4 style="font-size:.85rem;font-weight:600;color:var(--blue);margin-bottom:8px">Live Meeting Notes</h4>
-        <textarea data-key="meeting-notes" placeholder="Type meeting notes here..."></textarea>
+    <div style="margin-top:8px;">
+      <span class="section-label stalled">STALLED</span>
+      <div class="stalled-list">
+        <span>Peloton</span>
+        <span>Visa</span>
+        <span>Microsoft</span>
+        <span>Hilton</span>
+        <span>Delta</span>
       </div>
-
     </div>
   </div>
+</div>
 
-</main>
+<!-- ── SIFT ── -->
+<div class="card" id="card-sift">
+  <div class="card-header" onclick="toggleCard('card-sift')">
+    <div class="card-title">SIFT <span class="lab-full">&mdash; Semantic Inference for Targeting (Cognitiv)</span></div>
+    <span class="badge badge-attention">Attention</span>
+    <span class="card-chevron" id="chv-card-sift">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-sift">
+    <span class="section-label done">ACCOMPLISHED</span>
+    <div class="item-text">No longer paused. Was paused after Justin pulled back. 2nd batch: only Kenvue responded. Now back on track.</div>
+    <span class="section-label next">NEXT</span>
+    <div class="item-text">GM call (ask Alec). Shortlist: Delta, DraftKings, 1-800 Flowers, SC Johnson.</div>
+    <span class="section-label help">HELP NEEDED</span>
+    <div class="item-text">"Zero to one" &mdash; another vendor to evaluate alongside Cognitiv.</div>
+    <textarea class="notes" data-key="sift-main" placeholder="Notes..."></textarea>
+  </div>
+</div>
 
+<!-- ── ACE ── -->
+<div class="card" id="card-ace">
+  <div class="card-header" onclick="toggleCard('card-ace')">
+    <div class="card-title">ACE <span class="lab-full">&mdash; AI-Driven Creative Effectiveness</span></div>
+    <span class="card-chevron" id="chv-card-ace">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-ace">
+
+    <div class="sub-card" id="sub-ace-vidmob">
+      <div class="sub-card-header" onclick="toggleSub('sub-ace-vidmob')">
+        <span class="sub-title">VidMob / Kroger</span>
+        <span class="sub-chevron" id="chv-sub-ace-vidmob">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-ace-vidmob">
+        <div class="item-text">Delayed. CCS summer target.</div>
+        <textarea class="notes" data-key="ace-vidmob" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-ace-celtra">
+      <div class="sub-card-header" onclick="toggleSub('sub-ace-celtra')">
+        <span class="sub-title">Celtra</span>
+        <span class="sub-chevron" id="chv-sub-ace-celtra">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-ace-celtra">
+        <div class="item-text">Stalled. Vania left, CTO Miha. Halo Intelligence as alternative.</div>
+        <textarea class="notes" data-key="ace-celtra" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-ace-att">
+      <div class="sub-card-header" onclick="toggleSub('sub-ace-att')">
+        <span class="sub-title">AT&amp;T (Parthiv)</span>
+        <span class="sub-chevron" id="chv-sub-ace-att">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-ace-att">
+        <div class="item-text">Own solution built internally. Need alternative partner.</div>
+        <textarea class="notes" data-key="ace-att" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-ace-intuit">
+      <div class="sub-card-header" onclick="toggleSub('sub-ace-intuit')">
+        <span class="sub-title">Intuit / Celtra</span>
+        <span class="sub-chevron" id="chv-sub-ace-intuit">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-ace-intuit">
+        <div class="item-text">Stalled. Test failed 3x.</div>
+        <textarea class="notes" data-key="ace-intuit" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-ace-peloton">
+      <div class="sub-card-header" onclick="toggleSub('sub-ace-peloton')">
+        <span class="sub-title">Peloton ACE <span class="badge badge-today">DUE TODAY</span></span>
+        <span class="sub-chevron" id="chv-sub-ace-peloton">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-ace-peloton">
+        <div class="item-text">Confirm Vas outreach to Peloton team. Due today.</div>
+        <textarea class="notes" data-key="ace-peloton" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ARC ── -->
+<div class="card" id="card-arc">
+  <div class="card-header" onclick="toggleCard('card-arc')">
+    <div class="card-title">ARC <span class="lab-full">&mdash; AEO via Reddit</span></div>
+    <span class="card-chevron" id="chv-card-arc">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-arc">
+    <div class="sub-card" id="sub-arc-reddit">
+      <div class="sub-card-header" onclick="toggleSub('sub-arc-reddit')">
+        <span class="sub-title">Reddit Research</span>
+        <span class="sub-chevron" id="chv-sub-arc-reddit">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-arc-reddit">
+        <div class="item-text">In progress. Mid-Q2 results expected. Brown University collaboration.</div>
+        <textarea class="notes" data-key="arc-reddit" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     KNOWLEDGE CENTER
+     ══════════════════════════════════════════════════════════════ -->
+<div class="section-header">Knowledge Center</div>
+
+<div class="card" id="card-kc">
+  <div class="card-header" onclick="toggleCard('card-kc')">
+    <div class="card-title">Knowledge Center</div>
+    <span class="card-chevron" id="chv-card-kc">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-kc">
+
+    <!-- Training -->
+    <h3 style="font-size:0.9rem;font-weight:600;margin:8px 0 6px;color:var(--gold);">Training</h3>
+
+    <div class="sub-card" id="sub-kc-damit">
+      <div class="sub-card-header" onclick="toggleSub('sub-kc-damit')">
+        <span class="sub-title">DAMit VII <span class="badge badge-today">Mar 30 / Review Today</span></span>
+        <span class="sub-chevron" id="chv-sub-kc-damit">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-kc-damit">
+        <div class="item-text">Dan Whiting proof email reviewed. Stats ready. Credly certs configured.</div>
+        <textarea class="notes" data-key="kc-damit" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-kc-mac">
+      <div class="sub-card-header" onclick="toggleSub('sub-kc-mac')">
+        <span class="sub-title">MAC &mdash; AI Belt Certification</span>
+        <span class="sub-chevron" id="chv-sub-kc-mac">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-kc-mac">
+        <div class="item-text">White / Yellow / Green Belt progress. ChatGPT clone development.</div>
+        <textarea class="notes" data-key="kc-mac" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-kc-maf">
+      <div class="sub-card-header" onclick="toggleSub('sub-kc-maf')">
+        <span class="sub-title">MAF &mdash; AI Foundry</span>
+        <span class="sub-chevron" id="chv-sub-kc-maf">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-kc-maf">
+        <div class="item-text">96% AI policy pass rate. Alec AI-AF Office Hours ongoing.</div>
+        <textarea class="notes" data-key="kc-maf" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <!-- Research -->
+    <h3 style="font-size:0.9rem;font-weight:600;margin:14px 0 6px;color:var(--gold);">Research</h3>
+
+    <div class="sub-card" id="sub-kc-survey">
+      <div class="sub-card-header" onclick="toggleSub('sub-kc-survey')">
+        <span class="sub-title">Agentic AI Survey</span>
+        <span class="sub-chevron" id="chv-sub-kc-survey">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-kc-survey">
+        <div class="item-text">Vas leading. Launching soon. Outreach configured.</div>
+        <textarea class="notes" data-key="kc-survey" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-kc-benchmark">
+      <div class="sub-card-header" onclick="toggleSub('sub-kc-benchmark')">
+        <span class="sub-title">Benchmark Study</span>
+        <span class="sub-chevron" id="chv-sub-kc-benchmark">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-kc-benchmark">
+        <div class="item-text">Jerome raised data validity concern. Under review.</div>
+        <textarea class="notes" data-key="kc-benchmark" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-kc-coloop">
+      <div class="sub-card-header" onclick="toggleSub('sub-kc-coloop')">
+        <span class="sub-title">CoLoop <span class="badge badge-new">New</span></span>
+        <span class="sub-chevron" id="chv-sub-kc-coloop">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-kc-coloop">
+        <div class="item-text">Mar 24 demo scheduled. Evaluate platform.</div>
+        <textarea class="notes" data-key="kc-coloop" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <!-- Papers & Guides -->
+    <h3 style="font-size:0.9rem;font-weight:600;margin:14px 0 6px;color:var(--gold);">Papers &amp; Guides</h3>
+
+    <div class="sub-card" id="sub-kc-papers">
+      <div class="sub-card-header" onclick="toggleSub('sub-kc-papers')">
+        <span class="sub-title">Active Papers</span>
+        <span class="sub-chevron" id="chv-sub-kc-papers">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-kc-papers">
+        <div class="stalled-list" style="color:var(--text);">
+          <span>Rex Paper</span>
+          <span>Okra</span>
+          <span>BCG</span>
+          <span>RAIL</span>
+          <span>GPT Marketing</span>
+        </div>
+        <textarea class="notes" data-key="kc-papers" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     COMMUNITY
+     ══════════════════════════════════════════════════════════════ -->
+<div class="section-header">Community</div>
+
+<div class="card" id="card-community">
+  <div class="card-header" onclick="toggleCard('card-community')">
+    <div class="card-title">Community &amp; Events</div>
+    <span class="card-chevron" id="chv-card-community">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-community">
+
+    <div class="sub-card" id="sub-comm-alc">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-alc')">
+        <span class="sub-title">ALC Schedule 2026</span>
+        <span class="sub-chevron" id="chv-sub-comm-alc">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-comm-alc">
+        <div class="item-text">Quarterly cadence. Dates TBD.</div>
+        <textarea class="notes" data-key="comm-alc" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-comm-cats">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-cats')">
+        <span class="sub-title">CATS &mdash; May 14</span>
+        <span class="sub-chevron" id="chv-sub-comm-cats">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-comm-cats">
+        <div class="item-text">Planning in progress.</div>
+        <textarea class="notes" data-key="comm-cats" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-comm-debates">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-debates')">
+        <span class="sub-title">Great Debates &mdash; June 20</span>
+        <span class="sub-chevron" id="chv-sub-comm-debates">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-comm-debates">
+        <div class="item-text">Format and speakers TBD.</div>
+        <textarea class="notes" data-key="comm-debates" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-comm-slack">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-slack')">
+        <span class="sub-title">Slack Community</span>
+        <span class="sub-chevron" id="chv-sub-comm-slack">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-comm-slack">
+        <div class="item-text">Launching. David Berkowitz engagement &mdash; Greg flagged for discussion.</div>
+        <textarea class="notes" data-key="comm-slack" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-comm-talent">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-talent')">
+        <span class="sub-title">Talent &mdash; Adam Raines</span>
+        <span class="sub-chevron" id="chv-sub-comm-talent">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-comm-talent">
+        <div class="item-text">Talent pipeline and recruitment updates.</div>
+        <textarea class="notes" data-key="comm-talent" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-comm-bodhium">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-bodhium')">
+        <span class="sub-title">Bodhium Labs <span class="badge badge-new">New</span></span>
+        <span class="sub-chevron" id="chv-sub-comm-bodhium">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-comm-bodhium">
+        <div class="item-text">New partnership opportunity. Evaluate fit.</div>
+        <textarea class="notes" data-key="comm-bodhium" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     ACTION ITEMS
+     ══════════════════════════════════════════════════════════════ -->
+<div class="section-header">Action Items</div>
+
+<div class="card" id="card-actions">
+  <div class="card-header" onclick="toggleCard('card-actions')">
+    <div class="card-title">Action Items</div>
+    <span class="card-chevron" id="chv-card-actions">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-actions">
+
+    <h3 style="font-size:0.9rem;font-weight:600;margin:4px 0 8px;">Hassan (11 items)</h3>
+    <div class="action-section">
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h1">
+        <span class="action-num">1.</span>
+        <span class="action-text">Confirm Vas outreach to Peloton for ACE <span class="tag tag-today">TODAY</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h2">
+        <span class="action-num">2.</span>
+        <span class="action-text">Review DAMit VII proof email from Dan &mdash; approve blast <span class="tag tag-today">TODAY</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h3">
+        <span class="action-num">3.</span>
+        <span class="action-text">Follow up on Claritas blanket agreement re-up (Don Sklenka) <span class="tag tag-urgent">URGENT</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h4">
+        <span class="action-num">4.</span>
+        <span class="action-text">Launch ALTT agentic AI survey with Vas <span class="tag tag-schedule">SCHEDULE</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h5">
+        <span class="action-num">5.</span>
+        <span class="action-text">GCE contract &mdash; confirm mid-April launch timeline with Heba <span class="tag tag-monitor">MONITOR</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h6">
+        <span class="action-num">6.</span>
+        <span class="action-text">Brief team on Campbell + Monks A3 execution status <span class="tag tag-confirm">CONFIRM</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h7">
+        <span class="action-num">7.</span>
+        <span class="action-text">Schedule scoping calls with Phil Auerbach (Custom Ink) <span class="tag tag-schedule">SCHEDULE</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h8">
+        <span class="action-num">8.</span>
+        <span class="action-text">David Berkowitz email &mdash; prepare for Greg discussion <span class="tag tag-escalation">ESCALATION</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h9">
+        <span class="action-num">9.</span>
+        <span class="action-text">Track Peloton follow-up for FY2027 pipeline <span class="tag tag-monitor">MONITOR</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h10">
+        <span class="action-num">10.</span>
+        <span class="action-text">Attend CoLoop demo (Mar 24) <span class="tag tag-today">TODAY</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h11">
+        <span class="action-num">11.</span>
+        <span class="action-text">SIFT &mdash; identify second vendor for "zero to one" evaluation <span class="tag tag-fup">FUP</span></span>
+      </div>
+    </div>
+
+    <!-- Team cards -->
+    <h3 style="font-size:0.9rem;font-weight:600;margin:18px 0 8px;">Team</h3>
+    <div class="team-grid">
+      <div class="team-card">
+        <h4>Greg</h4>
+        <ul>
+          <li>Send AmFam CMO letter to Sharina Smith</li>
+          <li>David Berkowitz email &mdash; discuss</li>
+          <li>POSSIBLE session decisions</li>
+        </ul>
+      </div>
+      <div class="team-card">
+        <h4>Rex</h4>
+        <ul>
+          <li>GM/CAP update + CTV expansion</li>
+          <li>White paper draft &mdash; pre-launch checklist</li>
+          <li>Impact numbers finalization</li>
+        </ul>
+      </div>
+      <div class="team-card">
+        <h4>Alec</h4>
+        <ul>
+          <li>SIFT GM call &mdash; share details</li>
+          <li>MAF AI-AF Office Hours</li>
+          <li>MAVEN development updates</li>
+        </ul>
+      </div>
+      <div class="team-card">
+        <h4>Vas</h4>
+        <ul>
+          <li>Peloton ACE outreach</li>
+          <li>Agentic AI survey launch</li>
+          <li>Ops support for DAMit blast</li>
+        </ul>
+      </div>
+      <div class="team-card">
+        <h4>Leah</h4>
+        <ul>
+          <li>Community launch support</li>
+          <li>Event coordination (CATS, Great Debates)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Live Meeting Notes -->
+    <h3 style="font-size:0.9rem;font-weight:600;margin:18px 0 8px;">Live Meeting Notes</h3>
+    <textarea class="live-notes" data-key="live-notes" placeholder="Meeting notes..."></textarea>
+  </div>
+</div>
+
+</div><!-- /.main -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ════════════════════════════════════════════════════════════════════ -->
 <script>
-/* ===== Week Navigation ===== */
-let weekOffset = 0;
-const STORAGE_PREFIX = 'altt-agenda-';
+(function() {
+  'use strict';
 
-function getMonday(d) {
-  const dt = new Date(d);
-  const day = dt.getDay();
-  const diff = dt.getDate() - day + (day === 0 ? -6 : 1);
-  dt.setDate(diff);
-  dt.setHours(0, 0, 0, 0);
-  return dt;
-}
+  /* ── Week Math ── */
+  let weekOffset = 0;
+  const MEETING_DOW = 2; // Tuesday
 
-function getCurrentMonday() {
-  const now = new Date();
-  const monday = getMonday(now);
-  monday.setDate(monday.getDate() + weekOffset * 7);
-  return monday;
-}
+  function getMondayOfWeek(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    d.setDate(diff);
+    d.setHours(0,0,0,0);
+    return d;
+  }
 
-function getWeekKey() {
-  const m = getCurrentMonday();
-  return m.toISOString().slice(0, 10);
-}
+  function getISOWeek(d) {
+    const tmp = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    tmp.setUTCDate(tmp.getUTCDate() + 4 - (tmp.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(tmp.getUTCFullYear(), 0, 1));
+    return Math.ceil((((tmp - yearStart) / 86400000) + 1) / 7);
+  }
 
-function formatWeekLabel() {
-  const m = getCurrentMonday();
-  const f = new Date(m);
-  f.setDate(f.getDate() + 4);
-  const opts = { month: 'short', day: 'numeric' };
-  const mStr = m.toLocaleDateString('en-US', opts);
-  const fStr = f.toLocaleDateString('en-US', opts);
-  const year = m.getFullYear();
-  return `Week of ${mStr} – ${fStr}, ${year}`;
-}
+  function formatDate(d) {
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months = ['January','February','March','April','May','June',
+                    'July','August','September','October','November','December'];
+    return days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  }
 
-function updateWeekDisplay() {
-  document.getElementById('weekLabel').textContent = formatWeekLabel();
-  loadNotes();
-  updateReadOnly();
-}
+  function getWeekKey() {
+    const mon = getMondayOfWeek(new Date());
+    mon.setDate(mon.getDate() + weekOffset * 7);
+    const yr = mon.getFullYear();
+    const wk = getISOWeek(mon);
+    return yr + '-W' + String(wk).padStart(2, '0');
+  }
 
-function prevWeek() { weekOffset--; updateWeekDisplay(); }
-function nextWeek() { weekOffset++; updateWeekDisplay(); }
-function jumpToday() { weekOffset = 0; updateWeekDisplay(); }
+  function updateWeekDisplay() {
+    const mon = getMondayOfWeek(new Date());
+    mon.setDate(mon.getDate() + weekOffset * 7);
+    const tue = new Date(mon); tue.setDate(tue.getDate() + 1);
+    const yr = mon.getFullYear();
+    const wk = getISOWeek(mon);
 
-/* ===== Read-Only Mode ===== */
-function isCurrentWeek() {
-  const todayMonday = getMonday(new Date()).toISOString().slice(0, 10);
-  return getWeekKey() === todayMonday;
-}
+    document.getElementById('weekCode').textContent = yr + '-W' + String(wk).padStart(2, '0');
+    document.getElementById('weekDate').textContent = formatDate(tue);
 
-function updateReadOnly() {
-  const ro = !isCurrentWeek();
-  const banner = document.getElementById('readonlyBanner');
-  banner.classList.toggle('visible', ro);
-  document.querySelectorAll('textarea').forEach(ta => {
-    ta.readOnly = ro;
-    ta.style.opacity = ro ? '.6' : '1';
-  });
-  document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-    cb.disabled = ro;
-    cb.style.opacity = ro ? '.6' : '1';
-  });
-}
+    const todayMon = getMondayOfWeek(new Date());
+    const isPast = mon < todayMon;
+    const banner = document.getElementById('readOnlyBanner');
+    banner.style.display = isPast ? 'inline-block' : 'none';
 
-/* ===== Storage ===== */
-function getStorageKey() {
-  return STORAGE_PREFIX + getWeekKey();
-}
-
-function saveNotes() {
-  const data = {};
-  document.querySelectorAll('textarea[data-key]').forEach(ta => {
-    if (ta.value.trim()) data[ta.dataset.key] = ta.value;
-  });
-  document.querySelectorAll('input[type=checkbox][data-key]').forEach(cb => {
-    if (cb.checked) data[cb.dataset.key] = true;
-  });
-  try {
-    localStorage.setItem(getStorageKey(), JSON.stringify(data));
-    showSaved();
-  } catch (e) { console.warn('Save failed:', e); }
-}
-
-function loadNotes() {
-  try {
-    const raw = localStorage.getItem(getStorageKey());
-    const data = raw ? JSON.parse(raw) : {};
-    document.querySelectorAll('textarea[data-key]').forEach(ta => {
-      ta.value = data[ta.dataset.key] || '';
+    document.querySelectorAll('.notes, .live-notes').forEach(function(el) {
+      el.readOnly = isPast;
     });
-    document.querySelectorAll('input[type=checkbox][data-key]').forEach(cb => {
-      cb.checked = !!data[cb.dataset.key];
+    document.querySelectorAll('.action-item input[type="checkbox"]').forEach(function(el) {
+      el.disabled = isPast;
     });
-  } catch (e) { console.warn('Load failed:', e); }
-}
 
-/* ===== Debounced Auto-Save ===== */
-let saveTimer = null;
-function debouncedSave() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveNotes, 600);
-}
+    loadNotes();
+  }
 
-function showSaved() {
-  const ind = document.getElementById('saveInd');
-  ind.classList.add('show');
-  setTimeout(() => ind.classList.remove('show'), 1500);
-}
+  window.changeWeek = function(dir) {
+    weekOffset += dir;
+    updateWeekDisplay();
+  };
 
-/* ===== Section Toggle ===== */
-function toggleSection(id) {
-  const body = document.getElementById('body-' + id);
-  const toggle = document.getElementById('toggle-' + id);
-  const collapsed = body.classList.toggle('collapsed');
-  toggle.innerHTML = collapsed ? '&#9654;' : '&#9660;';
-}
+  window.jumpToday = function() {
+    weekOffset = 0;
+    updateWeekDisplay();
+  };
 
-function toggleAllSections(expand) {
-  document.querySelectorAll('.section').forEach(sec => {
-    const id = sec.id;
+  /* ── Toggle Cards ── */
+  window.toggleCard = function(id) {
     const body = document.getElementById('body-' + id);
-    const toggle = document.getElementById('toggle-' + id);
-    if (expand) {
-      body.classList.remove('collapsed');
-      toggle.innerHTML = '&#9660;';
-    } else {
-      body.classList.add('collapsed');
-      toggle.innerHTML = '&#9654;';
+    const chv = document.getElementById('chv-' + id);
+    if (!body) return;
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open');
+    body.style.display = isOpen ? 'none' : 'block';
+    if (chv) chv.classList.toggle('open');
+  };
+
+  window.toggleSub = function(id) {
+    const body = document.getElementById('body-' + id);
+    const chv = document.getElementById('chv-' + id);
+    if (!body) return;
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open');
+    body.style.display = isOpen ? 'none' : 'block';
+    if (chv) chv.classList.toggle('open');
+  };
+
+  window.expandAll = function() {
+    document.querySelectorAll('.card-body, .sub-card-body').forEach(function(el) {
+      el.classList.add('open');
+      el.style.display = 'block';
+    });
+    document.querySelectorAll('.card-chevron, .sub-chevron').forEach(function(el) {
+      el.classList.add('open');
+    });
+  };
+
+  window.collapseAll = function() {
+    document.querySelectorAll('.card-body, .sub-card-body').forEach(function(el) {
+      el.classList.remove('open');
+      el.style.display = 'none';
+    });
+    document.querySelectorAll('.card-chevron, .sub-chevron').forEach(function(el) {
+      el.classList.remove('open');
+    });
+  };
+
+  /* ── Auto-save Notes ── */
+  let saveTimer = null;
+  function getStorageKey() { return 'altt-agenda-' + getWeekKey(); }
+
+  function saveNotes() {
+    const data = {};
+    document.querySelectorAll('[data-key]').forEach(function(el) {
+      if (el.type === 'checkbox') {
+        data[el.getAttribute('data-key')] = el.checked;
+      } else {
+        data[el.getAttribute('data-key')] = el.value;
+      }
+    });
+    try { localStorage.setItem(getStorageKey(), JSON.stringify(data)); } catch(e) {}
+  }
+
+  function loadNotes() {
+    let data = {};
+    try { data = JSON.parse(localStorage.getItem(getStorageKey())) || {}; } catch(e) {}
+    document.querySelectorAll('[data-key]').forEach(function(el) {
+      const val = data[el.getAttribute('data-key')];
+      if (el.type === 'checkbox') {
+        el.checked = !!val;
+      } else if (val !== undefined) {
+        el.value = val;
+      } else {
+        el.value = '';
+      }
+    });
+  }
+
+  function debounceSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNotes, 600);
+  }
+
+  document.addEventListener('input', function(e) {
+    if (e.target.matches('[data-key]')) debounceSave();
+  });
+  document.addEventListener('change', function(e) {
+    if (e.target.matches('[data-key]')) debounceSave();
+  });
+
+  /* ── Date-stamp on focus ── */
+  document.addEventListener('focusin', function(e) {
+    if (e.target.matches('textarea[data-key]') && !e.target.readOnly && e.target.value.trim() === '') {
+      const now = new Date();
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      e.target.value = '[' + months[now.getMonth()] + ' ' + now.getDate() + '] ';
+      const len = e.target.value.length;
+      e.target.setSelectionRange(len, len);
+      debounceSave();
     }
   });
-}
 
-/* ===== Export Markdown ===== */
-function exportMarkdown() {
-  const weekLabel = document.getElementById('weekLabel').textContent;
-  let md = `# ALTT Weekly Agenda\n## ${weekLabel}\n\n`;
+  /* ── Export Markdown ── */
+  window.exportMarkdown = function() {
+    const wk = getWeekKey();
+    let md = '# ALTT Weekly Check-in — ' + wk + '\n\n';
 
-  document.querySelectorAll('.section').forEach(sec => {
-    const title = sec.querySelector('.section-title').textContent.trim();
-    md += `---\n### ${title}\n\n`;
+    document.querySelectorAll('.card').forEach(function(card) {
+      const title = card.querySelector('.card-title');
+      if (title) md += '## ' + title.textContent.trim() + '\n\n';
 
-    sec.querySelectorAll('.item').forEach(item => {
-      const name = item.querySelector('.item-name');
-      const status = item.querySelector('.item-status');
-      if (name) {
-        md += `**${name.textContent}**`;
-        if (status) md += ` [${status.textContent}]`;
+      card.querySelectorAll('.sub-card').forEach(function(sub) {
+        const st = sub.querySelector('.sub-title');
+        if (st) md += '### ' + st.textContent.trim() + '\n';
+        sub.querySelectorAll('.item-text').forEach(function(it) {
+          md += '- ' + it.textContent.trim() + '\n';
+        });
+        const notes = sub.querySelector('textarea[data-key]');
+        if (notes && notes.value.trim()) {
+          md += '\n> **Notes:** ' + notes.value.trim() + '\n';
+        }
         md += '\n';
-      }
-      item.querySelectorAll('.item-detail').forEach(d => {
-        const marker = d.querySelector('.marker');
-        const sym = marker ? (marker.classList.contains('marker-done') ? '  v ' : marker.classList.contains('marker-next') ? '  > ' : '  ! ') : '  - ';
-        md += sym + d.textContent.trim() + '\n';
       });
-      const ta = item.querySelector('textarea');
-      if (ta && ta.value.trim()) {
-        md += `  _Notes: ${ta.value.trim()}_\n`;
-      }
-      md += '\n';
+
+      card.querySelectorAll('.action-item').forEach(function(ai) {
+        const cb = ai.querySelector('input[type="checkbox"]');
+        const txt = ai.querySelector('.action-text');
+        if (txt) {
+          md += '- [' + (cb && cb.checked ? 'x' : ' ') + '] ' + txt.textContent.trim() + '\n';
+        }
+      });
     });
 
-    sec.querySelectorAll('.action-item').forEach(ai => {
-      const cb = ai.querySelector('input[type=checkbox]');
-      const lbl = ai.querySelector('label');
-      const tag = ai.querySelector('.action-tag');
-      if (lbl) {
-        md += `- [${cb && cb.checked ? 'x' : ' '}] ${lbl.textContent}`;
-        if (tag) md += ` [${tag.textContent}]`;
-        md += '\n';
-      }
-    });
-
-    const meetingNotes = sec.querySelector('.meeting-notes textarea');
-    if (meetingNotes && meetingNotes.value.trim()) {
-      md += `\n**Meeting Notes:**\n${meetingNotes.value.trim()}\n`;
+    const liveNotes = document.querySelector('.live-notes');
+    if (liveNotes && liveNotes.value.trim()) {
+      md += '\n## Live Meeting Notes\n\n' + liveNotes.value.trim() + '\n';
     }
-  });
 
-  const blob = new Blob([md], { type: 'text/markdown' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `ALTT_Agenda_${getWeekKey()}.md`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ALTT-Agenda-' + wk + '.md';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
 
-/* ===== Event Listeners ===== */
-document.addEventListener('input', e => {
-  if (e.target.matches('textarea[data-key]') || e.target.matches('input[type=checkbox][data-key]')) {
-    debouncedSave();
-  }
-});
-document.addEventListener('change', e => {
-  if (e.target.matches('input[type=checkbox][data-key]')) {
-    debouncedSave();
-  }
-});
-
-/* ===== Init ===== */
-updateWeekDisplay();
+  /* ── Init ── */
+  updateWeekDisplay();
+})();
 </script>
 </body>
 </html>
