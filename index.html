@@ -540,7 +540,8 @@ a:hover { text-decoration: underline; }
     <button onclick="collapseAll()">Collapse All</button>
     <button onclick="exportMarkdown()">Export MD</button>
     <button onclick="downloadScript()">Script</button>
-    <button onclick="toggleLog()">&#128221; Change Log</button>
+    <button onclick="saveNotesFile()" style="background:var(--green);color:#000;border-color:var(--green);font-weight:600">Save Notes</button>
+    <button onclick="toggleLog()">Change Log</button>
     <span class="spacer"></span>
     <span class="read-only-banner" id="readOnlyBanner">READ-ONLY (past week)</span>
   </div>
@@ -1650,6 +1651,29 @@ a:hover { text-decoration: underline; }
     });
     try { localStorage.setItem('altt-edits-' + getWeekKey(), JSON.stringify(edits)); } catch(e) {}
   }
+
+  /* ── Save Notes File ── */
+  window.saveNotesFile = function() {
+    const wk = getWeekKey();
+    const data = {};
+    document.querySelectorAll('[data-key]').forEach(function(el) {
+      if (el.type === 'checkbox') {
+        if (el.checked) data[el.getAttribute('data-key')] = true;
+      } else if (el.value && el.value.trim()) {
+        data[el.getAttribute('data-key')] = el.value.trim();
+      }
+    });
+    // Save JSON backup
+    const json = JSON.stringify({ week: wk, saved: new Date().toISOString(), notes: data }, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ALTT-Notes-' + wk + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    // Also save to localStorage
+    saveNotes();
+  };
 
   /* ── Call Script Download ── */
   window.downloadScript = function() {
