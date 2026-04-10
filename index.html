@@ -693,6 +693,11 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   <div class="card-body open" id="body-card-focus" style="display:block;">
     <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Start here. Click a priority to jump to the relevant section and expand it. Your notes stay where they belong.</p>
     <div class="focus-list">
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-claritas')" style="border-left-width:5px;background:rgba(248,81,73,0.08);">
+        <span class="focus-num">&#9733;</span>
+        <span class="focus-label"><strong>&#128308; CRITICAL: Write to Claritas CEO</strong> &mdash; escalation above Don/Chelsea level. Unblock GCE contract + master blanket renewal. (From today's ALTT call.)</span>
+        <span class="focus-tag">A.1.1</span>
+      </button>
       <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-gce')">
         <span class="focus-num">1</span>
         <span class="focus-label"><strong>Resolve GCE CAP contract</strong> &mdash; Chelsea chased today (Apr 10 14:17). Legal on brand/results sharing. Hassan has answers ready.</span>
@@ -825,12 +830,19 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
         <span class="sub-chevron" id="chv-sub-cap-claritas">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-claritas">
+        <span class="section-label help">CRITICAL &mdash; FROM APR 10 ALTT CALL</span>
+        <div class="item-text"><strong>&#128308; Hassan to write directly to Claritas CEO</strong> for CAP &mdash; escalation path to resolve blanket contract renewal + GCE contract blockers. Don Sklenka + Chelsea Crerand (VP Sales) + Claire Vasquez level is not moving the needle fast enough. Go to the top.</div>
+        <div class="item-text item-text-muted">Action owner: Hassan. Draft email today if possible. Loop Greg in as sender/cc if helpful.</div>
+
         <span class="section-label help">BLOCKING</span>
         <div class="item-text">1. Contract <strong>EXPIRED Dec 31</strong>. Blocks all Claritas-dependent experiments.</div>
-        <div class="item-text">2. Hassan to own renewal &mdash; <strong>URGENT</strong>.</div>
+        <div class="item-text">2. Don Sklenka approved as vendor on GCE side &#10003; but master Claritas blanket still unsigned.</div>
+        <div class="item-text">3. Chelsea chased again today (Apr 10 14:17) on the GCU License Order signature &mdash; still outstanding.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Hassan to drive renewal this week. Escalate if needed.</div>
-        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9</span> <span class="source source-notion">Pipeline: urgent</span></div>
+        <div class="item-text">1. <strong>Hassan: draft + send email to Claritas CEO.</strong> Escalation above Chelsea/Don/Claire level.</div>
+        <div class="item-text">2. Sign pending GCU License Order (Word doc from Claire Apr 2).</div>
+        <div class="item-text">3. Close master Claritas blanket renewal.</div>
+        <div class="item-sources"><span class="source source-call">ALTT Weekly Apr 10 (critical TODO surfaced)</span> <span class="source source-email">Chelsea Crerand Apr 10 14:17 chase</span> <span class="source source-notion">MMA Pipeline: urgent</span></div>
         <textarea class="notes" data-key="cap-claritas" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1637,6 +1649,11 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 
     <h3 style="font-size:0.9rem;font-weight:600;margin:4px 0 8px;">Hassan</h3>
     <div class="action-section">
+      <div class="action-item" style="background:rgba(248,81,73,0.08);border-left:3px solid var(--red);padding-left:8px;margin:4px 0;">
+        <input type="checkbox" data-key="act-h0">
+        <span class="action-num">D.0</span>
+        <span class="action-text">&#128308; <strong>Write to Claritas CEO</strong> &mdash; escalation email above Don/Chelsea/Claire level. Unblock GCE contract + master blanket renewal. Surfaced on Apr 10 ALTT call. <span class="tag tag-urgent">CRITICAL</span></span>
+      </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h1">
         <span class="action-num">D.1</span>
