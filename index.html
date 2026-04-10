@@ -693,35 +693,40 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   <div class="card-body open" id="body-card-focus" style="display:block;">
     <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Start here. Click a priority to jump to the relevant section and expand it. Your notes stay where they belong.</p>
     <div class="focus-list">
-      <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-gce')">
         <span class="focus-num">1</span>
-        <span class="focus-label"><strong>DAMit VII wrap-up</strong> &mdash; quick celebration: 1,980 reg / 1,328 attended / KPI met</span>
+        <span class="focus-label"><strong>Resolve GCE CAP contract</strong> &mdash; Chelsea chased today (Apr 10 14:17). Legal on brand/results sharing. Hassan has answers ready.</span>
+        <span class="focus-tag">A.1.2</span>
+      </button>
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-gm')">
+        <span class="focus-num">2</span>
+        <span class="focus-label"><strong>GM: Roku vs Amazon $20K fee split</strong> &mdash; decide allocation + Norm contract signing</span>
+        <span class="focus-tag">A.1.3</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
+        <span class="focus-num">3</span>
+        <span class="focus-label"><strong>DAMit VII wrap-up</strong> &mdash; quick celebration: 1,980 reg / 1,328 attended / Credly cert approved</span>
         <span class="focus-tag">B.1.1</span>
       </button>
-      <button class="focus-btn" onclick="jumpToItem('card-cap','sub-cap-possible')">
-        <span class="focus-num">2</span>
-        <span class="focus-label"><strong>POSSIBLE schedule</strong> &mdash; CAP Roundtable moved, MATT rescheduled, comms on hold</span>
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-possible')">
+        <span class="focus-num">4</span>
+        <span class="focus-label"><strong>POSSIBLE</strong> &mdash; Vas asked for CAP agenda + prep call today. Schedule in flux.</span>
         <span class="focus-tag">A.1.6</span>
       </button>
-      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-amfam')">
-        <span class="focus-num">3</span>
-        <span class="focus-label"><strong>AmFam letter</strong> &mdash; Greg, #1 blocker. Still not sent.</span>
-        <span class="focus-tag">A.1.4</span>
-      </button>
-      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-claritas')">
-        <span class="focus-num">4</span>
-        <span class="focus-label"><strong>Claritas contract</strong> &mdash; expired, Hassan owning renewal</span>
-        <span class="focus-tag">A.1.1</span>
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-aura-peloton')">
+        <span class="focus-num">5</span>
+        <span class="focus-label"><strong>Peloton AURA</strong> &mdash; overview call <strong>Mon Apr 13, 3pm ET</strong>. Prep with Rex.</span>
+        <span class="focus-tag">A.3.3</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-labs','sub-a3-campbell')">
-        <span class="focus-num">5</span>
-        <span class="focus-label"><strong>A3 Campbell ON HOLD</strong> &mdash; Novartis as replacement?</span>
+        <span class="focus-num">6</span>
+        <span class="focus-label"><strong>A3 Campbell</strong> &mdash; fiscal Jan 2027 (still moving). Monks replacement question.</span>
         <span class="focus-tag">A.2.2</span>
       </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-aura-peloton')">
-        <span class="focus-num">6</span>
-        <span class="focus-label"><strong>Peloton AURA</strong> &mdash; overview call happened today (debrief)</span>
-        <span class="focus-tag">A.3.3</span>
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-a3-intuit')">
+        <span class="focus-num">7</span>
+        <span class="focus-label"><strong>A3 Intuit</strong> &mdash; weekly Monks sync TODAY 1:05pm ET (active, not stalled)</span>
+        <span class="focus-tag">A.2.1</span>
       </button>
     </div>
   </div>
@@ -833,24 +838,37 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <!-- A.1.2 GCE -->
     <div class="sub-card" id="sub-cap-gce">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-gce')">
-        <span class="sub-title">A.1.2 GCE <span class="badge badge-attention">Pixel QC</span></span>
+        <span class="sub-title">A.1.2 GCE <span class="badge badge-urgent">Contract Resolution</span></span>
         <span class="sub-chevron" id="chv-sub-cap-gce">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-gce">
+        <div class="item-text item-text-muted">Grand Canyon Education &mdash; video brand lift study for "Purpose Driven Education" national campaign. Contact: Chad Wilson. Stage: execution / 4.1 launch prep.</div>
+
         <span class="section-label done">ACCOMPLISHED</span>
         <div class="item-text">1. Pixels <strong>LIVE</strong> on gcu.edu and explore.gcu.edu.</div>
         <div class="item-text">2. <strong>Apr 9 QC (Isaac Coppola):</strong> Homepage pixel PASS (within 10% of GA4). Landing page pixel <strong>MISMATCH</strong> vs GA4.</div>
-        <div class="item-text">3. Andy Ryan (Claritas) sending fresh count <strong>Monday Apr 13</strong>.</div>
-        <div class="item-text">4. Heba added Claritas as pre-approved subcontractor &#10003;.</div>
-        <span class="section-label help">OPEN CONTRACT POINTS</span>
-        <div class="item-text">1. <strong>Use of Name</strong> + <strong>Public Report veto</strong> &mdash; GCE wants publication control. Heba asked for sample Public Report.</div>
-        <div class="item-text">2. <strong>ISA gap:</strong> GCE pushing for publication veto + liability carve-out that can't flow through Claritas ISA.</div>
-        <div class="item-text">3. $20K MMA billing question still open.</div>
-        <div class="item-text">4. GEM lab targeting 2nd week April. Roku approvals caused 1-week delay.</div>
-        <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Claritas to fix landing page pixel by <strong>Apr 13</strong>.</div>
-        <div class="item-text">2. Finalize contract. Hold the line on Public Report rights.</div>
-        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9</span> <span class="source source-email">Isaac Coppola QC Apr 9</span></div>
+        <div class="item-text">3. <strong>Andy Ryan (Claritas)</strong> sending fresh count Monday Apr 13.</div>
+        <div class="item-text">4. Heba added Claritas as <strong>pre-approved subcontractor</strong> &#10003; (Don Sklenka as approved vendor).</div>
+        <div class="item-text">5. Video campaign plan finalized (Mar 16 call): 75% PvE (55% YouTube, 45% OTT/CTV), ~40M impressions, 30s+15s ads. Brand lift KPIs.</div>
+
+        <span class="section-label help">OPEN CONTRACT POINTS &mdash; TODAY'S TARGET</span>
+        <div class="item-text">1. <strong>Chelsea Crerand chased AGAIN today (Apr 10 14:17):</strong> "Just checking in on the below to see where we are on this." License Order Agreement awaiting Hassan's signature.</div>
+        <div class="item-text">2. <strong>Claire Vasquez (Claritas) confirmed Apr 2:</strong> "ISA is still valid. For GCU, all we need is a signature on the attached License Order (Word doc)."</div>
+        <div class="item-text">3. <strong>Legal pushing back</strong> on <strong>brand sharing</strong> and <strong>results sharing</strong> terms (per Granola/Apr 9 CAP Weekly). <strong>Hassan has answers ready</strong>, waiting for response.</div>
+        <div class="item-text">4. <strong>Sec. 22 (Use of Name):</strong> written approval override (Hassan flagged Mar 9). <span class="tag tag-urgent">RESOLVE</span></div>
+        <div class="item-text">5. <strong>Public Report veto:</strong> GCE wants publication control. Heba asked for sample Public Report. Contradicts CAP's publish-findings premise. <span class="tag tag-urgent">RESOLVE</span></div>
+        <div class="item-text">6. <strong>ISA gap:</strong> GCE pushing for publication veto + liability carve-out that can't flow through Claritas ISA. <span class="tag tag-urgent">RESOLVE</span></div>
+        <div class="item-text">7. <strong>Heba (GCE procurement) may have sent fresh email today</strong> &mdash; Hassan hasn't checked yet; Perplexity checking.</div>
+        <div class="item-text">8. <strong>$20K MMA billing question</strong> still open (separate from GM $20K fee split).</div>
+        <div class="item-text">9. GEM lab launch: targeting <strong>2nd week April</strong> (Roku approvals caused 1-week delay).</div>
+
+        <span class="section-label next">NEXT (due Apr 14)</span>
+        <div class="item-text">1. <strong>Hassan: check inbox for Heba's email</strong> (GCE procurement) and respond.</div>
+        <div class="item-text">2. <strong>Reply to Chelsea</strong> with License Order signature status.</div>
+        <div class="item-text">3. Claritas to fix landing page pixel by <strong>Apr 13</strong>.</div>
+        <div class="item-text">4. Finalize contract: hold line on Public Report rights; resolve Use of Name + ISA gap.</div>
+        <div class="item-text">5. Confirm pixel QC complete, GEM launch this week.</div>
+        <div class="item-sources"><span class="source source-email">Chelsea Crerand Apr 10 14:17</span> <span class="source source-email">Claire Vasquez Apr 2</span> <span class="source source-call">CAP Weekly Apr 9 (Mike Rodriguez / Claritas, Don on PTO)</span> <span class="source source-notion">Fireflies daily digest Apr 10: "Contract not signed; pending legal finalization"</span></div>
         <textarea class="notes" data-key="cap-gce" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -858,23 +876,36 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <!-- A.1.3 GM -->
     <div class="sub-card" id="sub-cap-gm">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-gm')">
-        <span class="sub-title">A.1.3 GM Update (Rex) <span class="badge badge-new">CTV LIVE</span></span>
+        <span class="sub-title">A.1.3 GM (GMC Branding CTV/Video) <span class="badge badge-new">Amazon LIVE</span> <span class="badge badge-urgent">Roku/Amazon Split</span></span>
         <span class="sub-chevron" id="chv-sub-cap-gm">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-gm">
+        <div class="item-text item-text-muted">GMC Sierra AI optimization Phase 2 &mdash; expanding to CTV (Prime Video + Roku) at significantly greater scale. Stage: execution / 4.1 launch prep. Stalled 30d in execution.</div>
+
         <span class="section-label done">ACCOMPLISHED</span>
-        <div class="item-text">1. <strong>Amazon GMC Sierra CTV brand lift LIVE as of April 6</strong> &#10003;</div>
-        <div class="item-text">2. Aaron Shaffer looped in Anish Koppula (new GM internal contact) Apr 8.</div>
-        <div class="item-text">3. Hassan sent cross-lab status update (CAP, AURA, SIFT) to GM Apr 8.</div>
-        <span class="section-label help">OPEN</span>
-        <div class="item-text">1. Roku pixel approvals still pending.</div>
-        <div class="item-text">2. Roku/Amazon budget split in agreement still unresolved.</div>
-        <div class="item-text">3. <strong>Project Romy:</strong> Bells launching Apr 16. Mazda meeting Apr 16.</div>
-        <div class="item-text item-text-muted">Note: SIFT and AURA are separate labs &mdash; do NOT mix SIFT KPI items into CAP card.</div>
-        <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Close Roku/Amazon budget split.</div>
-        <div class="item-text">2. Rex update on Romy/Google post Apr 16 (Mazda/Bells calls).</div>
-        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9</span> <span class="source source-email">Shaffer &rarr; Koppula Apr 8</span></div>
+        <div class="item-text">1. <strong>Amazon GMC Sierra CTV brand lift leg LIVE April 6</strong> &#10003;</div>
+        <div class="item-text">2. Aaron Shaffer looped in <strong>Anish Koppula</strong> (new GM internal contact) Apr 8.</div>
+        <div class="item-text">3. Hassan sent cross-lab status update (CAP + AURA + SIFT) to GM Apr 8.</div>
+        <div class="item-text">4. Contract agreement sent Mar 13 (Phase 2 CTV expansion scope).</div>
+
+        <span class="section-label help">BILLING / FEE SPLIT &mdash; TODAY'S TARGET</span>
+        <div class="item-text">1. <strong>$20K fee split Amazon vs Roku</strong> in agreement <strong>still unresolved.</strong> (Per Fireflies Apr 10 daily digest &mdash; open question owned by Hassan.)</div>
+        <div class="item-text">2. <strong>Roku pixel approvals</strong> still pending &mdash; blocks Roku leg launch.</div>
+        <div class="item-text">3. <strong>Contract signing with Norm</strong> in progress &mdash; need to close before Roku leg can go live.</div>
+        <div class="item-text">4. <strong>Roku leg launch:</strong> latest note (Apr 9) &mdash; <strong>first week of May</strong>.</div>
+        <div class="item-text">5. Greg's position (carried over from Mar 19): new campaign = new cost, pass through expenses, <strong>don't negotiate</strong>.</div>
+
+        <span class="section-label help">RELATED</span>
+        <div class="item-text">1. <strong>Project Romy (Google):</strong> Bells launching Apr 16. Mazda meeting Apr 16. Rex update post Apr 16.</div>
+        <div class="item-text">2. AURA GM (Buick/GMC) still stalled &mdash; Christine not responding. Consider consolidated exec touch instead of lab-by-lab chase.</div>
+        <div class="item-text">3. SIFT GM kickoff done Apr 7 (separate lab &mdash; do NOT mix KPIs into CAP).</div>
+
+        <span class="section-label next">NEXT (due Apr 16)</span>
+        <div class="item-text">1. <strong>Close Roku/Amazon budget split</strong> in agreement.</div>
+        <div class="item-text">2. Finalize contract signing with Norm.</div>
+        <div class="item-text">3. Unblock Roku pixel approvals.</div>
+        <div class="item-text">4. Rex update on Romy/Google post Apr 16.</div>
+        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9 (Mike Rodriguez/Claritas)</span> <span class="source source-email">Contract sent Mar 13 (Phase 2 CTV)</span> <span class="source source-email">Shaffer &rarr; Koppula Apr 8</span> <span class="source source-notion">MMA Pipeline: stalled 30d</span></div>
         <textarea class="notes" data-key="cap-gm" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -987,21 +1018,21 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <!-- Intuit + Monks -->
     <div class="sub-card" id="sub-a3-intuit">
       <div class="sub-card-header" onclick="toggleSub('sub-a3-intuit')">
-        <span class="sub-title">A.2.1 Intuit + Monks</span>
+        <span class="sub-title">A.2.1 Intuit + Monks <span class="badge badge-new">ACTIVE &mdash; Call 1:05pm Today</span></span>
         <span class="sub-chevron" id="chv-sub-a3-intuit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-a3-intuit">
+        <span class="section-label done">ACTIVE</span>
+        <div class="item-text">1. <strong>Weekly Monks sync TODAY</strong> &mdash; "Intuit Intelligence Agentic Video w/ Monks" <strong>1:05&ndash;1:30pm ET</strong>. 15 attendees (organizer: Paulina Marchese, Monks).</div>
+        <div class="item-text">2. Pipeline status may say "Qualified Out / Unresponsive" &mdash; that's stale. Work is clearly ongoing.</div>
         <span class="section-label done">CARRY-OVER</span>
-        <div class="item-text">1. Mar 20 Call #3: "Lone Wolf" creative concept selected. Three personas (Marcus Chen $6.5M, Nia Robinson $3.2M, Dr. Rodriguez $8M &rarr; flagged unrealistic, swapping).</div>
+        <div class="item-text">1. Mar 20 Call #3: "Lone Wolf" creative concept selected. Three personas (Marcus Chen $6.5M, Nia Robinson $3.2M, Dr. Rodriguez &mdash; $8M flagged unrealistic, swapping).</div>
         <div class="item-text">2. Three-act structure: establish worlds &rarr; Intuit Intelligence activation &rarr; resolution.</div>
-        <span class="section-label help">STATUS</span>
-        <div class="item-text">1. <strong>SOW sent Mar 13, no reply.</strong></div>
-        <div class="item-text">2. Monks say "coming along nicely" &mdash; <strong>verify directly</strong>.</div>
-        <div class="item-text">3. In "Qualified Out / Unresponsive" in Supabase but may still be active.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Hassan to verify status directly with Intuit contact.</div>
-        <div class="item-text">2. Legal review for AI content still needed.</div>
-        <div class="item-sources"><span class="source source-call">Mar 20 Call</span> <span class="source source-email">SOW Mar 13</span></div>
+        <div class="item-text">1. <strong>Attend today's Monks sync</strong> (1:05pm ET). Pull status: where are we on creative + legal + rough cut?</div>
+        <div class="item-text">2. Update pipeline stage after call (move out of Qualified Out).</div>
+        <div class="item-text">3. Legal review for AI content still outstanding.</div>
+        <div class="item-sources"><span class="source source-call">Mar 20 Call</span> <span class="source source-email">SOW Mar 13</span> <span class="source source-notion">Outlook calendar Apr 10 13:05 ET</span></div>
         <textarea class="notes" data-key="a3-intuit" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1009,20 +1040,25 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <!-- Campbell + Monks -->
     <div class="sub-card" id="sub-a3-campbell">
       <div class="sub-card-header" onclick="toggleSub('sub-a3-campbell')">
-        <span class="sub-title">A.2.2 Campbell + Monks <span class="badge badge-urgent">ON HOLD</span></span>
+        <span class="sub-title">A.2.2 Campbell + Monks <span class="badge badge-attention">Fiscal Jan 2027</span></span>
         <span class="sub-chevron" id="chv-sub-a3-campbell">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-a3-campbell">
-        <span class="section-label help">ON HOLD</span>
-        <div class="item-text">1. <strong>Megan O'Brien confirmed Jan 2027 in-market date</strong> &mdash; incompatible with POSSIBLE timeline.</div>
-        <div class="item-text">2. Kickoff call Apr 8 <strong>CANCELED</strong> by Megan. No reschedule.</div>
+        <span class="section-label done">CLARIFICATION</span>
+        <div class="item-text">1. <strong>Campbell is NOT on hold.</strong> The Jan 2027 reference is Campbell's <strong>fiscal year start</strong>, not a project pause.</div>
+        <div class="item-text">2. A3 takes 2&ndash;4 weeks brief-to-asset &mdash; can finish well before Campbell's FY 2027 kickoff.</div>
+        <div class="item-text">3. Goal (per earlier notes): <strong>two videos, not one</strong>.</div>
+        <span class="section-label help">STATUS</span>
+        <div class="item-text">1. Leah reached out to Campbell multiple times, no responses as of Mar 24.</div>
+        <div class="item-text">2. Hassan stepping in to remind Campbell of POSSIBLE deadlines.</div>
         <span class="section-label done">ACCOMPLISHED (Apr 9)</span>
-        <div class="item-text">1. Hassan emailed <strong>Monks</strong> (Kate Richling, Dave Carey, Liz Cook): proposed replacement brand with 3-week POSSIBLE deadline.</div>
-        <div class="item-text">2. Hassan emailed <strong>Megan</strong> clarifying A3 takes 2&ndash;4 weeks brief-to-asset, can finish before January.</div>
+        <div class="item-text">1. Hassan emailed <strong>Monks</strong> (Kate Richling, Dave Carey, Liz Cook): align on timing given Campbell fiscal.</div>
+        <div class="item-text">2. Hassan emailed <strong>Megan O'Brien</strong> clarifying A3 timeline fits before January.</div>
         <span class="section-label next">NEXT</span>
         <div class="item-text">1. Await Monks + Megan replies.</div>
-        <div class="item-text">2. If Jan 2027 confirmed, <strong>activate Novartis</strong>.</div>
-        <div class="item-sources"><span class="source source-email">Hassan Apr 9 (Monks + Megan)</span></div>
+        <div class="item-text">2. Confirm: 1 video or 2? POSSIBLE slot alignment?</div>
+        <div class="item-text">3. Novartis remains a parallel option, not a replacement.</div>
+        <div class="item-sources"><span class="source source-email">Hassan Apr 9 (Monks + Megan)</span> <span class="source source-notion">Granola Mar 24</span></div>
         <textarea class="notes" data-key="a3-campbell" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1105,17 +1141,19 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 
     <div class="sub-card" id="sub-aura-peloton">
       <div class="sub-card-header" onclick="toggleSub('sub-aura-peloton')">
-        <span class="sub-title">A.3.3 Peloton <span class="badge badge-new">NEW</span></span>
+        <span class="sub-title">A.3.3 Peloton <span class="badge badge-today">Mon Apr 13 3pm ET</span></span>
         <span class="sub-chevron" id="chv-sub-aura-peloton">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-aura-peloton">
-        <span class="section-label done">SCHEDULED</span>
-        <div class="item-text">1. <strong>AURA Overview call Apr 9</strong> with Jennifer Director (VP Growth Marketing), Ria Galiano (Head Analytics), Megan O'Shea, Emily Bordages, Saki Kanomata.</div>
-        <div class="item-text">2. <strong>Rex + Alec attending.</strong> Fireflies recording.</div>
+        <span class="section-label done">LATEST (Apr 10)</span>
+        <div class="item-text">1. <strong>Ria Galiano accepted today (Apr 10 14:56)</strong> &mdash; "MMA/Peloton: AURA Overview @ Mon Apr 13, 2026 3pm&ndash;3:30pm EDT".</div>
+        <div class="item-text">2. 30-min overview call. Rex + Alec attending. Fireflies recording.</div>
+        <div class="item-text item-text-muted">Earlier Perplexity brief said this call happened Apr 9 &mdash; that was wrong. Call is Monday.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Rex to present AURA methodology + <strong>15&ndash;20% lift across 200 campaigns</strong>.</div>
-        <div class="item-text">2. Debrief after call &mdash; scope next step.</div>
-        <div class="item-sources"><span class="source source-call">AURA Overview Apr 9</span></div>
+        <div class="item-text">1. <strong>Prep with Rex</strong> before Mon &mdash; AURA methodology deck + <strong>15&ndash;20% lift across 200 campaigns</strong> pitch.</div>
+        <div class="item-text">2. Confirm attendees (Jennifer Director VP Growth Marketing, Ria Galiano Head Analytics, Megan O'Shea, Emily Bordages, Saki Kanomata).</div>
+        <div class="item-text">3. Debrief after call &mdash; scope next step.</div>
+        <div class="item-sources"><span class="source source-email">Ria Galiano accept Apr 10 14:56</span></div>
         <textarea class="notes" data-key="aura-peloton" placeholder="Notes..."></textarea>
       </div>
     </div>
