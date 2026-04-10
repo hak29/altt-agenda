@@ -339,6 +339,47 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   font-size: 0.72rem; color: var(--gold);
 }
 
+/* Today's Focus quick-jump buttons */
+.focus-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.focus-btn {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 10px 14px; cursor: pointer;
+  color: var(--text); font-family: inherit; font-size: 0.85rem;
+  text-align: left; transition: all 0.15s;
+}
+.focus-btn:hover {
+  background: var(--bg); border-color: var(--gold);
+  transform: translateX(2px);
+}
+.focus-btn .focus-num {
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--gold); color: #000;
+  font-weight: 700; font-size: 0.78rem; flex-shrink: 0;
+}
+.focus-btn .focus-label { flex: 1; line-height: 1.35; }
+.focus-btn .focus-tag {
+  background: var(--bg); color: var(--muted);
+  font-size: 0.65rem; font-family: monospace; font-weight: 600;
+  padding: 2px 7px; border-radius: 3px;
+  border: 1px solid var(--border); flex-shrink: 0;
+}
+.focus-btn-urgent { border-left: 3px solid var(--red); }
+.focus-btn-urgent .focus-num { background: var(--red); color: #fff; }
+
+/* Target highlight when jumped to */
+.jump-flash {
+  animation: jumpFlash 1.5s ease-out;
+}
+@keyframes jumpFlash {
+  0% { background: rgba(240,180,41,0.25); }
+  100% { background: transparent; }
+}
+
 /* Toast for rollover confirmation */
 .toast {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -643,6 +684,49 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   <div class="status-card"><span class="dot dot-amber"></span><strong>POSSIBLE</strong> schedule in flux</div>
 </div>
 
+<!-- ── TODAY'S FOCUS (pinned priority quick-jump) ── -->
+<div class="card" id="card-focus" style="border-color: var(--gold); border-width: 2px;">
+  <div class="card-header" onclick="toggleCard('card-focus')">
+    <div class="card-title" style="color: var(--gold);">&#128205; Today's Focus <span class="badge badge-today">Apr 10</span></div>
+    <span class="card-chevron open" id="chv-card-focus">&rsaquo;</span>
+  </div>
+  <div class="card-body open" id="body-card-focus" style="display:block;">
+    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Start here. Click a priority to jump to the relevant section and expand it. Your notes stay where they belong.</p>
+    <div class="focus-list">
+      <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
+        <span class="focus-num">1</span>
+        <span class="focus-label"><strong>DAMit VII wrap-up</strong> &mdash; quick celebration: 1,980 reg / 1,328 attended / KPI met</span>
+        <span class="focus-tag">B.1.1</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-cap','sub-cap-possible')">
+        <span class="focus-num">2</span>
+        <span class="focus-label"><strong>POSSIBLE schedule</strong> &mdash; CAP Roundtable moved, MATT rescheduled, comms on hold</span>
+        <span class="focus-tag">A.1.6</span>
+      </button>
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-amfam')">
+        <span class="focus-num">3</span>
+        <span class="focus-label"><strong>AmFam letter</strong> &mdash; Greg, #1 blocker. Still not sent.</span>
+        <span class="focus-tag">A.1.4</span>
+      </button>
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-claritas')">
+        <span class="focus-num">4</span>
+        <span class="focus-label"><strong>Claritas contract</strong> &mdash; expired, Hassan owning renewal</span>
+        <span class="focus-tag">A.1.1</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-a3-campbell')">
+        <span class="focus-num">5</span>
+        <span class="focus-label"><strong>A3 Campbell ON HOLD</strong> &mdash; Novartis as replacement?</span>
+        <span class="focus-tag">A.2.2</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-aura-peloton')">
+        <span class="focus-num">6</span>
+        <span class="focus-label"><strong>Peloton AURA</strong> &mdash; overview call happened today (debrief)</span>
+        <span class="focus-tag">A.3.3</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- ── PROCESS CARD (weekly workflow) ── -->
 <div class="card ref-card" id="processCard">
   <div class="card-header" onclick="toggleCard('processCard')">
@@ -713,8 +797,12 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 <!-- ══════════════════════════════════════════════════════════════════
      LABS SECTION
      ══════════════════════════════════════════════════════════════ -->
-<div class="section-header" style="cursor:pointer;" onclick="toggleSection('sec-labs')">A. Labs <span id="chv-sec-labs" style="font-size:0.7em;color:var(--muted);margin-left:6px;">&#9660;</span></div>
-<div id="sec-labs">
+<div class="card" id="card-labs" style="margin-top:24px;">
+  <div class="card-header" onclick="toggleCard('card-labs')">
+    <div class="card-title">A. Labs</div>
+    <span class="card-chevron open" id="chv-card-labs">&rsaquo;</span>
+  </div>
+  <div class="card-body open" id="body-card-labs" style="display:block;">
 
 <!-- ── CAP ── -->
 <div class="card" id="card-cap">
@@ -831,20 +919,34 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <!-- A.1.6 POSSIBLE Sessions -->
     <div class="sub-card" id="sub-cap-possible">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-possible')">
-        <span class="sub-title">A.1.6 POSSIBLE Sessions <span class="badge badge-attention">Schedule in Flux</span></span>
+        <span class="sub-title">A.1.6 POSSIBLE Sessions <span class="badge badge-attention">Comms On Hold</span></span>
         <span class="sub-chevron" id="chv-sub-cap-possible">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-possible">
-        <span class="section-label done">CONFIRMED / PROPOSED</span>
-        <div class="item-text">1. <strong>Mon Apr 27, 10&ndash;11am</strong> &mdash; AI Training (Rex). <span class="tag tag-confirm">CONFIRMED</span> Description locked.</div>
+        <span class="section-label done">LATEST FROM SLACK (Apr 10 AM)</span>
+        <div class="item-text">Amanda sent final reg form edits to Jason Chase this morning with the latest titles. CAP moved from Monday to Tuesday. New Wed main stage title locked in. MATT moving to Wed 1:45pm.</div>
+
+        <span class="section-label next">CURRENT SCHEDULE</span>
+        <div class="item-text">1. <strong>Mon Apr 27, 10&ndash;11am</strong> &mdash; AI Training (Rex). <span class="tag tag-confirm">CONFIRMED</span></div>
         <div class="item-text">2. <strong>Mon Apr 27 (time TBD)</strong> &mdash; ALTT Meeting (Hassan + Alec).</div>
-        <div class="item-text">3. <strong>Mon Apr 27, ~3:45pm</strong> &mdash; CAP Roundtable (Rex + Vas). <span class="tag tag-urgent">PROPOSED MOVE</span> Angela flagged Rex double-booked. Vas critical since Hassan not attending in person.</div>
-        <div class="item-text">4. <strong>Tue Apr 28, 2:15&ndash;3:00pm</strong> &mdash; Brand as Performance (Denise). <span class="tag tag-confirm">CONFIRMED</span> Splash 9&ndash;10.</div>
+        <div class="item-text">3. <strong>Tue Apr 28, 2:15&ndash;3:00pm</strong> &mdash; <strong>"Quantifying Brand's Impact"</strong> (Brand as Performance, Denise). <span class="tag tag-confirm">CONFIRMED</span> Splash 9&ndash;10.</div>
+        <div class="item-text">4. <strong>Tue Apr 28, 3:45&ndash;4:15pm</strong> &mdash; <strong>"CAP Inner Circle: A Roundtable with Brands Who've Run the AI Creative Personalization Experiments"</strong>. <span class="tag tag-confirm">MOVED TO TUE</span> Splash 9&ndash;10. Rex + Vas leading. <span class="tag tag-urgent">Vas CRITICAL</span> &mdash; Hassan not in person.</div>
         <div class="item-text">5. <strong>Tue Apr 28, 5&ndash;6pm</strong> &mdash; MMA Welcome Mixer. All staff.</div>
-        <div class="item-text">6. <strong>Wed Apr 29, 2:45pm</strong> &mdash; Main Stage (Greg, Joel, Vas). <span class="tag tag-confirm">CONFIRMED</span></div>
-        <div class="item-text">7. <strong>MATT Workshop</strong> &mdash; <span class="tag tag-urgent">BEING RESCHEDULED</span> Greg wants Joel+Vas on Wed Main Stage &rarr; MATT must move.</div>
-        <div class="item-text item-text-muted">NOTE: Amanda's member comms blast ON HOLD until CAP + MATT times confirmed.</div>
-        <div class="item-sources"><span class="source source-slack">#possible-2026-member-comms</span> <span class="source source-email">Angela / Amanda</span></div>
+        <div class="item-text">6. <strong>Wed Apr 29, 1:30&ndash;2:30pm</strong> &mdash; <strong>"From Attribution to Incrementality to AI: What's the New Center of Gravity?"</strong> Main Stage. <span class="tag tag-confirm">CONFIRMED</span> Greg, Joel, Vas. Splash 9&ndash;10.</div>
+        <div class="item-text">7. <strong>Wed Apr 29, 1:45&ndash;2:45pm</strong> &mdash; <strong>MATT Workshop</strong> (Denise confirmed Wed slot). Splash 9&ndash;10. <span class="tag tag-monitor">Watch overlap with Main Stage</span></div>
+
+        <span class="section-label help">BLOCKERS</span>
+        <div class="item-text">1. <strong>Amanda's member comms blast ON HOLD</strong> until CAP + MATT times fully confirmed. She was holding this morning.</div>
+        <div class="item-text">2. Hassan's own ALTT POSSIBLE email draft (<code>ALTT_POSSIBLE_2026_Email_Draft-v1.docx</code>) waiting on reg form link before sending.</div>
+        <div class="item-text">3. Greg wants to write positioning as intro to the member comms email (word doc proof requested by Angela).</div>
+
+        <span class="section-label next">NEXT (TODAY)</span>
+        <div class="item-text">1. <strong>Hassan + Rex sync (happening now, ~17:30 CEST)</strong> &mdash; confirm timing, unblock comms.</div>
+        <div class="item-text">2. Vas confirm availability for CAP Roundtable + ALTT Meeting.</div>
+        <div class="item-text">3. Once confirmed &rarr; Amanda sends member comms, Hassan sends ALTT-specific email.</div>
+
+        <div class="item-text item-text-muted" style="margin-top:6px;">MMA Booth: #301 (LEFT), Atrium 4th Floor.</div>
+        <div class="item-sources"><span class="source source-slack">#possible-2026-member-comms (Apr 9&ndash;10)</span> <span class="source source-notion">Amanda's final reg edits Apr 10 13:51 CEST</span></div>
         <textarea class="notes" data-key="cap-possible" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1172,10 +1274,12 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   </div>
 </div>
 
+  </div><!-- /body-card-labs -->
+</div><!-- /card-labs -->
+
 <!-- ══════════════════════════════════════════════════════════════════
      KNOWLEDGE CENTER
      ══════════════════════════════════════════════════════════════ -->
-</div><!-- /sec-labs -->
 
 <div class="card" id="card-kc" style="margin-top:24px;">
   <div class="card-header" onclick="toggleCard('card-kc')">
@@ -1417,17 +1521,17 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
       <div class="action-item">
         <input type="checkbox" data-key="act-h3">
         <span class="action-num">D.3</span>
-        <span class="action-text">POSSIBLE: confirm CAP Roundtable + MATT times with Angela so Amanda can send comms <span class="tag tag-today">TODAY</span></span>
+        <span class="action-text">POSSIBLE: meet with Rex post-call, confirm final CAP Roundtable + MATT timing so Amanda can unblock comms <span class="tag tag-today">TODAY</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h4">
         <span class="action-num">D.4</span>
-        <span class="action-text">POSSIBLE: send dedicated ALTT community email for AI sessions <span class="tag tag-schedule">SCHEDULE</span></span>
+        <span class="action-text">POSSIBLE: send ALTT community email (draft v1 ready) once reg form link available <span class="tag tag-today">TODAY</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h5">
         <span class="action-num">D.5</span>
-        <span class="action-text">Reply to Rex re: CAP private room (invites, timing, format) <span class="tag tag-fup">FUP</span></span>
+        <span class="action-text">Confirm Vas availability for CAP Roundtable Tue 3:45pm + ALTT Meeting Mon (critical &mdash; Hassan not in person) <span class="tag tag-urgent">URGENT</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h6">
@@ -1572,10 +1676,12 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 
       <div class="script-block">
         <h3>4. POSSIBLE (Apr 27&ndash;29) <span class="time">~4 min</span></h3>
-        <div class="script-line flag"><strong>Schedule in flux:</strong> CAP Roundtable proposed move to Mon 3:45pm (Rex double-booked).</div>
-        <div class="script-line flag"><strong>MATT being rescheduled</strong> to make room for Joel+Vas on Main Stage Wed.</div>
-        <div class="script-line say">"Amanda's member comms blast ON HOLD until CAP + MATT times confirm."</div>
-        <div class="script-line ask"><strong>Ask Vas:</strong> "Confirm availability for CAP Roundtable + ALTT Meeting? Critical since I'm not there in person."</div>
+        <div class="script-line say">"Big updates from Slack this morning. CAP Roundtable moved to Tuesday Apr 28, 3:45pm Splash 9-10. New title locked: 'CAP Inner Circle: A Roundtable with Brands Who've Run the AI Creative Personalization Experiments.'"</div>
+        <div class="script-line say">"New Wed Main Stage title: 'From Attribution to Incrementality to AI: What's the New Center of Gravity?' &mdash; Wed 1:30&ndash;2:30pm, Greg/Joel/Vas."</div>
+        <div class="script-line say">"MATT moving to Wed 1:45&ndash;2:45pm Splash 9-10 (Denise confirmed)."</div>
+        <div class="script-line flag"><strong>Blocker:</strong> Amanda's member comms blast is ON HOLD. Greg wants to write positioning as intro &mdash; needs proof doc first.</div>
+        <div class="script-line ask"><strong>Ask Vas:</strong> "Can you confirm CAP Roundtable Tue 3:45pm + ALTT Meeting Mon? Critical &mdash; I'm not there in person."</div>
+        <div class="script-line say">"I'm meeting Rex right after this call to confirm any remaining timing."</div>
       </div>
 
       <hr class="script-divider">
@@ -1775,6 +1881,38 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     } else {
       btn.innerHTML = '\u25B6 Meeting Mode';
       toast('Meeting Mode OFF');
+    }
+  };
+
+  /* ── Jump to a specific sub-card (expand parent card + sub-card, scroll, flash) ── */
+  window.jumpToItem = function(parentCardId, subCardId) {
+    // Expand parent card
+    if (parentCardId) {
+      const parentBody = document.getElementById('body-' + parentCardId);
+      const parentChv = document.getElementById('chv-' + parentCardId);
+      if (parentBody && !parentBody.classList.contains('open')) {
+        parentBody.classList.add('open');
+        parentBody.style.display = 'block';
+        if (parentChv) parentChv.classList.add('open');
+      }
+    }
+    // Expand target sub-card
+    const subBody = document.getElementById('body-' + subCardId);
+    const subChv = document.getElementById('chv-' + subCardId);
+    if (subBody && !subBody.classList.contains('open')) {
+      subBody.classList.add('open');
+      subBody.style.display = 'block';
+      if (subChv) subChv.classList.add('open');
+    }
+    // Scroll + flash
+    const target = document.getElementById(subCardId);
+    if (target) {
+      setTimeout(function() {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.remove('jump-flash');
+        void target.offsetWidth;
+        target.classList.add('jump-flash');
+      }, 120);
     }
   };
 
