@@ -148,6 +148,7 @@ a:hover { text-decoration: underline; }
 .dot-green { background: var(--green); }
 .dot-amber { background: var(--amber); }
 .dot-red { background: var(--red); }
+.dot-blue { background: var(--blue-bright); }
 
 /* ── CARDS (universal collapsible) ── */
 .card {
@@ -269,14 +270,87 @@ a:hover { text-decoration: underline; }
 
 /* Notes textarea */
 .notes {
-  width: 100%; min-height: 50px; margin-top: 6px;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 8px 10px;
-  color: var(--text); font-family: inherit; font-size: 0.8rem;
-  resize: vertical; line-height: 1.45;
+  width: 100%; min-height: 80px; margin-top: 8px;
+  background: var(--bg); border: 1px solid var(--border-highlight);
+  border-radius: var(--radius); padding: 10px 12px;
+  color: var(--text); font-family: inherit; font-size: 0.85rem;
+  resize: vertical; line-height: 1.5;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.notes:focus { border-color: var(--gold); outline: none; }
+.notes:focus {
+  border-color: var(--gold); outline: none;
+  box-shadow: 0 0 0 2px rgba(240,180,41,0.2);
+}
 .notes[readonly] { opacity: 0.5; cursor: not-allowed; }
+.notes.has-content { border-left: 3px solid var(--gold); }
+.notes.carried-over { border-left: 3px solid var(--blue-bright); background: rgba(88,166,255,0.04); }
+
+/* Note footer: timestamp + quick actions */
+.note-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.68rem; color: var(--muted);
+  margin-top: 3px; padding: 0 2px;
+}
+.note-meta .note-ts { font-family: monospace; }
+.note-meta .note-label {
+  background: var(--blue-bright); color: #000;
+  padding: 1px 6px; border-radius: 3px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.3px; font-size: 0.6rem;
+}
+
+/* Meeting mode — larger, cleaner, focused */
+body.meeting-mode .ref-card,
+body.meeting-mode .section-header:not([data-labs]),
+body.meeting-mode #processCard { display: none; }
+body.meeting-mode .notes { min-height: 120px; font-size: 0.92rem; }
+body.meeting-mode .main { max-width: 900px; }
+body.meeting-mode .status-card { font-size: 0.75rem; padding: 5px 12px; }
+body.meeting-mode #btnMeetingMode {
+  background: var(--red) !important; color: #fff !important;
+  border-color: var(--red) !important;
+}
+body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
+
+/* Process explainer card */
+#processCard { margin-bottom: 12px; }
+#processCard .card-body { padding-top: 10px; }
+.process-steps {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+.process-step {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px;
+}
+.process-step .step-num {
+  display: inline-block; width: 22px; height: 22px;
+  background: var(--gold); color: #000; border-radius: 50%;
+  text-align: center; font-weight: 700; font-size: 0.8rem;
+  line-height: 22px; margin-right: 6px;
+}
+.process-step h5 {
+  display: inline; font-size: 0.88rem; font-weight: 600; color: var(--text);
+}
+.process-step p {
+  margin-top: 6px; font-size: 0.78rem; color: var(--muted); line-height: 1.5;
+}
+.process-step code {
+  background: var(--bg); padding: 1px 5px; border-radius: 3px;
+  font-size: 0.72rem; color: var(--gold);
+}
+
+/* Toast for rollover confirmation */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--surface); border: 1px solid var(--green);
+  color: var(--text); padding: 12px 20px; border-radius: var(--radius);
+  font-size: 0.85rem; z-index: 300;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  opacity: 0; transition: opacity 0.2s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
+.toast.err { border-color: var(--red); }
 
 /* Stalled list */
 .stalled-list {
@@ -509,8 +583,8 @@ a:hover { text-decoration: underline; }
     <div class="week-nav">
       <button onclick="changeWeek(-1)" title="Previous week">&lsaquo;</button>
       <div class="week-label">
-        <div class="week-code" id="weekCode">2026-W13</div>
-        <div class="week-date" id="weekDate">Tue, March 24, 2026</div>
+        <div class="week-code" id="weekCode">2026-W15</div>
+        <div class="week-date" id="weekDate">Fri, April 10, 2026</div>
         <div class="week-time">1:00 PM ET</div>
       </div>
       <button onclick="changeWeek(1)" title="Next week">&rsaquo;</button>
@@ -529,15 +603,17 @@ a:hover { text-decoration: underline; }
 
   <!-- Context bar -->
   <div class="context-bar">
-    Last substantive meeting: <strong>March 10</strong>.
-    March 17 was 11 min / silent.
-    March 24 was canceled then rescheduled.
+    Last check-in: <strong>April 7</strong> (Greg + Alec pre-call).
+    CAP Weekly: <strong>April 9</strong>.
+    This is the full ALTT weekly &mdash; <strong>April 10</strong>.
   </div>
 
   <!-- Toolbar -->
   <div class="toolbar">
+    <button onclick="toggleMeetingMode()" id="btnMeetingMode" style="background:var(--gold);color:#000;border-color:var(--gold);font-weight:600">&#9654; Meeting Mode</button>
     <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>
+    <button onclick="rolloverToNextWeek()" style="background:var(--blue-bright);color:#000;border-color:var(--blue-bright);font-weight:600" title="Carry this week's notes forward as starting point for next week">&rarr; Rollover</button>
     <button onclick="exportMarkdown()">Export MD</button>
     <button onclick="downloadScript()">Script</button>
     <button onclick="saveNotesFile()" style="background:var(--green);color:#000;border-color:var(--green);font-weight:600">Save Notes</button>
@@ -554,14 +630,45 @@ a:hover { text-decoration: underline; }
 
 <!-- ── QUICK STATUS (compact pills) ── -->
 <div class="status-grid">
-  <div class="status-card"><span class="dot dot-amber"></span><strong>AmFam</strong> CMO letter pending</div>
-  <div class="status-card"><span class="dot dot-amber"></span><strong>GCE</strong> mid-April launch</div>
-  <div class="status-card"><span class="dot dot-amber"></span><strong>SIFT</strong> back on track</div>
-  <div class="status-card"><span class="dot dot-green"></span><strong>DAMit VII</strong> 1,150 reg</div>
-  <div class="status-card"><span class="dot dot-amber"></span><strong>Survey</strong> launching this week</div>
-  <div class="status-card"><span class="dot dot-green"></span><strong>Custom Ink</strong> new interest</div>
-  <div class="status-card"><span class="dot dot-amber"></span><strong>Peloton</strong> FY2027</div>
-  <div class="status-card"><span class="dot dot-red"></span><strong>Berkowitz</strong> Greg flagged</div>
+  <div class="status-card"><span class="dot dot-green"></span><strong>DAMit VII</strong> 1,980 reg / 1,328 attended</div>
+  <div class="status-card"><span class="dot dot-amber"></span><strong>GCE</strong> landing page pixel mismatch</div>
+  <div class="status-card"><span class="dot dot-green"></span><strong>GM</strong> Amazon CTV LIVE Apr 6</div>
+  <div class="status-card"><span class="dot dot-red"></span><strong>AmFam</strong> letter NOT sent &mdash; still blocked</div>
+  <div class="status-card"><span class="dot dot-blue"></span><strong>SIFT</strong> GM kickoff done Apr 7</div>
+  <div class="status-card"><span class="dot dot-red"></span><strong>A3 Campbell's</strong> ON HOLD &mdash; Jan 2027</div>
+  <div class="status-card"><span class="dot dot-green"></span><strong>Canva</strong> call done, lab onboarding</div>
+  <div class="status-card"><span class="dot dot-blue"></span><strong>Peloton</strong> CAP + AURA calls scheduled</div>
+  <div class="status-card"><span class="dot dot-amber"></span><strong>Custom Ink</strong> re-engaged Apr 9</div>
+  <div class="status-card"><span class="dot dot-red"></span><strong>Claritas contract</strong> EXPIRED &mdash; urgent</div>
+  <div class="status-card"><span class="dot dot-amber"></span><strong>POSSIBLE</strong> schedule in flux</div>
+</div>
+
+<!-- ── PROCESS CARD (weekly workflow) ── -->
+<div class="card ref-card" id="processCard">
+  <div class="card-header" onclick="toggleCard('processCard')">
+    <div class="card-title">&#128161; Weekly Process <span class="badge badge-ref">How this works</span></div>
+    <span class="card-chevron" id="chv-processCard">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-processCard">
+    <div class="process-steps">
+      <div class="process-step">
+        <span class="step-num">1</span><h5>During the call</h5>
+        <p>Click <strong>Meeting Mode</strong>. Type into the <strong>Notes</strong> field under each item as it's discussed. Auto-saves every <code>600ms</code>.</p>
+      </div>
+      <div class="process-step">
+        <span class="step-num">2</span><h5>After the call</h5>
+        <p>Click <strong>Rollover &rarr;</strong>. All your notes get carried forward as starting context for next week. No re-typing.</p>
+      </div>
+      <div class="process-step">
+        <span class="step-num">3</span><h5>Before next call</h5>
+        <p>Navigate forward with <code>&rsaquo;</code>. Last week's notes show as <span style="color:var(--blue-bright)">blue-highlighted context</span>. Edit, delete what's done, add fresh items.</p>
+      </div>
+      <div class="process-step">
+        <span class="step-num">4</span><h5>Anytime</h5>
+        <p><strong>Save Notes</strong> = JSON backup. <strong>Export MD</strong> = full markdown. <strong>Change Log</strong> = audit trail of edits.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ── REFERENCE: KPIs ── -->
@@ -616,112 +723,150 @@ a:hover { text-decoration: underline; }
     <span class="card-chevron" id="chv-card-cap">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-cap">
-    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:8px;">Deep dives happen in the weekly CAP call. High-level items only.</p>
+    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:8px;">Deep dives in the weekly CAP call (Apr 9). High-level items + blockers only.</p>
 
+    <!-- A.1.1 Claritas -->
     <div class="sub-card" id="sub-cap-claritas">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-claritas')">
         <span class="sub-title">A.1.1 Claritas Blanket Agreement <span class="badge badge-urgent">URGENT</span></span>
         <span class="sub-chevron" id="chv-sub-cap-claritas">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-claritas">
-        <span class="section-label help">BLOCKING (Mar 19 CAP Weekly)</span>
-        <div class="item-text">1. <strong>Blanket agreement:</strong> expired Dec 31. Re-up decision needed. Blocks all Claritas-dependent experiments.</div>
-        <div class="item-text">2. <strong>GCE contract:</strong> blocked on name usage/brand rights. Legal reviewing updated agreement (Don as approved vendor).</div>
-        <div class="item-text">3. Public report sharing restrictions need resolution (same issue as Travelers previously).</div>
-        <div class="item-text">4. <strong>Heba Shrourou</strong> (GCE Procurement) confirmed receipt Mar 23. Mid-April launch target.</div>
+        <span class="section-label help">BLOCKING</span>
+        <div class="item-text">1. Contract <strong>EXPIRED Dec 31</strong>. Blocks all Claritas-dependent experiments.</div>
+        <div class="item-text">2. Hassan to own renewal &mdash; <strong>URGENT</strong>.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Finalize contract with legal (Don/Claritas) &mdash; <strong>due Apr 15</strong></div>
-        <div class="item-text">2. Hassan pushed back on points in GCE agreement</div>
-        <div class="item-sources"><span class="source source-call">Granola: CAP Weekly Mar 19</span> <span class="source source-email">Email: Mar 23</span> <span class="source source-notion">Pipeline: high priority</span></div>
+        <div class="item-text">1. Hassan to drive renewal this week. Escalate if needed.</div>
+        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9</span> <span class="source source-notion">Pipeline: urgent</span></div>
         <textarea class="notes" data-key="cap-claritas" placeholder="Notes..."></textarea>
       </div>
     </div>
 
+    <!-- A.1.2 GCE -->
+    <div class="sub-card" id="sub-cap-gce">
+      <div class="sub-card-header" onclick="toggleSub('sub-cap-gce')">
+        <span class="sub-title">A.1.2 GCE <span class="badge badge-attention">Pixel QC</span></span>
+        <span class="sub-chevron" id="chv-sub-cap-gce">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-cap-gce">
+        <span class="section-label done">ACCOMPLISHED</span>
+        <div class="item-text">1. Pixels <strong>LIVE</strong> on gcu.edu and explore.gcu.edu.</div>
+        <div class="item-text">2. <strong>Apr 9 QC (Isaac Coppola):</strong> Homepage pixel PASS (within 10% of GA4). Landing page pixel <strong>MISMATCH</strong> vs GA4.</div>
+        <div class="item-text">3. Andy Ryan (Claritas) sending fresh count <strong>Monday Apr 13</strong>.</div>
+        <div class="item-text">4. Heba added Claritas as pre-approved subcontractor &#10003;.</div>
+        <span class="section-label help">OPEN CONTRACT POINTS</span>
+        <div class="item-text">1. <strong>Use of Name</strong> + <strong>Public Report veto</strong> &mdash; GCE wants publication control. Heba asked for sample Public Report.</div>
+        <div class="item-text">2. <strong>ISA gap:</strong> GCE pushing for publication veto + liability carve-out that can't flow through Claritas ISA.</div>
+        <div class="item-text">3. $20K MMA billing question still open.</div>
+        <div class="item-text">4. GEM lab targeting 2nd week April. Roku approvals caused 1-week delay.</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">1. Claritas to fix landing page pixel by <strong>Apr 13</strong>.</div>
+        <div class="item-text">2. Finalize contract. Hold the line on Public Report rights.</div>
+        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9</span> <span class="source source-email">Isaac Coppola QC Apr 9</span></div>
+        <textarea class="notes" data-key="cap-gce" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <!-- A.1.3 GM -->
     <div class="sub-card" id="sub-cap-gm">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-gm')">
-        <span class="sub-title">A.1.2 GM Update (Rex)</span>
+        <span class="sub-title">A.1.3 GM Update (Rex) <span class="badge badge-new">CTV LIVE</span></span>
         <span class="sub-chevron" id="chv-sub-cap-gm">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-gm">
-        <span class="section-label done">STATUS (Mar 19 CAP Weekly)</span>
-        <div class="item-text">1. <strong>Second wave cost dispute:</strong> Kristen questioning separate payment for phase 2</div>
-        <div class="item-text">2. <strong>Greg's position:</strong> new campaign = new cost, just passing through expenses. Decision: don't negotiate.</div>
-        <div class="item-text">3. <strong>CTV expansion:</strong> GMC to Roku + Amazon Prime with brand KPI (totally new) &mdash; 4x impressions, longer period</div>
-        <div class="item-text">4. <strong>AURA crossover:</strong> probably Buick or GMC</div>
+        <span class="section-label done">ACCOMPLISHED</span>
+        <div class="item-text">1. <strong>Amazon GMC Sierra CTV brand lift LIVE as of April 6</strong> &#10003;</div>
+        <div class="item-text">2. Aaron Shaffer looped in Anish Koppula (new GM internal contact) Apr 8.</div>
+        <div class="item-text">3. Hassan sent cross-lab status update (CAP, AURA, SIFT) to GM Apr 8.</div>
+        <span class="section-label help">OPEN</span>
+        <div class="item-text">1. Roku pixel approvals still pending.</div>
+        <div class="item-text">2. Roku/Amazon budget split in agreement still unresolved.</div>
+        <div class="item-text">3. <strong>Project Romy:</strong> Bells launching Apr 16. Mazda meeting Apr 16.</div>
+        <div class="item-text item-text-muted">Note: SIFT and AURA are separate labs &mdash; do NOT mix SIFT KPI items into CAP card.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Finalize study list for Norm/David prep (Greg needs from Hassan)</div>
-        <div class="item-text">2. Norm + Molly (Home Depot) confirmed as CAP presenters for Cosimo Summit</div>
-        <div class="item-text">3. David unavailable Tuesday afternoon for prep</div>
-        <div class="item-sources"><span class="source source-call">Granola: CAP Weekly Mar 19</span> <span class="source source-notion">Pipeline: active</span></div>
+        <div class="item-text">1. Close Roku/Amazon budget split.</div>
+        <div class="item-text">2. Rex update on Romy/Google post Apr 16 (Mazda/Bells calls).</div>
+        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9</span> <span class="source source-email">Shaffer &rarr; Koppula Apr 8</span></div>
         <textarea class="notes" data-key="cap-gm" placeholder="Notes..."></textarea>
       </div>
     </div>
 
+    <!-- A.1.4 AmFam -->
     <div class="sub-card" id="sub-cap-amfam">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-amfam')">
-        <span class="sub-title">A.1.3 AmFam</span>
+        <span class="sub-title">A.1.4 AmFam <span class="badge badge-urgent">#1 BLOCKER</span></span>
         <span class="sub-chevron" id="chv-sub-cap-amfam">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-amfam">
-        <span class="section-label help">ISSUE (Mar 19 CAP Weekly)</span>
-        <div class="item-text">1. <strong>Conversion discrepancy:</strong> $70-79K per conversion vs GA4 showing vastly different numbers</div>
-        <div class="item-text">2. Company refused deeper analysis to resolve &mdash; may impact public reporting confidence</div>
-        <div class="item-text">3. 28.8% lift but data reconciliation blocking</div>
+        <span class="section-label help">STILL BLOCKED</span>
+        <div class="item-text">1. Greg's letter to CMO <strong>Sherina Smith NOT sent</strong>.</div>
+        <div class="item-text">2. Rex's white paper <strong>blocked</strong> until resolved.</div>
+        <div class="item-text">3. Greg considering board continuity based on AmFam participation.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Greg CMO letter to Sharina Smith &mdash; still pending (board-level)</div>
-        <div class="item-text">2. Need forensic analysis of low lift &mdash; blocked without full campaign data from AmFam</div>
-        <div class="item-sources"><span class="source source-call">Granola: CAP Weekly Mar 19</span></div>
+        <div class="item-text">1. <strong>Greg to send letter.</strong> This is the #1 blocker.</div>
+        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9</span></div>
         <textarea class="notes" data-key="cap-amfam" placeholder="Notes..."></textarea>
       </div>
     </div>
 
+    <!-- A.1.5 Home Depot (NEW) -->
+    <div class="sub-card" id="sub-cap-hd">
+      <div class="sub-card-header" onclick="toggleSub('sub-cap-hd')">
+        <span class="sub-title">A.1.5 Home Depot <span class="badge badge-new">NEW</span> <span class="badge badge-attention">Caution</span></span>
+        <span class="sub-chevron" id="chv-sub-cap-hd">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-cap-hd">
+        <span class="section-label done">STATUS</span>
+        <div class="item-text">1. Study completed. Final report <strong>NOT received</strong> from Zach/OMD.</div>
+        <div class="item-text">2. <strong>CAUTION:</strong> Study was compromised &mdash; ran 3 weeks not 8, InMarket failed. Do not cite prominently.</div>
+        <div class="item-text">3. <strong>Molly (CMO) + Norm</strong> confirmed as CAP presenters at POSSIBLE + CMO Summit.</div>
+        <div class="item-text">4. Greg email to Molly drafted to nudge Zach/Dale for final numbers.</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">1. <strong>Greg to send email.</strong> Need numbers before CMO Summit prep.</div>
+        <div class="item-sources"><span class="source source-email">Draft email to Molly</span></div>
+        <textarea class="notes" data-key="cap-hd" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <!-- A.1.6 POSSIBLE Sessions -->
     <div class="sub-card" id="sub-cap-possible">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-possible')">
-        <span class="sub-title">A.1.4 POSSIBLE Sessions (4 AI Sessions)</span>
+        <span class="sub-title">A.1.6 POSSIBLE Sessions <span class="badge badge-attention">Schedule in Flux</span></span>
         <span class="sub-chevron" id="chv-sub-cap-possible">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-possible">
-        <div class="item-text">1. <strong>CAP Main Stage</strong> &mdash; keynote/panel, brand case studies</div>
-        <div class="item-text">2. <strong>CAP Roundtable</strong> &mdash; intimate discussion with participating brands</div>
-        <div class="item-text">3. <strong>ALTT Labs</strong> &mdash; ACE/A3 showcase (maybe AURA)</div>
-        <div class="item-text">4. <strong>ALTT Community Session</strong> &mdash; broader engagement</div>
-        <div class="item-text item-text-muted">Which brands present? Finalize speakers and format.</div>
-        <div class="item-sources"><span class="source source-notion">SharePoint: POSSIBLE Agenda</span></div>
+        <span class="section-label done">CONFIRMED / PROPOSED</span>
+        <div class="item-text">1. <strong>Mon Apr 27, 10&ndash;11am</strong> &mdash; AI Training (Rex). <span class="tag tag-confirm">CONFIRMED</span> Description locked.</div>
+        <div class="item-text">2. <strong>Mon Apr 27 (time TBD)</strong> &mdash; ALTT Meeting (Hassan + Alec).</div>
+        <div class="item-text">3. <strong>Mon Apr 27, ~3:45pm</strong> &mdash; CAP Roundtable (Rex + Vas). <span class="tag tag-urgent">PROPOSED MOVE</span> Angela flagged Rex double-booked. Vas critical since Hassan not attending in person.</div>
+        <div class="item-text">4. <strong>Tue Apr 28, 2:15&ndash;3:00pm</strong> &mdash; Brand as Performance (Denise). <span class="tag tag-confirm">CONFIRMED</span> Splash 9&ndash;10.</div>
+        <div class="item-text">5. <strong>Tue Apr 28, 5&ndash;6pm</strong> &mdash; MMA Welcome Mixer. All staff.</div>
+        <div class="item-text">6. <strong>Wed Apr 29, 2:45pm</strong> &mdash; Main Stage (Greg, Joel, Vas). <span class="tag tag-confirm">CONFIRMED</span></div>
+        <div class="item-text">7. <strong>MATT Workshop</strong> &mdash; <span class="tag tag-urgent">BEING RESCHEDULED</span> Greg wants Joel+Vas on Wed Main Stage &rarr; MATT must move.</div>
+        <div class="item-text item-text-muted">NOTE: Amanda's member comms blast ON HOLD until CAP + MATT times confirmed.</div>
+        <div class="item-sources"><span class="source source-slack">#possible-2026-member-comms</span> <span class="source source-email">Angela / Amanda</span></div>
         <textarea class="notes" data-key="cap-possible" placeholder="Notes..."></textarea>
       </div>
     </div>
 
-    <div class="sub-card" id="sub-cap-paper">
-      <div class="sub-card-header" onclick="toggleSub('sub-cap-paper')">
-        <span class="sub-title">A.1.5 Impact Numbers / White Paper</span>
-        <span class="sub-chevron" id="chv-sub-cap-paper">&rsaquo;</span>
-      </div>
-      <div class="sub-card-body" id="body-sub-cap-paper">
-        <div class="item-text">Rex draft in progress. Pre-launch checklist needed.</div>
-        <div class="item-text"><a href="https://docs.google.com/document/d/1bpAO1T3pmSjPPq-D6dOP19lFM1SLcUCelZyUpL3F4fM/edit?usp=sharing" target="_blank">Whitepaper: Pre-launch Checklist for Creatives (Rex)</a></div>
-        <textarea class="notes" data-key="cap-paper" placeholder="Notes..."></textarea>
-      </div>
-    </div>
-
+    <!-- A.1.7 Pipeline -->
     <div class="sub-card" id="sub-cap-pipeline">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-pipeline')">
-        <span class="sub-title">A.1.6 New Pipeline</span>
+        <span class="sub-title">A.1.7 Pipeline (Prospects)</span>
         <span class="sub-chevron" id="chv-sub-cap-pipeline">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-pipeline">
-        <div class="item-text"><strong>Pipeline: 29 active CAP experiments, 29 done, $665K total est. value</strong></div>
-        <span class="section-label done">ACTIVE PROSPECTS</span>
-        <div class="item-text">1. <strong>Custom Ink</strong> &mdash; Phil Auerbach strong interest. Exploration stage. Cross-functional team (paid search, CRM, analytics). Need follow-up with Don/Mike. <span class="tag tag-fup">Due: Mar 21 (overdue)</span></div>
-        <div class="item-text">2. <strong>Clorox</strong> &mdash; Schedule intro call with Jade (via Amanda Hyland). <span class="tag tag-today">Due: Mar 24</span></div>
-        <div class="item-text">3. <strong>Marriott</strong> &mdash; Schedule call with Michelle. Leverage POSSIBLE for in-person intro with Andy. <span class="tag tag-today">Due: Mar 24</span></div>
-        <div class="item-text">4. <strong>Ford Motor Co.</strong> &mdash; Don interested, calls being scheduled (Mar 19)</div>
-        <div class="item-text">5. <strong>NYT</strong> &mdash; Exploration stage. <span class="tag tag-urgent">Stalled 14d</span></div>
-        <div class="item-text">6. <strong>Campbell Soup</strong> &mdash; Exploration stage. <span class="tag tag-urgent">Stalled 14d</span></div>
-        <div class="item-text">7. <strong>GroundTruth</strong> &mdash; Matt Knight reviewing Claritas partnership. Shell + Mazda as foot traffic cases. <span class="tag tag-today">Due: Mar 24</span></div>
-        <div class="item-text">8. <strong>Peloton</strong> &mdash; Responding to AURA + CAP proposals. Booked through June, pilots FY2027.</div>
-        <div class="item-text">9. <strong>Arcelik Turkey</strong> &mdash; Waiting on Guliz. <span class="tag tag-fup">Due: Mar 31</span></div>
-        <div class="item-text">10. <strong>Hilton</strong> &mdash; Lead identified. <span class="tag tag-monitor">Stalled 7d</span></div>
-        <div class="item-sources"><span class="source source-notion">Pipeline Dashboard</span> <span class="source source-call">CAP Weekly Mar 19</span></div>
+        <div class="item-text">1. <strong>SC Johnson</strong> &mdash; Re-engaged Apr 9 (Julio + Francis). 30-min Rex call offered. <span class="tag tag-fup">Apr 9</span></div>
+        <div class="item-text">2. <strong>E*Trade / Morgan Stanley</strong> &mdash; Escalating. Hassan emailed Mike Bosco directly. Greg escalation to Andrea Zaretsky (NA BOD) via Angela/Jade. <span class="tag tag-escalation">ESCALATE</span></div>
+        <div class="item-text">3. <strong>Custom Ink</strong> &mdash; Re-engaged full team Apr 9 (Phil + 6 others). Lab scoping offered. <span class="tag tag-fup">Apr 9</span></div>
+        <div class="item-text">4. <strong>Clorox</strong> &mdash; CMO Eric is Global BOD. Team of 12 at POSSIBLE. Intro via Jade. <span class="tag tag-schedule">PENDING</span></div>
+        <div class="item-text">5. <strong>Marriott</strong> &mdash; CMO Andy is NA BOD. Michelle rearranged POSSIBLE trip. Amanda/Jade intro. <span class="tag tag-schedule">PENDING</span></div>
+        <div class="item-text">6. <strong>Ford</strong> &mdash; Scott Kelly is NA BOD. CAP top interest. Intro call overdue. <span class="tag tag-urgent">OVERDUE</span></div>
+        <div class="item-text">7. <strong>Peloton</strong> &mdash; CAP + AURA Overview calls scheduled. Jennifer Director (M&amp;D BOD). <span class="tag tag-fup">Apr 9</span></div>
+        <div class="item-text">8. <strong>GroundTruth</strong> &mdash; Mar 16 DCO call. Existing Claritas partnership. Rosie O'Meara (M&amp;D BOD). <span class="tag tag-fup">Mar 16</span></div>
+        <div class="item-text">9. <strong>Campbell Soup</strong> &mdash; Stalled. A3 also on hold (Jan 2027). <span class="tag tag-urgent">ON HOLD</span></div>
+        <div class="item-text">10. <strong>Canva</strong> &mdash; Call done Apr 9 with Jackie Hill. Lab onboarding interest. <span class="tag tag-fup">Apr 9</span></div>
+        <div class="item-sources"><span class="source source-notion">Pipeline Dashboard</span> <span class="source source-call">CAP Weekly Apr 9</span></div>
         <textarea class="notes" data-key="cap-pipeline" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -732,7 +877,7 @@ a:hover { text-decoration: underline; }
 <div class="card" id="card-a3">
   <div class="card-header" onclick="toggleCard('card-a3')">
     <div class="card-title">A.2 A3 <span class="lab-full">&mdash; Agentic AI Advertising</span></div>
-    <span class="badge badge-attention">Attention</span>
+    <span class="badge badge-urgent">Campbell ON HOLD</span>
     <span class="card-chevron" id="chv-card-a3">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-a3">
@@ -740,22 +885,21 @@ a:hover { text-decoration: underline; }
     <!-- Intuit + Monks -->
     <div class="sub-card" id="sub-a3-intuit">
       <div class="sub-card-header" onclick="toggleSub('sub-a3-intuit')">
-        <span class="sub-title">A.2.1 Intuit + Monks <span class="badge badge-attention">Attention</span></span>
+        <span class="sub-title">A.2.1 Intuit + Monks</span>
         <span class="sub-chevron" id="chv-sub-a3-intuit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-a3-intuit">
-        <span class="section-label done">ACCOMPLISHED</span>
-        <div class="item-text">1. Mar 20 Call #3: "Lone Wolf" creative concept selected &mdash; business owners working alone, AI replicants doing tasks behind the scenes</div>
-        <div class="item-text">2. Three hero personas finalized: Marcus Chen (retrofitter, $6.5M), Nia Robinson (e-commerce, $3.2M), Dr. Alina Rodriguez (PT group, $8M)</div>
-        <div class="item-text">3. Three-act structure: establish worlds &rarr; Intuit Intelligence activation with UI overlays &rarr; resolution</div>
+        <span class="section-label done">CARRY-OVER</span>
+        <div class="item-text">1. Mar 20 Call #3: "Lone Wolf" creative concept selected. Three personas (Marcus Chen $6.5M, Nia Robinson $3.2M, Dr. Rodriguez $8M &rarr; flagged unrealistic, swapping).</div>
+        <div class="item-text">2. Three-act structure: establish worlds &rarr; Intuit Intelligence activation &rarr; resolution.</div>
+        <span class="section-label help">STATUS</span>
+        <div class="item-text">1. <strong>SOW sent Mar 13, no reply.</strong></div>
+        <div class="item-text">2. Monks say "coming along nicely" &mdash; <strong>verify directly</strong>.</div>
+        <div class="item-text">3. In "Qualified Out / Unresponsive" in Supabase but may still be active.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Call #4: persona refinement &mdash; $8M PT revenue flagged as unrealistic, swapping revenue amounts between personas</div>
-        <div class="item-text">2. Concept approval. Legal review AI-generated content.</div>
-        <div class="item-text">3. Rough cut target ~April 1</div>
-        <span class="section-label help">HELP NEEDED</span>
-        <div class="item-text">1. Legal review needed for AI-generated video content</div>
-        <div class="item-text">2. Alternative personas being developed for healthcare clinic owner to reflect realistic revenue</div>
-        <div class="item-sources"><span class="source source-call">Granola: Mar 20 Call</span></div>
+        <div class="item-text">1. Hassan to verify status directly with Intuit contact.</div>
+        <div class="item-text">2. Legal review for AI content still needed.</div>
+        <div class="item-sources"><span class="source source-call">Mar 20 Call</span> <span class="source source-email">SOW Mar 13</span></div>
         <textarea class="notes" data-key="a3-intuit" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -763,21 +907,20 @@ a:hover { text-decoration: underline; }
     <!-- Campbell + Monks -->
     <div class="sub-card" id="sub-a3-campbell">
       <div class="sub-card-header" onclick="toggleSub('sub-a3-campbell')">
-        <span class="sub-title">A.2.2 Campbell + Monks <span class="badge badge-attention">Attention</span></span>
+        <span class="sub-title">A.2.2 Campbell + Monks <span class="badge badge-urgent">ON HOLD</span></span>
         <span class="sub-chevron" id="chv-sub-a3-campbell">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-a3-campbell">
-        <span class="section-label done">ACCOMPLISHED</span>
-        <div class="item-text">1. Feb 23: CAP overview presented to Campbell: Marci Raible, Megan O'Brien, Emily Thomas Theobald, Chris Tutor</div>
-        <div class="item-text">2. Feb 27: Joint call with Campbell + Monks for A3</div>
-        <div class="item-text">3. In execution with Monks creative team</div>
+        <span class="section-label help">ON HOLD</span>
+        <div class="item-text">1. <strong>Megan O'Brien confirmed Jan 2027 in-market date</strong> &mdash; incompatible with POSSIBLE timeline.</div>
+        <div class="item-text">2. Kickoff call Apr 8 <strong>CANCELED</strong> by Megan. No reschedule.</div>
+        <span class="section-label done">ACCOMPLISHED (Apr 9)</span>
+        <div class="item-text">1. Hassan emailed <strong>Monks</strong> (Kate Richling, Dave Carey, Liz Cook): proposed replacement brand with 3-week POSSIBLE deadline.</div>
+        <div class="item-text">2. Hassan emailed <strong>Megan</strong> clarifying A3 takes 2&ndash;4 weeks brief-to-asset, can finish before January.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Track creative development progress</div>
-        <div class="item-text">2. Hassan to brief team on outcomes from Feb 27 call</div>
-        <div class="item-text">3. Challenge: proxy for sales signal, comes from Circana</div>
-        <span class="section-label help">PIPELINE</span>
-        <div class="item-text"><span class="tag tag-urgent">Stalled 14d</span> in exploration &mdash; awaiting response from Campbell after follow-up</div>
-        <div class="item-sources"><span class="source source-call">Calls: Feb 23, Feb 27</span> <span class="source source-notion">Pipeline: urgent</span></div>
+        <div class="item-text">1. Await Monks + Megan replies.</div>
+        <div class="item-text">2. If Jan 2027 confirmed, <strong>activate Novartis</strong>.</div>
+        <div class="item-sources"><span class="source source-email">Hassan Apr 9 (Monks + Megan)</span></div>
         <textarea class="notes" data-key="a3-campbell" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -785,12 +928,20 @@ a:hover { text-decoration: underline; }
     <!-- Novartis -->
     <div class="sub-card" id="sub-a3-novartis">
       <div class="sub-card-header" onclick="toggleSub('sub-a3-novartis')">
-        <span class="sub-title">A.2.3 Novartis</span>
+        <span class="sub-title">A.2.3 Novartis <span class="badge badge-new">Replacement Candidate</span></span>
         <span class="sub-chevron" id="chv-sub-a3-novartis">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-a3-novartis">
+        <span class="section-label done">CONTEXT</span>
+        <div class="item-text">1. Top replacement candidate for Campbell's. CMO: <strong>Gail Horwood</strong> (Global BOD).</div>
+        <div class="item-text">2. Prior calls Nov 19 + Dec 10 2025.</div>
+        <div class="item-text">3. Use case: agentic content creation, automated ad production.</div>
+        <span class="section-label help">BLOCKER</span>
+        <div class="item-text">1. <strong>MUST check Monks pharma policy</strong> before reactivating.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">Video generation for FDA label changes &mdash; Dave Carey ISI feasibility.</div>
+        <div class="item-text">1. Hassan + Monks confirm pharma policy.</div>
+        <div class="item-text">2. Re-engage Gail Horwood.</div>
+        <div class="item-sources"><span class="source source-call">Nov 19 + Dec 10 2025</span></div>
         <textarea class="notes" data-key="a3-novartis" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -822,47 +973,54 @@ a:hover { text-decoration: underline; }
         <span class="sub-chevron" id="chv-sub-aura-att">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-aura-att">
-        <span class="section-label done">STATUS</span>
-        <div class="item-text">1. Last call Feb 19: Very interested, want AURA + CAP together, starting AURA first</div>
-        <div class="item-text">2. Min 10M impressions over 4 weeks</div>
-        <div class="item-text">3. Prism Segmentation: 68 categories, phased targeting approach</div>
-        <div class="item-text">4. Audio ads allow real-time updates; display requires manual effort</div>
-        <div class="item-text">5. Test metrics align with fiber traffic, no suppression of other campaigns</div>
-        <div class="item-text">6. New senior hire <strong>Christopher Stanger</strong> is ambitious about scaling CAP</div>
+        <span class="section-label help">STATUS</span>
+        <div class="item-text">1. Still selecting which campaign to use for AURA.</div>
+        <div class="item-text">2. <strong>Hiep Nguyen</strong> requested new lower-funnel conversion tags (Purchase/Cart by Mobility + Broadband).</div>
+        <div class="item-text">3. <strong>Heather Roestamadji</strong> (Claritas) waiting on Hiep to confirm URLs.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Hassan sent follow-up &mdash; awaiting response on pixel implementation</div>
-        <div class="item-text">2. Mar 6: pixel implementation progressing. Hassan responded to compliance Qs.</div>
-        <div class="item-text">3. Old trkn.us pixel under review. Cookie details + full pixel code requested from Claritas.</div>
-        <div class="item-text">4. Hassan to clarify impression minimums with AT&amp;T contacts (Rex occupied)</div>
-        <div class="item-sources"><span class="source source-call">Call: Feb 19</span> <span class="source source-email">Email: Mar 6</span></div>
+        <div class="item-text">1. Hiep to confirm campaign + URLs.</div>
+        <div class="item-sources"><span class="source source-call">Prior call Feb 19</span> <span class="source source-email">Hiep / Heather</span></div>
         <textarea class="notes" data-key="aura-att" placeholder="Notes..."></textarea>
       </div>
     </div>
 
     <div class="sub-card" id="sub-aura-gm">
       <div class="sub-card-header" onclick="toggleSub('sub-aura-gm')">
-        <span class="sub-title">A.3.2 GM (Buick/GMC)</span>
+        <span class="sub-title">A.3.2 GM (Buick/GMC) <span class="badge badge-attention">Stalled</span></span>
         <span class="sub-chevron" id="chv-sub-aura-gm">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-aura-gm">
-        <span class="section-label done">STATUS (Feb 18 call)</span>
-        <div class="item-text">1. Moving forward. Christine: goal is to find 'best' group within FSP audience using AI</div>
-        <div class="item-text">2. Testing with Buick or GMC. Goal: <strong>15-25% conversion rate increase</strong></div>
-        <div class="item-text">3. Pronghorn integration with Dynata brand lift surveys</div>
-        <div class="item-text">4. Dynamic audience expansion delayed 6 months to stabilize rollout</div>
-        <div class="item-text">5. Kalpana Yanamadala to continue Moveable Middles discussion as future AURA test</div>
+        <span class="section-label help">STATUS</span>
+        <div class="item-text">1. <strong>Still stalled.</strong> Christine not responding to follow-ups.</div>
+        <div class="item-text">2. Greg considering <strong>single top-down exec touch</strong> across all GM labs (CAP + AURA + SIFT) instead of chasing lab by lab.</div>
+        <div class="item-text item-text-muted">Prior goal: 15&ndash;25% conversion rate increase on Buick or GMC (from Feb 18 call).</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Confirm test setup status (Buick vs GMC decision)</div>
-        <div class="item-text">2. Peloton AURA deep-dive &mdash; Leah to schedule with Rex. <span class="tag tag-fup">Due: Mar 31</span></div>
-        <div class="item-sources"><span class="source source-call">Call: Feb 18</span> <span class="source source-notion">Pipeline: active</span></div>
+        <div class="item-text">1. Decide: lab-by-lab chase OR Greg consolidated exec touch.</div>
+        <div class="item-sources"><span class="source source-call">Call: Feb 18</span></div>
         <textarea class="notes" data-key="aura-gm" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-aura-peloton">
+      <div class="sub-card-header" onclick="toggleSub('sub-aura-peloton')">
+        <span class="sub-title">A.3.3 Peloton <span class="badge badge-new">NEW</span></span>
+        <span class="sub-chevron" id="chv-sub-aura-peloton">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-aura-peloton">
+        <span class="section-label done">SCHEDULED</span>
+        <div class="item-text">1. <strong>AURA Overview call Apr 9</strong> with Jennifer Director (VP Growth Marketing), Ria Galiano (Head Analytics), Megan O'Shea, Emily Bordages, Saki Kanomata.</div>
+        <div class="item-text">2. <strong>Rex + Alec attending.</strong> Fireflies recording.</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">1. Rex to present AURA methodology + <strong>15&ndash;20% lift across 200 campaigns</strong>.</div>
+        <div class="item-text">2. Debrief after call &mdash; scope next step.</div>
+        <div class="item-sources"><span class="source source-call">AURA Overview Apr 9</span></div>
+        <textarea class="notes" data-key="aura-peloton" placeholder="Notes..."></textarea>
       </div>
     </div>
 
     <div style="margin-top:8px;">
       <span class="section-label stalled">STALLED</span>
       <div class="stalled-list">
-        <span>Peloton</span>
         <span>Visa</span>
         <span>Microsoft</span>
         <span>Hilton</span>
@@ -876,16 +1034,18 @@ a:hover { text-decoration: underline; }
 <div class="card" id="card-sift">
   <div class="card-header" onclick="toggleCard('card-sift')">
     <div class="card-title">A.4 SIFT <span class="lab-full">&mdash; Semantic Inference for Targeting (Cognitiv)</span></div>
-    <span class="badge badge-attention">Attention</span>
+    <span class="badge badge-new">GM Kickoff Done</span>
     <span class="card-chevron" id="chv-card-sift">&rsaquo;</span>
   </div>
   <div class="card-body" id="body-card-sift">
     <span class="section-label done">ACCOMPLISHED</span>
-    <div class="item-text">No longer paused. Was paused after Justin pulled back. 2nd batch: only Kenvue responded. Now back on track.</div>
+    <div class="item-text">1. <strong>GM kickoff done Apr 7</strong> with Cognitiv (Aaron), Sara Ernst, Rachel Hazy, Alexander Heath (internal experimentation team), ZZ Zhao.</div>
+    <span class="section-label help">STATUS</span>
+    <div class="item-text">1. GM <strong>regrouping internally</strong> on KPIs, brand alignment, and timing.</div>
     <span class="section-label next">NEXT</span>
-    <div class="item-text">GM call (ask Alec). Shortlist: Delta, DraftKings, 1-800 Flowers, SC Johnson.</div>
-    <span class="section-label help">HELP NEEDED</span>
-    <div class="item-text">"Zero to one" &mdash; another vendor to evaluate alongside Cognitiv.</div>
+    <div class="item-text">1. Next touch expected <strong>Apr 16&ndash;23</strong>.</div>
+    <div class="item-text">2. Alec leading.</div>
+    <div class="item-sources"><span class="source source-call">GM SIFT kickoff Apr 7</span></div>
     <textarea class="notes" data-key="sift-main" placeholder="Notes..."></textarea>
   </div>
 </div>
@@ -998,11 +1158,13 @@ a:hover { text-decoration: underline; }
         <div class="item-text">1. <strong>Ridge Wallet (gifting category)</strong> &mdash; daily LLM querying across 13B question database to track visibility vs competitors. Achieved <strong>8.6% probability increase</strong> through surgical modification of just 15 specific words</div>
         <div class="item-text">2. <strong>Source citation analysis</strong> &mdash; identified which pages ChatGPT consults for recommendations (e.g., Alibaba.com top source for gift recs, showing third-party influence)</div>
         <div class="item-text">3. <strong>First experiment proposed:</strong> ChatGPT visibility in 1 area with Ridge gifting use case</div>
+        <span class="section-label done">UPDATE</span>
+        <div class="item-text"><strong>Kartik Hosanagar presented at MSI Forum March 19</strong> on AI search and GEO.</div>
         <span class="section-label help">DISCUSS</span>
         <div class="item-text">1. How does this fit into ALTT lab structure? Potential new lab or fold into ARC?</div>
         <div class="item-text">2. Which MMA member brands to pilot with?</div>
         <div class="item-text">3. Differentiation from ARC Reddit research &mdash; complementary or overlapping?</div>
-        <div class="item-sources"><span class="source source-call">Granola: Mar 20 Kartik Call</span></div>
+        <div class="item-sources"><span class="source source-call">Granola: Mar 20 Kartik Call</span> <span class="source source-notion">MSI Forum Mar 19</span></div>
         <textarea class="notes" data-key="geo-overview" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1027,30 +1189,40 @@ a:hover { text-decoration: underline; }
 
     <div class="sub-card" id="sub-kc-damit">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-damit')">
-        <span class="sub-title">B.1.1 DAMit VII <span class="badge badge-today">Mar 30 / 1,150 Reg</span></span>
+        <span class="sub-title">B.1.1 DAMit VII <span class="badge badge-new">1,980 / 1,328</span></span>
         <span class="sub-chevron" id="chv-sub-kc-damit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-damit">
         <span class="section-label done">ACCOMPLISHED</span>
-        <div class="item-text">1,150 registrations (as of Mar 24). Prep email blasting today (auto-send to new registrants). On-demand up within 2 hours with recap. More emails + LinkedIn posts planned.</div>
+        <div class="item-text">1. <strong>1,980 registrations</strong> / <strong>1,328 unique attendees (67% conversion)</strong>.</div>
+        <div class="item-text">2. <strong>Day 1:</strong> 1,106 &middot; <strong>Day 2:</strong> 854 &middot; <strong>Day 3:</strong> 700.</div>
+        <div class="item-text">3. <strong>All 3 days:</strong> 465 (35%) &middot; <strong>2+ days:</strong> 867 (65%) &middot; <strong>1 day only:</strong> 461.</div>
+        <div class="item-text">4. Combined with prior cohorts: <strong>10K+ trained</strong> (KPI met &#10003;).</div>
+        <div class="item-text">5. Credly certificate design reviewed Apr 3. NPS pending from Dan.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">New KPI: every member sends at least one person (Stephen, Amanda, Greg pushing). Daily recaps once training starts. Dan Whiting proof reviewed. Credly certs configured.</div>
+        <div class="item-text">1. Full post-event report from Dan.</div>
+        <div class="item-text">2. Next cohort planning.</div>
+        <div class="item-sources"><span class="source source-email">Dan Whiting</span></div>
         <textarea class="notes" data-key="kc-damit" placeholder="Notes..."></textarea>
       </div>
     </div>
 
     <div class="sub-card" id="sub-kc-mac">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-mac')">
-        <span class="sub-title">B.1.2 MAC &mdash; AI Belt Certification</span>
+        <span class="sub-title">B.1.2 MAC &mdash; AI Belt Certification <span class="badge badge-attention">PSI Issue</span></span>
         <span class="sub-chevron" id="chv-sub-kc-mac">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-mac">
-        <div class="item-text">1. Feb 10: announced for all staff at offsite &mdash; deadline March 15</div>
-        <div class="item-text">2. AI Thursdays started Feb 26</div>
-        <div class="item-text">3. Rex: Tech Tuesday, Tech Thursday, 2-3hrs Friday &mdash; buddy system</div>
-        <div class="item-text">4. <strong>White Belt</strong> (~10hrs) ready, <strong>Yellow Belt</strong> (~20hrs) near completion, <strong>Green Belt</strong> (30-40hrs) in March</div>
-        <div class="item-text">5. On demand content, 10 tests, AI auto-grading</div>
-        <div class="item-text">6. <strong>10K+ total registrations</strong> across training programs</div>
+        <span class="section-label done">STATUS</span>
+        <div class="item-text">1. <strong>Yellow Belt content 100% done.</strong></div>
+        <div class="item-text">2. Tests pending automation (<strong>Rex + Cameron</strong>).</div>
+        <span class="section-label help">OPEN</span>
+        <div class="item-text">1. <strong>PSI/Adapt AI exclusivity issue</strong> flagged by <strong>Michael Pettiette</strong> &mdash; contradicts guidance to leadership.</div>
+        <div class="item-text">2. Need decision path.</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">1. Decide PSI/Adapt AI exclusivity resolution.</div>
+        <div class="item-text">2. Rex + Cameron complete test automation.</div>
+        <div class="item-sources"><span class="source source-slack">Michael Pettiette flag</span></div>
         <textarea class="notes" data-key="kc-mac" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1097,7 +1269,7 @@ a:hover { text-decoration: underline; }
         <span class="sub-chevron" id="chv-sub-kc-coloop">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-coloop">
-        <div class="item-text">Mar 24 demo scheduled. Evaluate platform.</div>
+        <div class="item-text">Platform evaluation in progress. Awaiting update.</div>
         <textarea class="notes" data-key="kc-coloop" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1132,81 +1304,89 @@ a:hover { text-decoration: underline; }
   </div>
   <div class="card-body" id="body-card-community">
 
-    <div class="sub-card" id="sub-comm-alc">
-      <div class="sub-card-header" onclick="toggleSub('sub-comm-alc')">
-        <span class="sub-title">C.1 ALC Schedule 2026</span>
-        <span class="sub-chevron" id="chv-sub-comm-alc">&rsaquo;</span>
+    <div class="sub-card" id="sub-comm-canva">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-canva')">
+        <span class="sub-title">C.1 Canva <span class="badge badge-new">NEW</span></span>
+        <span class="sub-chevron" id="chv-sub-comm-canva">&rsaquo;</span>
       </div>
-      <div class="sub-card-body" id="body-sub-comm-alc">
-        <div class="item-text">1. <strong>Q1 (done):</strong> MATT 2/24, ALTT 2/17-2/18, ALTT Quarterly 2/25</div>
-        <div class="item-text">2. <strong>Q2:</strong> MATT &amp; ALTT &mdash; POSSIBLE encore meetings May 12-13</div>
-        <div class="item-text">3. <strong>Q3:</strong> MATT &amp; ALTT &mdash; Sept 1-3</div>
-        <div class="item-text">4. <strong>Q4:</strong> MATT &amp; ALTT &mdash; Nov 17-19</div>
-        <textarea class="notes" data-key="comm-alc" placeholder="Notes..."></textarea>
+      <div class="sub-card-body" id="body-sub-comm-canva">
+        <span class="section-label done">ACCOMPLISHED (Apr 9)</span>
+        <div class="item-text">1. Call done with <strong>Jackie Hill</strong> (AI Marketing Lead, Canva, Sydney).</div>
+        <div class="item-text">2. Interested in: (1) <strong>AI video generation</strong> (Monks/Flow), (2) sponsoring/presenting at AI training, (3) lab onboarding calls.</div>
+        <div class="item-text">3. Cannot attend POSSIBLE (own event conflict).</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">1. Send AI Acceleration Guide.</div>
+        <div class="item-text">2. Coordinate lab onboarding.</div>
+        <div class="item-text">3. Connect Jackie with Alec for Responsible AI.</div>
+        <div class="item-sources"><span class="source source-call">Canva call Apr 9</span></div>
+        <textarea class="notes" data-key="comm-canva" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="sub-card" id="sub-comm-quarterly">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-quarterly')">
+        <span class="sub-title">C.2 ALTT Quarterly &mdash; May 14</span>
+        <span class="sub-chevron" id="chv-sub-comm-quarterly">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-comm-quarterly">
+        <div class="item-text">1. <strong>Claudia Cruz (Unilever) CONFIRMED.</strong></div>
+        <div class="item-text">2. Same day as <strong>CMO AI Transformation Summit</strong>.</div>
+        <textarea class="notes" data-key="comm-quarterly" placeholder="Notes..."></textarea>
       </div>
     </div>
 
     <div class="sub-card" id="sub-comm-cats">
       <div class="sub-card-header" onclick="toggleSub('sub-comm-cats')">
-        <span class="sub-title">C.2 CATS &mdash; May 14</span>
+        <span class="sub-title">C.3 CATS &mdash; May 14 <span class="badge badge-attention">Over Capacity</span></span>
         <span class="sub-chevron" id="chv-sub-comm-cats">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-comm-cats">
-        <div class="item-text">1. Pending Meta facility confirmation</div>
-        <div class="item-text">2. Capacity ~50-65 attendees</div>
-        <div class="item-text">3. 120+ registrations already received</div>
-        <div class="item-text">4. Waitlist system being implemented</div>
-        <div class="item-text">5. Priority access for members</div>
+        <div class="item-text">1. <strong>120+ registrations</strong> but capacity is <strong>50&ndash;65 at Meta facility</strong>.</div>
+        <div class="item-text">2. <strong>Waitlist system being implemented.</strong></div>
         <textarea class="notes" data-key="comm-cats" placeholder="Notes..."></textarea>
-      </div>
-    </div>
-
-    <div class="sub-card" id="sub-comm-debates">
-      <div class="sub-card-header" onclick="toggleSub('sub-comm-debates')">
-        <span class="sub-title">C.3 Great Debates &mdash; June 20</span>
-        <span class="sub-chevron" id="chv-sub-comm-debates">&rsaquo;</span>
-      </div>
-      <div class="sub-card-body" id="body-sub-comm-debates">
-        <div class="item-text">1. "The Real AI Challenge" &mdash; starting June 20</div>
-        <div class="item-text">2. Format and speakers TBD</div>
-        <textarea class="notes" data-key="comm-debates" placeholder="Notes..."></textarea>
       </div>
     </div>
 
     <div class="sub-card" id="sub-comm-slack">
       <div class="sub-card-header" onclick="toggleSub('sub-comm-slack')">
-        <span class="sub-title">C.4 Slack Community</span>
+        <span class="sub-title">C.4 Berkowitz / Slack Community</span>
         <span class="sub-chevron" id="chv-sub-comm-slack">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-comm-slack">
-        <div class="item-text">1. <strong>David Berkowitz</strong> &mdash; Greg connected him to team today (Mar 24). "My team would like to talk to you."</div>
-        <div class="item-text">2. Strategy deck finalized (v3). Launch plan in progress.</div>
-        <div class="item-text">3. Alec coordinating</div>
-        <div class="item-text">4. Alec creating dedicated North America AI Foundry channel</div>
-        <div class="item-text">5. Reddit community for MMA (non-members, biz dev, thought leadership)</div>
+        <span class="section-label help">STATUS</span>
+        <div class="item-text">1. <strong>Cannot do ongoing community management</strong> (conflicts/bandwidth).</div>
+        <div class="item-text">2. Available for <strong>strategy + launch support only</strong> (~10hr advisory contract).</div>
+        <div class="item-text">3. Alec sending strategy deck.</div>
+        <span class="section-label next">NEXT</span>
+        <div class="item-text">1. Define success metrics.</div>
+        <div class="item-text">2. Alec send strategy deck.</div>
         <textarea class="notes" data-key="comm-slack" placeholder="Notes..."></textarea>
       </div>
     </div>
 
-    <div class="sub-card" id="sub-comm-talent">
-      <div class="sub-card-header" onclick="toggleSub('sub-comm-talent')">
-        <span class="sub-title">C.5 Talent &mdash; Adam Raines</span>
-        <span class="sub-chevron" id="chv-sub-comm-talent">&rsaquo;</span>
+    <div class="sub-card" id="sub-comm-debates">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-debates')">
+        <span class="sub-title">C.5 Great Debates &mdash; June 20</span>
+        <span class="sub-chevron" id="chv-sub-comm-debates">&rsaquo;</span>
       </div>
-      <div class="sub-card-body" id="body-sub-comm-talent">
-        <div class="item-text">Talent pipeline and recruitment updates.</div>
-        <textarea class="notes" data-key="comm-talent" placeholder="Notes..."></textarea>
+      <div class="sub-card-body" id="body-sub-comm-debates">
+        <div class="item-text">1. "The Real AI Challenge" &mdash; starting June 20.</div>
+        <div class="item-text">2. Format and speakers TBD.</div>
+        <textarea class="notes" data-key="comm-debates" placeholder="Notes..."></textarea>
       </div>
     </div>
 
-    <div class="sub-card" id="sub-comm-bodhium">
-      <div class="sub-card-header" onclick="toggleSub('sub-comm-bodhium')">
-        <span class="sub-title">C.6 Bodhium Labs <span class="badge badge-new">New</span></span>
-        <span class="sub-chevron" id="chv-sub-comm-bodhium">&rsaquo;</span>
+    <div class="sub-card" id="sub-comm-alc">
+      <div class="sub-card-header" onclick="toggleSub('sub-comm-alc')">
+        <span class="sub-title">C.6 ALC Schedule 2026</span>
+        <span class="sub-chevron" id="chv-sub-comm-alc">&rsaquo;</span>
       </div>
-      <div class="sub-card-body" id="body-sub-comm-bodhium">
-        <div class="item-text">New partnership opportunity. Evaluate fit.</div>
-        <textarea class="notes" data-key="comm-bodhium" placeholder="Notes..."></textarea>
+      <div class="sub-card-body" id="body-sub-comm-alc">
+        <div class="item-text">1. <strong>Q1 (done):</strong> MATT 2/24, ALTT 2/17&ndash;2/18, ALTT Quarterly 2/25</div>
+        <div class="item-text">2. <strong>Q2:</strong> MATT &amp; ALTT &mdash; POSSIBLE encore meetings May 12&ndash;13</div>
+        <div class="item-text">3. <strong>Q3:</strong> MATT &amp; ALTT &mdash; Sept 1&ndash;3</div>
+        <div class="item-text">4. <strong>Q4:</strong> MATT &amp; ALTT &mdash; Nov 17&ndash;19</div>
+        <textarea class="notes" data-key="comm-alc" placeholder="Notes..."></textarea>
       </div>
     </div>
   </div>
@@ -1227,67 +1407,42 @@ a:hover { text-decoration: underline; }
       <div class="action-item">
         <input type="checkbox" data-key="act-h1">
         <span class="action-num">D.1</span>
-        <span class="action-text">Claritas blanket agreement re-up &mdash; follow up Don Sklenka <span class="tag tag-urgent">URGENT</span></span>
+        <span class="action-text">Claritas contract renewal &mdash; <strong>own this</strong> <span class="tag tag-urgent">URGENT</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h2">
         <span class="action-num">D.2</span>
-        <span class="action-text">GCE contract &mdash; confirm mid-April launch with Heba <span class="tag tag-monitor">MONITOR</span></span>
+        <span class="action-text">GCE contract: resolve open points (Use of Name, Public Report, ISA gap) <span class="tag tag-urgent">URGENT</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h3">
         <span class="action-num">D.3</span>
-        <span class="action-text">A3/Intuit: track legal review for AI content + persona revenue fix <span class="tag tag-fup">FUP</span></span>
+        <span class="action-text">POSSIBLE: confirm CAP Roundtable + MATT times with Angela so Amanda can send comms <span class="tag tag-today">TODAY</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h4">
         <span class="action-num">D.4</span>
-        <span class="action-text">AURA AT&amp;T: follow up on pixel implementation + Christopher Stanger <span class="tag tag-fup">FUP</span></span>
+        <span class="action-text">POSSIBLE: send dedicated ALTT community email for AI sessions <span class="tag tag-schedule">SCHEDULE</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h5">
         <span class="action-num">D.5</span>
-        <span class="action-text">AURA GM: check status Buick/GMC test setup <span class="tag tag-fup">FUP</span></span>
+        <span class="action-text">Reply to Rex re: CAP private room (invites, timing, format) <span class="tag tag-fup">FUP</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h6">
         <span class="action-num">D.6</span>
-        <span class="action-text">Campbell/Monks A3: brief team on creative dev status <span class="tag tag-confirm">CONFIRM</span></span>
+        <span class="action-text">A3: await Monks + Megan replies on Campbell's replacement <span class="tag tag-monitor">MONITOR</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h7">
         <span class="action-num">D.7</span>
-        <span class="action-text">Custom Ink / Phil Auerbach: schedule scoping calls <span class="tag tag-schedule">SCHEDULE</span></span>
+        <span class="action-text">GM status brief for Greg (consolidated CAP + AURA + SIFT) <span class="tag tag-confirm">CONFIRM</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h8">
         <span class="action-num">D.8</span>
-        <span class="action-text">ALTT survey launch with Vas <span class="tag tag-schedule">SCHEDULE</span></span>
-      </div>
-      <div class="action-item">
-        <input type="checkbox" data-key="act-h9">
-        <span class="action-num">D.9</span>
-        <span class="action-text">DAMit VII: confirm recording schedule (Mon/Tue + rest of week) <span class="tag tag-confirm">CONFIRM</span></span>
-      </div>
-      <div class="action-item">
-        <input type="checkbox" data-key="act-h10">
-        <span class="action-num">D.10</span>
-        <span class="action-text">DAMit VII: resolve 1000 limit issue <span class="tag tag-urgent">URGENT</span></span>
-      </div>
-      <div class="action-item">
-        <input type="checkbox" data-key="act-h11">
-        <span class="action-num">D.11</span>
-        <span class="action-text">Share slides with GS &mdash; 3 labs, 1 per session (with Alec) <span class="tag tag-confirm">CONFIRM</span></span>
-      </div>
-      <div class="action-item">
-        <input type="checkbox" data-key="act-h12">
-        <span class="action-num">D.12</span>
-        <span class="action-text">SIFT: identify second vendor for "zero to one" <span class="tag tag-fup">FUP</span></span>
-      </div>
-      <div class="action-item">
-        <input type="checkbox" data-key="act-h13">
-        <span class="action-num">D.13</span>
-        <span class="action-text">Peloton: track FY2027 pipeline <span class="tag tag-monitor">MONITOR</span></span>
+        <span class="action-text">Warm-intro shortlist for Greg (2&ndash;3 BOD brands) <span class="tag tag-schedule">SCHEDULE</span></span>
       </div>
     </div>
 
@@ -1297,40 +1452,42 @@ a:hover { text-decoration: underline; }
       <div class="team-card">
         <h4>Greg</h4>
         <ul>
-          <li>Send AmFam CMO letter to Sharina Smith</li>
-          <li>David Berkowitz email &mdash; discuss</li>
-          <li>POSSIBLE session decisions</li>
+          <li>AmFam: Send letter to Sherina Smith <strong>(#1 blocker)</strong></li>
+          <li>Home Depot: Send email to Molly for final report</li>
+          <li>E*Trade: Approve escalation to Andrea Zaretsky</li>
+          <li>POSSIBLE: Approve CAP Roundtable move to Mon 3:45pm</li>
+          <li>Board engagement: Identify 2&ndash;3 warm-intro targets</li>
         </ul>
       </div>
       <div class="team-card">
         <h4>Rex</h4>
         <ul>
-          <li>GM/CAP update + CTV expansion</li>
-          <li>White paper draft &mdash; pre-launch checklist</li>
-          <li>Impact numbers finalization</li>
+          <li>Confirm availability for 3 Monday sessions (AI Training + ALTT Meeting + CAP Roundtable)</li>
+          <li>Romy/Google update post Apr 16 (Mazda/Bells calls)</li>
+          <li>Yellow Belt test automation with Cameron</li>
         </ul>
       </div>
       <div class="team-card">
         <h4>Alec</h4>
         <ul>
-          <li>SIFT GM call &mdash; share details</li>
-          <li>MAF AI-AF Office Hours</li>
-          <li>MAVEN development updates</li>
+          <li>SIFT: Track GM KPI regroup, follow up Apr 16&ndash;23</li>
+          <li>Berkowitz: Send strategy deck</li>
+          <li>Canva: Connect Jackie Hill with Alec for Responsible AI</li>
         </ul>
       </div>
       <div class="team-card">
         <h4>Vas</h4>
         <ul>
+          <li>POSSIBLE: Confirm availability for CAP Roundtable + ALTT Meeting <strong>(critical &mdash; Hassan not in person)</strong></li>
+          <li>Agentic AI Survey launch (~3 weeks)</li>
           <li>Peloton ACE outreach</li>
-          <li>Agentic AI survey launch</li>
-          <li>Ops support for DAMit blast</li>
         </ul>
       </div>
       <div class="team-card">
         <h4>Leah</h4>
         <ul>
+          <li>POSSIBLE: RSVP management + Outlook calendar invites</li>
           <li>Community launch support</li>
-          <li>Event coordination (CATS, Great Debates)</li>
         </ul>
       </div>
     </div>
@@ -1375,68 +1532,69 @@ a:hover { text-decoration: underline; }
 
       <div class="script-block">
         <h3>Opening <span class="time">~1 min</span></h3>
-        <div class="script-line say">"Hey everyone. Let's jump in &mdash; we have a lot to cover."</div>
-        <div class="script-line say">"Quick context: last real meeting was March 10. March 17 was brief. Let's catch up on 2 weeks of movement."</div>
+        <div class="script-line say">"Hey everyone. Big week &mdash; lots to cover."</div>
+        <div class="script-line say">"Last check-in was Apr 7 with Greg + Alec. CAP weekly happened Apr 9. Let's catch up."</div>
       </div>
 
       <hr class="script-divider">
 
       <div class="script-block">
-        <h3>1. Labs &mdash; CAP <span class="time">~5 min</span></h3>
-        <div class="script-line say">"CAP is covered in the weekly CAP call &mdash; just high-level flags here."</div>
-        <div class="script-line ask"><strong>Ask Greg:</strong> "Any update on the AmFam CMO letter to Sharina Smith?"</div>
-        <div class="script-line flag"><strong>Flag:</strong> Claritas blanket agreement still expired. Blocks new experiments.</div>
-        <div class="script-line ask"><strong>Ask:</strong> "GCE contract &mdash; Heba confirmed mid-April. Anything we need to do?"</div>
-        <div class="script-line say">"Custom Ink / Phil Auerbach &mdash; strong interest. Scoping calls being set up."</div>
+        <h3>1. Labs &mdash; CAP <span class="time">~6 min</span></h3>
+        <div class="script-line say">"Big CAP wins: Amazon GMC Sierra CTV went LIVE April 6. GCE pixels are up."</div>
+        <div class="script-line flag"><strong>Flag:</strong> GCE landing page pixel MISMATCH vs GA4 &mdash; Claritas fixing by Apr 13.</div>
+        <div class="script-line flag"><strong>#1 BLOCKER:</strong> AmFam letter to Sherina Smith still NOT sent. Greg &mdash; can we ship it today?</div>
+        <div class="script-line flag"><strong>URGENT:</strong> Claritas blanket contract EXPIRED Dec 31. I'm owning renewal.</div>
+        <div class="script-line ask"><strong>Ask Greg:</strong> "Home Depot &mdash; email to Molly for final report? Need numbers before CMO Summit."</div>
+        <div class="script-line say">"Pipeline wins this week: SC Johnson, Custom Ink, Canva, Peloton all re-engaged Apr 9."</div>
       </div>
 
       <hr class="script-divider">
 
       <div class="script-block">
-        <h3>2. Labs &mdash; A3 (Intuit + Campbell) <span class="time">~5 min</span></h3>
-        <div class="script-line say">"Intuit/Monks: we're on Call #4 &mdash; persona refinement. Creative concept selected. Rough cut target ~April 1."</div>
-        <div class="script-line flag"><strong>Flag:</strong> Legal review needed for AI-generated content. Persona $8M flagged.</div>
-        <div class="script-line say">"Campbell/Monks: In execution. Need update from the team on creative development status."</div>
-        <div class="script-line ask"><strong>Ask:</strong> "Novartis &mdash; Dave Carey ISI feasibility for video generation. Any word?"</div>
+        <h3>2. Labs &mdash; A3 (Campbell on hold) <span class="time">~4 min</span></h3>
+        <div class="script-line flag"><strong>Flag:</strong> Campbell ON HOLD &mdash; Megan confirmed Jan 2027 in-market, kickoff canceled Apr 8.</div>
+        <div class="script-line say">"I emailed Monks + Megan Apr 9 &mdash; asked for replacement brand with 3-week POSSIBLE deadline."</div>
+        <div class="script-line say">"Novartis is top replacement candidate. Gail Horwood (Global BOD). Must verify Monks pharma policy first."</div>
+        <div class="script-line ask"><strong>Ask:</strong> "Intuit &mdash; SOW sent Mar 13, no reply. Monks say 'coming along nicely.' Verify directly?"</div>
       </div>
 
       <hr class="script-divider">
 
       <div class="script-block">
-        <h3>3. Labs &mdash; AURA <span class="time">~5 min</span></h3>
-        <div class="script-line ask"><strong>Ask:</strong> "AT&amp;T &mdash; I sent a follow-up. Any response? Where are we on pixel implementation?"</div>
-        <div class="script-line say">"Christopher Stanger is ambitious about scaling. We need 10M impressions over 4 weeks."</div>
-        <div class="script-line ask"><strong>Ask:</strong> "GM AURA &mdash; testing Buick or GMC. 15-25% conversion target. Status?"</div>
+        <h3>3. Labs &mdash; AURA + SIFT <span class="time">~4 min</span></h3>
+        <div class="script-line say">"Peloton AURA Overview call today (Apr 9). Rex + Alec attending. Huge."</div>
+        <div class="script-line ask"><strong>Ask:</strong> "AT&amp;T AURA &mdash; Hiep to confirm campaign + URLs. Any movement?"</div>
+        <div class="script-line flag"><strong>GM stalled across labs:</strong> Christine not responding. Greg &mdash; consider consolidated exec touch?</div>
+        <div class="script-line say">"SIFT: GM kickoff DONE Apr 7. GM regrouping internally on KPIs. Next touch Apr 16&ndash;23. Alec leading."</div>
       </div>
 
       <hr class="script-divider">
 
       <div class="script-block">
-        <h3>4. Labs &mdash; SIFT + ACE <span class="time">~3 min</span></h3>
-        <div class="script-line say">"SIFT is no longer paused &mdash; back on track with Cognitiv."</div>
-        <div class="script-line ask"><strong>Ask Alec:</strong> "Details on GM SIFT call?"</div>
-        <div class="script-line say">"ACE: VidMob/Kroger targeting CCS summer. Celtra stalled &mdash; Vania left."</div>
-        <div class="script-line ask"><strong>Ask:</strong> "AT&amp;T ACE &mdash; they built internally. What's our alternative vendor?"</div>
+        <h3>4. POSSIBLE (Apr 27&ndash;29) <span class="time">~4 min</span></h3>
+        <div class="script-line flag"><strong>Schedule in flux:</strong> CAP Roundtable proposed move to Mon 3:45pm (Rex double-booked).</div>
+        <div class="script-line flag"><strong>MATT being rescheduled</strong> to make room for Joel+Vas on Main Stage Wed.</div>
+        <div class="script-line say">"Amanda's member comms blast ON HOLD until CAP + MATT times confirm."</div>
+        <div class="script-line ask"><strong>Ask Vas:</strong> "Confirm availability for CAP Roundtable + ALTT Meeting? Critical since I'm not there in person."</div>
       </div>
 
       <hr class="script-divider">
 
       <div class="script-block">
-        <h3>5. Knowledge Center <span class="time">~5 min</span></h3>
-        <div class="script-line say">"DAMit VII: proof reviewed today, ready to blast. March 30 session."</div>
-        <div class="script-line say">"MAC certification: belts progressing. 10K+ registrations."</div>
-        <div class="script-line say">"Agentic AI survey &mdash; launching this week."</div>
-        <div class="script-line ask"><strong>Ask:</strong> "Benchmark study &mdash; Jerome flagged data validity. Any resolution?"</div>
+        <h3>5. Knowledge Center <span class="time">~3 min</span></h3>
+        <div class="script-line say">"DAMit VII CRUSHED IT: 1,980 reg / 1,328 attended (67% conversion). 10K+ trained total &mdash; KPI MET."</div>
+        <div class="script-line say">"Yellow Belt content 100% done. Tests pending automation (Rex + Cameron)."</div>
+        <div class="script-line flag"><strong>Flag:</strong> PSI/Adapt AI exclusivity issue (Michael Pettiette) &mdash; contradicts leadership guidance. Decision path?</div>
       </div>
 
       <hr class="script-divider">
 
       <div class="script-block">
         <h3>6. Community <span class="time">~3 min</span></h3>
-        <div class="script-line ask"><strong>Ask Greg:</strong> "David Berkowitz email &mdash; you flagged this. What do we need to discuss?"</div>
-        <div class="script-line say">"Slack community: strategy deck v3 finalized. Alec coordinating launch."</div>
-        <div class="script-line say">"CATS May 14: 120+ registrations, waitlist being set up."</div>
-        <div class="script-line say">"Great Debates: Starting June 20. Speakers TBD."</div>
+        <div class="script-line say">"Canva: Jackie Hill call done Apr 9. Wants AI video gen + training sponsorship + lab onboarding."</div>
+        <div class="script-line say">"ALTT Quarterly May 14: Claudia Cruz (Unilever) confirmed."</div>
+        <div class="script-line say">"CATS May 14: 120+ reg, capacity 50&ndash;65 at Meta. Waitlist going up."</div>
+        <div class="script-line say">"Berkowitz: can't do ongoing community mgmt &mdash; strategy + launch only (~10hr advisory)."</div>
       </div>
 
       <hr class="script-divider">
@@ -1460,7 +1618,7 @@ a:hover { text-decoration: underline; }
 
   /* ── Week Math ── */
   let weekOffset = 0;
-  const MEETING_DOW = 2; // Tuesday
+  const MEETING_DOW = 5; // Friday (ALTT weekly moved from Tue to Fri)
 
   function getMondayOfWeek(date) {
     const d = new Date(date);
@@ -1493,15 +1651,22 @@ a:hover { text-decoration: underline; }
     return yr + '-W' + String(wk).padStart(2, '0');
   }
 
+  function getWeekKeyForOffset(off) {
+    const mon = getMondayOfWeek(new Date());
+    mon.setDate(mon.getDate() + off * 7);
+    return mon.getFullYear() + '-W' + String(getISOWeek(mon)).padStart(2, '0');
+  }
+
   function updateWeekDisplay() {
     const mon = getMondayOfWeek(new Date());
     mon.setDate(mon.getDate() + weekOffset * 7);
-    const tue = new Date(mon); tue.setDate(tue.getDate() + 1);
+    // Meeting is Friday = Monday + 4
+    const meetingDay = new Date(mon); meetingDay.setDate(meetingDay.getDate() + (MEETING_DOW - 1));
     const yr = mon.getFullYear();
     const wk = getISOWeek(mon);
 
     document.getElementById('weekCode').textContent = yr + '-W' + String(wk).padStart(2, '0');
-    document.getElementById('weekDate').textContent = formatDate(tue);
+    document.getElementById('weekDate').textContent = formatDate(meetingDay);
 
     const todayMon = getMondayOfWeek(new Date());
     const isPast = mon < todayMon;
@@ -1516,6 +1681,16 @@ a:hover { text-decoration: underline; }
     });
 
     loadNotes();
+    updateNoteStyles();
+  }
+
+  /* ── Visual feedback: highlight notes that have content / carried over ── */
+  function updateNoteStyles() {
+    document.querySelectorAll('textarea.notes').forEach(function(el) {
+      const val = (el.value || '').trim();
+      el.classList.toggle('has-content', !!val && !val.startsWith('FROM LAST WEEK'));
+      el.classList.toggle('carried-over', val.startsWith('FROM LAST WEEK'));
+    });
   }
 
   window.changeWeek = function(dir) {
@@ -1526,6 +1701,81 @@ a:hover { text-decoration: underline; }
   window.jumpToday = function() {
     weekOffset = 0;
     updateWeekDisplay();
+  };
+
+  /* ── Toast helper ── */
+  function toast(msg, isError) {
+    let el = document.getElementById('toast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'toast';
+      el.className = 'toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.toggle('err', !!isError);
+    el.classList.add('show');
+    clearTimeout(el._t);
+    el._t = setTimeout(function() { el.classList.remove('show'); }, 2800);
+  }
+
+  /* ── Rollover: copy current week's notes into next week as seed context ── */
+  window.rolloverToNextWeek = function() {
+    const curKey = 'altt-agenda-' + getWeekKeyForOffset(weekOffset);
+    const nextKey = 'altt-agenda-' + getWeekKeyForOffset(weekOffset + 1);
+    let curData = {};
+    try { curData = JSON.parse(localStorage.getItem(curKey)) || {}; } catch(e) {}
+    const hasNotes = Object.keys(curData).some(function(k) {
+      const v = curData[k];
+      return typeof v === 'string' && v.trim();
+    });
+    if (!hasNotes) {
+      toast('No notes to roll over this week.', true);
+      return;
+    }
+    if (!confirm('Roll over this week\u2019s notes into next week as starting context?\n\nYour current notes stay intact. Next week will show them as carry-over (blue highlight) that you can edit or delete.')) return;
+
+    let nextData = {};
+    try { nextData = JSON.parse(localStorage.getItem(nextKey)) || {}; } catch(e) {}
+    const curWeek = getWeekKeyForOffset(weekOffset);
+    let count = 0;
+    Object.keys(curData).forEach(function(k) {
+      const v = curData[k];
+      if (typeof v !== 'string' || !v.trim()) return;
+      // Don't overwrite existing next-week notes unless they're empty
+      if (nextData[k] && nextData[k].trim()) return;
+      nextData[k] = 'FROM LAST WEEK (' + curWeek + '):\n' + v.trim() + '\n\n---\n';
+      count++;
+    });
+    try { localStorage.setItem(nextKey, JSON.stringify(nextData)); } catch(e) {}
+    logChange('note', 'Rollover', count + ' notes carried forward to ' + getWeekKeyForOffset(weekOffset + 1));
+    toast('\u2713 ' + count + ' notes rolled over to next week');
+  };
+
+  /* ── Meeting Mode toggle ── */
+  window.toggleMeetingMode = function() {
+    document.body.classList.toggle('meeting-mode');
+    const btn = document.getElementById('btnMeetingMode');
+    if (document.body.classList.contains('meeting-mode')) {
+      btn.innerHTML = '&#9632; Exit Meeting Mode';
+      // Auto-expand labs section and all attention cards
+      document.querySelectorAll('.badge-attention, .badge-urgent').forEach(function(b) {
+        const card = b.closest('.card, .sub-card');
+        if (card) {
+          const body = card.querySelector(':scope > .card-body, :scope > .sub-card-body');
+          if (body && !body.classList.contains('open')) {
+            body.classList.add('open');
+            body.style.display = 'block';
+            const chv = card.querySelector(':scope > .card-header .card-chevron, :scope > .sub-card-header .sub-chevron');
+            if (chv) chv.classList.add('open');
+          }
+        }
+      });
+      toast('Meeting Mode ON \u2014 focus on notes, attention items expanded');
+    } else {
+      btn.innerHTML = '\u25B6 Meeting Mode';
+      toast('Meeting Mode OFF');
+    }
   };
 
   /* ── Toggle Cards ── */
@@ -1606,7 +1856,7 @@ a:hover { text-decoration: underline; }
   }
 
   document.addEventListener('input', function(e) {
-    if (e.target.matches('[data-key]')) debounceSave();
+    if (e.target.matches('[data-key]')) { debounceSave(); updateNoteStyles(); }
   });
   document.addEventListener('change', function(e) {
     if (e.target.matches('[data-key]')) debounceSave();
@@ -1813,61 +2063,35 @@ a:hover { text-decoration: underline; }
   /* ── Call Script Download ── */
   window.downloadScript = function() {
     const wk = getWeekKey();
+    // Read the script content directly from the overlay so it stays in sync
+    const overlay = document.getElementById('scriptOverlay');
     let s = 'ALTT WEEKLY CHECK-IN — CALL SCRIPT\n';
-    s += '=' .repeat(50) + '\n';
+    s += '='.repeat(50) + '\n';
     s += 'Week: ' + wk + '\n\n';
-
-    s += '1. OPENING (~1 min)\n';
-    s += '   SAY: "Hey everyone. Let\'s jump in — we have a lot to cover."\n';
-    s += '   SAY: "Quick context: last real meeting was March 10. March 17 was brief. Let\'s catch up."\n\n';
-
-    s += '2. A. LABS — A.1 CAP (~5 min)\n';
-    s += '   SAY: "CAP is covered in the weekly CAP call — just high-level flags here."\n';
-    s += '   ASK GREG: "Any update on the AmFam CMO letter to Sharina Smith?"\n';
-    s += '   FLAG: Claritas blanket agreement still expired. Blocks new experiments.\n';
-    s += '   ASK: "GCE contract — Heba confirmed mid-April. Anything we need to do?"\n';
-    s += '   SAY: "Custom Ink / Phil Auerbach — strong interest. Scoping calls being set up."\n\n';
-
-    s += '3. A. LABS — A.2 A3 (Intuit + Campbell) (~5 min)\n';
-    s += '   SAY: "Intuit/Monks: we\'re on Call #4 — persona refinement. Lone Wolf concept selected."\n';
-    s += '   SAY: "Three personas: Marcus Chen ($6.5M), Nia Robinson ($3.2M), Dr. Rodriguez ($8M — flagged as unrealistic, swapping)."\n';
-    s += '   SAY: "Rough cut target ~April 1. Legal review needed for AI content."\n';
-    s += '   SAY: "Campbell/Monks: In execution. Need update from team on creative development."\n';
-    s += '   ASK: "Novartis — Dave Carey ISI feasibility for video generation. Any word?"\n\n';
-
-    s += '4. A. LABS — A.3 AURA (~5 min)\n';
-    s += '   ASK: "AT&T — I sent a follow-up. Any response? Pixel implementation status?"\n';
-    s += '   SAY: "Christopher Stanger is ambitious about scaling. 10M impressions over 4 weeks needed."\n';
-    s += '   ASK: "GM AURA — testing Buick or GMC. 15-25% conversion target. Status?"\n\n';
-
-    s += '5. A. LABS — A.4 SIFT + A.5 ACE (~3 min)\n';
-    s += '   SAY: "SIFT is no longer paused — back on track with Cognitiv."\n';
-    s += '   ASK ALEC: "Details on GM SIFT call?"\n';
-    s += '   SAY: "ACE: VidMob/Kroger targeting CCS summer. Celtra stalled — Vania left."\n';
-    s += '   ASK: "AT&T ACE — they built internally. What\'s our alternative vendor?"\n\n';
-
-    s += '6. B. KNOWLEDGE CENTER (~5 min)\n';
-    s += '   SAY: "DAMit VII: 1,150 registrations! Prep email blasting today. March 30 session."\n';
-    s += '   SAY: "MAC certification: belts progressing. 10K+ registrations."\n';
-    s += '   SAY: "Agentic AI survey — launching this week."\n';
-    s += '   ASK: "Benchmark study — Jerome flagged data validity. Any resolution?"\n\n';
-
-    s += '7. C. COMMUNITY (~3 min)\n';
-    s += '   ASK GREG: "David Berkowitz email — you flagged this. What do we need to discuss?"\n';
-    s += '   SAY: "Slack community: strategy deck v3 finalized. Alec coordinating launch."\n';
-    s += '   SAY: "CATS May 14: 120+ registrations, waitlist being set up."\n';
-    s += '   SAY: "POSSIBLE: 4 AI sessions — CAP Main Stage, CAP Roundtable, ALTT Labs, ALTT Community."\n\n';
-
-    s += '8. WRAP-UP (~2 min)\n';
-    s += '   SAY: "Let me quickly recap action items..."\n';
-    s += '   SAY: "Anything else before we close?"\n';
-
+    overlay.querySelectorAll('.script-block').forEach(function(blk) {
+      const h3 = blk.querySelector('h3');
+      if (h3) s += h3.textContent.trim().toUpperCase() + '\n';
+      blk.querySelectorAll('.script-line').forEach(function(line) {
+        let prefix = '  ';
+        if (line.classList.contains('say')) prefix = '  SAY: ';
+        else if (line.classList.contains('ask')) prefix = '  ASK: ';
+        else if (line.classList.contains('flag')) prefix = '  FLAG: ';
+        s += prefix + line.textContent.trim() + '\n';
+      });
+      s += '\n';
+    });
     const blob = new Blob([s], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'ALTT-Call-Script-' + wk + '.txt';
     a.click();
     URL.revokeObjectURL(a.href);
+  };
+
+  /* ── Script Overlay Toggle (close button uses this) ── */
+  window.toggleScript = function() {
+    const ov = document.getElementById('scriptOverlay');
+    if (ov) ov.classList.toggle('open');
   };
 
   /* ── Change Log ── */
