@@ -671,7 +671,7 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 
 <!-- ── QUICK STATUS (compact pills) ── -->
 <div class="status-grid">
-  <div class="status-card"><span class="dot dot-green"></span><strong>DAMit VII</strong> 1,980 reg / 1,328 attended</div>
+  <div class="status-card"><span class="dot dot-green"></span><strong>DAMit VII</strong> NPS +47 / 1,727 unique reg</div>
   <div class="status-card"><span class="dot dot-amber"></span><strong>GCE</strong> landing page pixel mismatch</div>
   <div class="status-card"><span class="dot dot-green"></span><strong>GM</strong> Amazon CTV LIVE Apr 6</div>
   <div class="status-card"><span class="dot dot-red"></span><strong>AmFam</strong> letter NOT sent &mdash; still blocked</div>
@@ -705,7 +705,7 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
         <span class="focus-num">3</span>
-        <span class="focus-label"><strong>DAMit VII wrap-up</strong> &mdash; quick celebration: 1,980 reg / 1,328 attended / Credly cert approved</span>
+        <span class="focus-label"><strong>DAMit VII wrap-up</strong> &mdash; NPS +47 on 228 (per Rex Apr 6). 1,727 unique. Credly cert approved.</span>
         <span class="focus-tag">B.1.1</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-possible')">
@@ -1048,9 +1048,10 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
         <div class="item-text">1. <strong>Campbell is NOT on hold.</strong> The Jan 2027 reference is Campbell's <strong>fiscal year start</strong>, not a project pause.</div>
         <div class="item-text">2. A3 takes 2&ndash;4 weeks brief-to-asset &mdash; can finish well before Campbell's FY 2027 kickoff.</div>
         <div class="item-text">3. Goal (per earlier notes): <strong>two videos, not one</strong>.</div>
-        <span class="section-label help">STATUS</span>
-        <div class="item-text">1. Leah reached out to Campbell multiple times, no responses as of Mar 24.</div>
-        <div class="item-text">2. Hassan stepping in to remind Campbell of POSSIBLE deadlines.</div>
+        <span class="section-label help">STATUS (Pipeline-verified)</span>
+        <div class="item-text">1. Campbell A3 is in <strong>execution / 4.2_experiment_in_progress</strong> with Monks (per Pipeline). Last email contact Mar 11.</div>
+        <div class="item-text">2. Campbell CAP (separate lab) in <strong>evaluation / 2.2_call_done</strong>. Contact: Jill Pratt. Team noted "not leaning in strongly" Feb 23.</div>
+        <div class="item-text">3. Mar 24 note: "Adam reached out multiple times for weekly standups, no response. Hassan stepping in to remind of Possible deadlines. Target is 2 videos. Risk of missing Possible showcase."</div>
         <span class="section-label done">ACCOMPLISHED (Apr 9)</span>
         <div class="item-text">1. Hassan emailed <strong>Monks</strong> (Kate Richling, Dave Carey, Liz Cook): align on timing given Campbell fiscal.</div>
         <div class="item-text">2. Hassan emailed <strong>Megan O'Brien</strong> clarifying A3 timeline fits before January.</div>
@@ -1331,20 +1332,38 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 
     <div class="sub-card" id="sub-kc-damit">
       <div class="sub-card-header" onclick="toggleSub('sub-kc-damit')">
-        <span class="sub-title">B.1.1 DAMit VII <span class="badge badge-new">1,980 / 1,328</span></span>
+        <span class="sub-title">B.1.1 DAMit VII <span class="badge badge-new">NPS +47 / 228</span> <span class="badge badge-today">Credly Approved</span></span>
         <span class="sub-chevron" id="chv-sub-kc-damit">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-kc-damit">
-        <span class="section-label done">ACCOMPLISHED</span>
-        <div class="item-text">1. <strong>1,980 registrations</strong> / <strong>1,328 unique attendees (67% conversion)</strong>.</div>
-        <div class="item-text">2. <strong>Day 1:</strong> 1,106 &middot; <strong>Day 2:</strong> 854 &middot; <strong>Day 3:</strong> 700.</div>
-        <div class="item-text">3. <strong>All 3 days:</strong> 465 (35%) &middot; <strong>2+ days:</strong> 867 (65%) &middot; <strong>1 day only:</strong> 461.</div>
-        <div class="item-text">4. Combined with prior cohorts: <strong>10K+ trained</strong> (KPI met &#10003;).</div>
-        <div class="item-text">5. Credly certificate design reviewed Apr 3. NPS pending from Dan.</div>
+        <span class="section-label done">REGISTRATIONS / AUDIENCE (per Rex's Apr 6 final analysis)</span>
+        <div class="item-text">1. <strong>1,727 unique registrations</strong> &mdash; nearly half from the <strong>top 25 companies</strong>.</div>
+        <div class="item-text">2. Audience heavily skewed to <strong>managers, directors, VPs</strong> from large enterprises. <strong>Strong demand signal &amp; strategic fit</strong> for MMA's enterprise role.</div>
+        <div class="item-text">3. Pre-course: AI-curious but early-stage. Daily LLM use common; advanced build behavior rare. Median participant NOT a technical builder.</div>
+        <div class="item-text item-text-muted">(Earlier Perplexity brief said 1,980 reg / 1,328 unique attendees &mdash; likely pre-dedup counts. Rex's Apr 6 exec analysis is the final source of truth.)</div>
+
+        <span class="section-label done">NPS BY DAY (Rex's Apr 6 email, "final NPS workbook")</span>
+        <div class="item-text">&bull; <strong>Day 1:</strong> +50 (n=54)</div>
+        <div class="item-text">&bull; <strong>Day 2:</strong> +18 (n=56)</div>
+        <div class="item-text">&bull; <strong>Day 3:</strong> +57 (n=44)</div>
+        <div class="item-text">&bull; <strong>Day 4:</strong> +56 (n=27)</div>
+        <div class="item-text">&bull; <strong>Day 5:</strong> +64 (n=47)</div>
+        <div class="item-text"><strong>Overall: +47 on 228 responses</strong> &mdash; after removing 11 same-day duplicate one-line submissions (Days 3&ndash;5), lands at <strong>+44 on 217</strong>. Directional story unchanged.</div>
+        <div class="item-text item-text-muted">Day 2 dip (+18) is the one to watch/explain if asked.</div>
+
+        <span class="section-label done">CERTIFICATE</span>
+        <div class="item-text"><strong>Credly certificate APPROVED</strong> &#10003; &mdash; "MMA Decoding AI for Marketers &mdash; VII: The Autonomous Marketing Era"</div>
+
+        <span class="section-label help">OPEN</span>
+        <div class="item-text">1. Rex waiting on answer re: <strong>level to aim at for POSSIBLE 1-hour session</strong> (his final task before moving on).</div>
+        <div class="item-text">2. API bill from Rex still to send.</div>
+        <div class="item-text">3. Combined with prior cohorts: <strong>10K+ trained</strong> (KPI met &#10003;).</div>
+
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. Full post-event report from Dan.</div>
-        <div class="item-text">2. Next cohort planning.</div>
-        <div class="item-sources"><span class="source source-email">Dan Whiting</span></div>
+        <div class="item-text">1. Answer Rex's "level" question for POSSIBLE session.</div>
+        <div class="item-text">2. Full post-event report.</div>
+        <div class="item-text">3. Next cohort planning.</div>
+        <div class="item-sources"><span class="source source-email">Rex Briggs Apr 6, 6:16 PM &mdash; MMA_Decoding_AI_VII_Final_Exec (177 KB)</span> <span class="source source-email">Dan Whiting</span></div>
         <textarea class="notes" data-key="kc-damit" placeholder="Notes..."></textarea>
       </div>
     </div>
