@@ -708,10 +708,10 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
         <span class="focus-label"><strong>DAMit VII wrap-up</strong> &mdash; NPS +47 on 228 (per Rex Apr 6). 1,727 unique. Credly cert approved.</span>
         <span class="focus-tag">B.1.1</span>
       </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-possible')">
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-possible','sub-possible-schedule')">
         <span class="focus-num">4</span>
-        <span class="focus-label"><strong>POSSIBLE</strong> &mdash; Vas asked for CAP agenda + prep call today. Schedule in flux.</span>
-        <span class="focus-tag">A.1.6</span>
+        <span class="focus-label"><strong>POSSIBLE 2026</strong> (Apr 27&ndash;29 Miami) &mdash; full schedule, Vas alignment, comms blocked. Cross-cutting event card.</span>
+        <span class="focus-tag">POSSIBLE</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-labs','sub-aura-peloton')">
         <span class="focus-num">5</span>
@@ -947,38 +947,17 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
       </div>
     </div>
 
-    <!-- A.1.6 POSSIBLE Sessions -->
+    <!-- A.1.6 POSSIBLE Sessions (pointer to top-level POSSIBLE card) -->
     <div class="sub-card" id="sub-cap-possible">
       <div class="sub-card-header" onclick="toggleSub('sub-cap-possible')">
-        <span class="sub-title">A.1.6 POSSIBLE Sessions <span class="badge badge-attention">Comms On Hold</span></span>
+        <span class="sub-title">A.1.6 CAP at POSSIBLE &mdash; CAP Inner Circle Roundtable</span>
         <span class="sub-chevron" id="chv-sub-cap-possible">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-possible">
-        <span class="section-label done">LATEST FROM SLACK (Apr 10 AM)</span>
-        <div class="item-text">Amanda sent final reg form edits to Jason Chase this morning with the latest titles. CAP moved from Monday to Tuesday. New Wed main stage title locked in. MATT moving to Wed 1:45pm.</div>
-
-        <span class="section-label next">CURRENT SCHEDULE</span>
-        <div class="item-text">1. <strong>Mon Apr 27, 10&ndash;11am</strong> &mdash; AI Training (Rex). <span class="tag tag-confirm">CONFIRMED</span></div>
-        <div class="item-text">2. <strong>Mon Apr 27 (time TBD)</strong> &mdash; ALTT Meeting (Hassan + Alec).</div>
-        <div class="item-text">3. <strong>Tue Apr 28, 2:15&ndash;3:00pm</strong> &mdash; <strong>"Quantifying Brand's Impact"</strong> (Brand as Performance, Denise). <span class="tag tag-confirm">CONFIRMED</span> Splash 9&ndash;10.</div>
-        <div class="item-text">4. <strong>Tue Apr 28, 3:45&ndash;4:15pm</strong> &mdash; <strong>"CAP Inner Circle: A Roundtable with Brands Who've Run the AI Creative Personalization Experiments"</strong>. <span class="tag tag-confirm">MOVED TO TUE</span> Splash 9&ndash;10. Rex + Vas leading. <span class="tag tag-urgent">Vas CRITICAL</span> &mdash; Hassan not in person.</div>
-        <div class="item-text">5. <strong>Tue Apr 28, 5&ndash;6pm</strong> &mdash; MMA Welcome Mixer. All staff.</div>
-        <div class="item-text">6. <strong>Wed Apr 29, 1:30&ndash;2:30pm</strong> &mdash; <strong>"From Attribution to Incrementality to AI: What's the New Center of Gravity?"</strong> Main Stage. <span class="tag tag-confirm">CONFIRMED</span> Greg, Joel, Vas. Splash 9&ndash;10.</div>
-        <div class="item-text">7. <strong>Wed Apr 29, 1:45&ndash;2:45pm</strong> &mdash; <strong>MATT Workshop</strong> (Denise confirmed Wed slot). Splash 9&ndash;10. <span class="tag tag-monitor">Watch overlap with Main Stage</span></div>
-
-        <span class="section-label help">BLOCKERS</span>
-        <div class="item-text">1. <strong>Amanda's member comms blast ON HOLD</strong> until CAP + MATT times fully confirmed. She was holding this morning.</div>
-        <div class="item-text">2. Hassan's own ALTT POSSIBLE email draft (<code>ALTT_POSSIBLE_2026_Email_Draft-v1.docx</code>) waiting on reg form link before sending.</div>
-        <div class="item-text">3. Greg wants to write positioning as intro to the member comms email (word doc proof requested by Angela).</div>
-
-        <span class="section-label next">NEXT (TODAY)</span>
-        <div class="item-text">1. <strong>Hassan + Rex sync (happening now, ~17:30 CEST)</strong> &mdash; confirm timing, unblock comms.</div>
-        <div class="item-text">2. Vas confirm availability for CAP Roundtable + ALTT Meeting.</div>
-        <div class="item-text">3. Once confirmed &rarr; Amanda sends member comms, Hassan sends ALTT-specific email.</div>
-
-        <div class="item-text item-text-muted" style="margin-top:6px;">MMA Booth: #301 (LEFT), Atrium 4th Floor.</div>
-        <div class="item-sources"><span class="source source-slack">#possible-2026-member-comms (Apr 9&ndash;10)</span> <span class="source source-notion">Amanda's final reg edits Apr 10 13:51 CEST</span></div>
-        <textarea class="notes" data-key="cap-possible" placeholder="Notes..."></textarea>
+        <div class="item-text"><strong>CAP Inner Circle: A Roundtable with Brands Who've Run the AI Creative Personalization Experiments</strong></div>
+        <div class="item-text">&rarr; <strong>Tue Apr 28, 3:45&ndash;4:15pm, Splash 9&ndash;10</strong>. Rex + Vas leading. (Moved from Monday.)</div>
+        <div class="item-text item-text-muted">Full POSSIBLE schedule + blockers + Vas alignment &rarr; <button onclick="event.stopPropagation();jumpToItem('card-possible','sub-possible-schedule')" style="background:var(--gold);color:#000;border:none;padding:2px 8px;border-radius:4px;font-weight:600;cursor:pointer;">See dedicated POSSIBLE 2026 card &#x2197;</button></div>
+        <textarea class="notes" data-key="cap-possible" placeholder="Notes on CAP Roundtable specifically..."></textarea>
       </div>
     </div>
 
@@ -1458,6 +1437,99 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 <!-- ══════════════════════════════════════════════════════════════════
      COMMUNITY
      ══════════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════════════════
+     POSSIBLE 2026 — dedicated top-level event card
+     (event is cross-cutting: CAP, ALTT, Main Stage, MATT, BaP)
+     ══════════════════════════════════════════════════════════════ -->
+<div class="card" id="card-possible" style="margin-top:24px;border-color:var(--gold);border-width:2px;">
+  <div class="card-header" onclick="toggleCard('card-possible')">
+    <div class="card-title" style="color:var(--gold);">&#127881; POSSIBLE 2026 <span class="lab-full">&mdash; Apr 27&ndash;29, Miami</span></div>
+    <span class="badge badge-urgent">Comms On Hold</span>
+    <span class="card-chevron" id="chv-card-possible">&rsaquo;</span>
+  </div>
+  <div class="card-body" id="body-card-possible">
+    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">MMA's flagship event. Cross-cutting: CAP roundtable, ALTT meeting, AI training, Main Stage, BaP, MATT workshop. MMA Booth: <strong>#301 (LEFT), Atrium 4th Floor</strong>.</p>
+
+    <!-- Schedule -->
+    <div class="sub-card" id="sub-possible-schedule">
+      <div class="sub-card-header" onclick="toggleSub('sub-possible-schedule')">
+        <span class="sub-title">Full Schedule (from Slack #possible-2026-member-comms, Apr 10 AM)</span>
+        <span class="sub-chevron" id="chv-sub-possible-schedule">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-possible-schedule">
+        <span class="section-label done">MONDAY APR 27</span>
+        <div class="item-text">1. <strong>10&ndash;11am</strong> &mdash; AI Training (Rex). <span class="tag tag-confirm">CONFIRMED</span> Description locked.</div>
+        <div class="item-text">2. <strong>Time TBD</strong> &mdash; ALTT Meeting (Hassan + Alec).</div>
+
+        <span class="section-label done">TUESDAY APR 28</span>
+        <div class="item-text">3. <strong>2:15&ndash;3:00pm</strong> &mdash; <strong>"Quantifying Brand's Impact"</strong> (Brand as Performance, Denise). <span class="tag tag-confirm">CONFIRMED</span> Splash 9&ndash;10.</div>
+        <div class="item-text">4. <strong>3:45&ndash;4:15pm</strong> &mdash; <strong>"CAP Inner Circle: A Roundtable with Brands Who've Run the AI Creative Personalization Experiments"</strong>. <span class="tag tag-confirm">MOVED TO TUE</span> Splash 9&ndash;10. Rex + Vas leading. <span class="tag tag-urgent">Vas CRITICAL</span> &mdash; Hassan not in person.</div>
+        <div class="item-text">5. <strong>5&ndash;6pm</strong> &mdash; MMA Welcome Mixer. All staff.</div>
+
+        <span class="section-label done">WEDNESDAY APR 29</span>
+        <div class="item-text">6. <strong>1:30&ndash;2:30pm</strong> &mdash; <strong>"From Attribution to Incrementality to AI: What's the New Center of Gravity?"</strong> Main Stage. <span class="tag tag-confirm">CONFIRMED</span> Greg, Joel, Vas. Splash 9&ndash;10.</div>
+        <div class="item-text">7. <strong>1:45&ndash;2:45pm</strong> &mdash; <strong>MATT Workshop</strong> (Denise confirmed Wed slot). Splash 9&ndash;10. <span class="tag tag-monitor">Watch overlap with Main Stage</span></div>
+        <textarea class="notes" data-key="possible-schedule" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <!-- Vas alignment -->
+    <div class="sub-card" id="sub-possible-vas">
+      <div class="sub-card-header" onclick="toggleSub('sub-possible-vas')">
+        <span class="sub-title">Vas alignment email <span class="badge badge-today">Apr 10 14:16</span></span>
+        <span class="sub-chevron" id="chv-sub-possible-vas">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-possible-vas">
+        <span class="section-label help">VAS IS ASKING (reply needed today)</span>
+        <div class="item-text">1. <strong>CAP Roundtable session:</strong> "Can you share the agenda? Have we reached out to marketers who have recently participated in these experiments? Should we have a prep call with you, Rex, and maybe some of the marketers?"</div>
+        <div class="item-text">2. <strong>AI ad experiments session:</strong> "do we need to align with Cognitiv, VidMob, etc., the Monks and the companies that participate? Is there an expectation that we will have marketers in the room? This feels a little complicated."</div>
+        <span class="section-label next">ACTION</span>
+        <div class="item-text">1. Share CAP Roundtable agenda + brand list with Vas.</div>
+        <div class="item-text">2. Schedule prep call: Hassan + Rex + Vas (+ optional marketers).</div>
+        <div class="item-text">3. Decide: are vendors (Cognitiv/VidMob/Monks) attending AI experiments session? marketers in room?</div>
+        <div class="item-sources"><span class="source source-email">Vas &rarr; Hassan Apr 10 14:16</span></div>
+        <textarea class="notes" data-key="possible-vas" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <!-- Blockers / Comms -->
+    <div class="sub-card" id="sub-possible-comms">
+      <div class="sub-card-header" onclick="toggleSub('sub-possible-comms')">
+        <span class="sub-title">Comms &amp; Blockers</span>
+        <span class="sub-chevron" id="chv-sub-possible-comms">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-possible-comms">
+        <span class="section-label help">BLOCKED</span>
+        <div class="item-text">1. <strong>Amanda's member comms blast ON HOLD</strong> until CAP + MATT times fully confirmed. She was holding this morning. Final reg edits sent to Jason Chase Apr 10 13:51 CEST.</div>
+        <div class="item-text">2. <strong>Greg wants to write positioning as intro</strong> to the member comms email. Angela requested proof doc first.</div>
+        <div class="item-text">3. <strong>Hassan's own ALTT POSSIBLE email draft</strong> (<code>ALTT_POSSIBLE_2026_Email_Draft-v1.docx</code>) waiting on reg form link before sending.</div>
+        <span class="section-label next">UNBLOCK</span>
+        <div class="item-text">1. Hassan + Rex sync (happened post-call, ~17:30 CEST Apr 10) &mdash; confirm any remaining timing.</div>
+        <div class="item-text">2. Vas confirm availability for CAP Roundtable + ALTT Meeting.</div>
+        <div class="item-text">3. Then: Amanda sends member comms, Hassan sends ALTT-specific email.</div>
+        <div class="item-sources"><span class="source source-slack">#possible-2026-member-comms</span></div>
+        <textarea class="notes" data-key="possible-comms" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <!-- Attendance / Brand reach -->
+    <div class="sub-card" id="sub-possible-brands">
+      <div class="sub-card-header" onclick="toggleSub('sub-possible-brands')">
+        <span class="sub-title">Brand targets at POSSIBLE</span>
+        <span class="sub-chevron" id="chv-sub-possible-brands">&rsaquo;</span>
+      </div>
+      <div class="sub-card-body" id="body-sub-possible-brands">
+        <div class="item-text">1. <strong>Clorox</strong> &mdash; CMO Eric is Global BOD. Team of 12 at POSSIBLE. Intro via Jade.</div>
+        <div class="item-text">2. <strong>Marriott</strong> &mdash; CMO Andy is NA BOD. Michelle rearranged POSSIBLE trip. Amanda/Jade intro.</div>
+        <div class="item-text">3. <strong>Home Depot</strong> &mdash; Molly (CMO) + Norm confirmed as CAP presenters at CAP Roundtable + CMO Summit.</div>
+        <div class="item-text">4. <strong>Canva</strong> &mdash; Jackie Hill CANNOT attend (own event conflict).</div>
+        <div class="item-text item-text-muted">Greg engagement: identify 2&ndash;3 warm-intro targets from BOD.</div>
+        <textarea class="notes" data-key="possible-brands" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="card" id="card-community" style="margin-top:24px;">
   <div class="card-header" onclick="toggleCard('card-community')">
     <div class="card-title">C. Community &amp; Events</div>
