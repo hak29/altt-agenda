@@ -339,6 +339,34 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   font-size: 0.72rem; color: var(--gold);
 }
 
+/* ── TABS (CAP / ALTT / Greg+Alec) ── */
+.tab-bar {
+  display: flex; gap: 4px; margin-bottom: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 4px;
+  position: sticky; top: 140px; z-index: 90;
+}
+.tab-btn {
+  flex: 1; background: transparent; border: none;
+  color: var(--muted); padding: 10px 16px;
+  border-radius: var(--radius); cursor: pointer;
+  font-family: inherit; font-size: 0.85rem; font-weight: 600;
+  transition: all 0.15s; display: flex; align-items: center;
+  justify-content: center; gap: 6px;
+}
+.tab-btn:hover { color: var(--text); background: var(--surface2); }
+.tab-btn.active {
+  background: var(--gold); color: #000;
+}
+.tab-btn .tab-sub {
+  font-size: 0.68rem; font-weight: 400; opacity: 0.8;
+}
+.tab-btn.active .tab-sub { color: #000; opacity: 0.7; }
+
+/* Per-tab priorities show/hide */
+.tab-priorities { display: none; }
+.tab-priorities.active { display: block; }
+
 /* Today's Focus quick-jump buttons */
 .focus-list {
   display: flex; flex-direction: column; gap: 6px;
@@ -625,8 +653,8 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
       <button onclick="changeWeek(-1)" title="Previous week">&lsaquo;</button>
       <div class="week-label">
         <div class="week-code" id="weekCode">2026-W15</div>
-        <div class="week-date" id="weekDate">Fri, April 10, 2026</div>
-        <div class="week-time">1:00 PM ET</div>
+        <div class="week-date" id="weekDate">Week of Mon Apr 6, 2026</div>
+        <div class="week-time" id="weekTime">Meeting day varies</div>
       </div>
       <button onclick="changeWeek(1)" title="Next week">&rsaquo;</button>
       <button class="btn-today" onclick="jumpToday()">Today</button>
@@ -684,54 +712,122 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   <div class="status-card"><span class="dot dot-amber"></span><strong>POSSIBLE</strong> schedule in flux</div>
 </div>
 
-<!-- ── TODAY'S FOCUS (pinned priority quick-jump) ── -->
+<!-- ── TAB BAR (meeting selector) ── -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="altt" onclick="switchTab('altt')">
+    ALTT Weekly <span class="tab-sub">(Greg + team)</span>
+  </button>
+  <button class="tab-btn" data-tab="cap" onclick="switchTab('cap')">
+    CAP Weekly <span class="tab-sub">(Rex + Claritas)</span>
+  </button>
+  <button class="tab-btn" data-tab="greg-alec" onclick="switchTab('greg-alec')">
+    Greg + Alec <span class="tab-sub">(1:1 pre-call)</span>
+  </button>
+</div>
+
+<!-- ── TODAY'S FOCUS — per-tab priorities ── -->
 <div class="card" id="card-focus" style="border-color: var(--gold); border-width: 2px;">
   <div class="card-header" onclick="toggleCard('card-focus')">
-    <div class="card-title" style="color: var(--gold);">&#128205; Today's Focus <span class="badge badge-today">Apr 10</span></div>
+    <div class="card-title" style="color: var(--gold);">&#128205; Priorities for Today <span class="badge badge-today" id="focusTabBadge">ALTT</span></div>
     <span class="card-chevron open" id="chv-card-focus">&rsaquo;</span>
   </div>
   <div class="card-body open" id="body-card-focus" style="display:block;">
     <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Start here. Click a priority to jump to the relevant section and expand it. Your notes stay where they belong.</p>
-    <div class="focus-list">
+
+    <!-- ALTT Weekly priorities -->
+    <div class="focus-list tab-priorities active" data-tab-content="altt">
       <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-claritas')" style="border-left-width:5px;background:rgba(248,81,73,0.08);">
         <span class="focus-num">&#9733;</span>
-        <span class="focus-label"><strong>&#128308; CRITICAL: Write to Claritas CEO</strong> &mdash; escalation above Don/Chelsea level. Unblock GCE contract + master blanket renewal. (From today's ALTT call.)</span>
+        <span class="focus-label"><strong>&#128308; CRITICAL: Claritas CEO escalation</strong> &mdash; Greg drafts anonymized campaign performance summary. Rex Briggs + Hassan do Don-vs-Rex cross-tab analysis. (Apr 10 ALTT call, 16:55.)</span>
         <span class="focus-tag">A.1.1</span>
       </button>
+      <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
+        <span class="focus-num">1</span>
+        <span class="focus-label"><strong>DAMit VII debrief</strong> &mdash; NPS +47 (228), 1,727 unique reg, Credly approved. Pacing/complexity feedback (Day 2 dip).</span>
+        <span class="focus-tag">B.1.1</span>
+      </button>
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-possible','sub-possible-schedule')">
+        <span class="focus-num">2</span>
+        <span class="focus-label"><strong>POSSIBLE 2026</strong> &mdash; 4 member sessions, NA board meeting conflict, Rex re-confirm calendar</span>
+        <span class="focus-tag">POSSIBLE</span>
+      </button>
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-gce')">
+        <span class="focus-num">3</span>
+        <span class="focus-label"><strong>GCE CAP contract</strong> &mdash; Chelsea chased Apr 10 14:17. Legal on brand/results sharing.</span>
+        <span class="focus-tag">A.1.2</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-aura-peloton')">
+        <span class="focus-num">4</span>
+        <span class="focus-label"><strong>Peloton AURA</strong> &mdash; overview call Mon Apr 13, 3pm ET. Prep.</span>
+        <span class="focus-tag">A.3.3</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-a3-intuit')">
+        <span class="focus-num">5</span>
+        <span class="focus-label"><strong>A3 Intuit</strong> &mdash; active Monks weekly sync. Creative variation insight driving CAP narrative.</span>
+        <span class="focus-tag">A.2.1</span>
+      </button>
+    </div>
+
+    <!-- CAP Weekly priorities -->
+    <div class="focus-list tab-priorities" data-tab-content="cap">
       <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-gce')">
         <span class="focus-num">1</span>
-        <span class="focus-label"><strong>Resolve GCE CAP contract</strong> &mdash; Chelsea chased today (Apr 10 14:17). Legal on brand/results sharing. Hassan has answers ready.</span>
+        <span class="focus-label"><strong>GCE contract resolution</strong> &mdash; Sec.22 Use of Name, Public Report veto, ISA gap, $20K billing. Heba / Chelsea / legal. Due Apr 14.</span>
         <span class="focus-tag">A.1.2</span>
       </button>
       <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-gm')">
         <span class="focus-num">2</span>
-        <span class="focus-label"><strong>GM: Roku vs Amazon $20K fee split</strong> &mdash; decide allocation + Norm contract signing</span>
+        <span class="focus-label"><strong>GM Roku vs Amazon $20K fee split</strong> &mdash; close budget split in agreement. Norm contract signing. Roku pixel approvals. First week of May launch.</span>
         <span class="focus-tag">A.1.3</span>
       </button>
-      <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
-        <span class="focus-num">3</span>
-        <span class="focus-label"><strong>DAMit VII wrap-up</strong> &mdash; NPS +47 on 228 (per Rex Apr 6). 1,727 unique. Credly cert approved.</span>
-        <span class="focus-tag">B.1.1</span>
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-labs','sub-cap-claritas')" style="border-left-width:5px;background:rgba(248,81,73,0.08);">
+        <span class="focus-num">&#9733;</span>
+        <span class="focus-label"><strong>&#128308; Claritas CEO escalation</strong> &mdash; Greg's summary + Rex/Hassan cross-tab creative variation analysis (Don vs Rex campaigns)</span>
+        <span class="focus-tag">A.1.1</span>
       </button>
-      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-possible','sub-possible-schedule')">
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-pipeline')">
+        <span class="focus-num">3</span>
+        <span class="focus-label"><strong>Pipeline moves</strong> &mdash; SC Johnson re-engaged, Custom Ink re-engaged, Canva call done, Peloton overview Mon</span>
+        <span class="focus-tag">A.1.7</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-hd')">
         <span class="focus-num">4</span>
-        <span class="focus-label"><strong>POSSIBLE 2026</strong> (Apr 27&ndash;29 Miami) &mdash; full schedule, Vas alignment, comms blocked. Cross-cutting event card.</span>
+        <span class="focus-label"><strong>Home Depot</strong> &mdash; Molly/Norm final report still missing. Greg to nudge.</span>
+        <span class="focus-tag">A.1.5</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-possible','sub-possible-schedule')">
+        <span class="focus-num">5</span>
+        <span class="focus-label"><strong>POSSIBLE CAP Roundtable</strong> &mdash; Tue Apr 28, 3:45pm Splash 9-10. Rex+Vas detailed agenda (norms + participant feedback)</span>
         <span class="focus-tag">POSSIBLE</span>
       </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-aura-peloton')">
+    </div>
+
+    <!-- Greg + Alec 1:1 priorities -->
+    <div class="focus-list tab-priorities" data-tab-content="greg-alec">
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-kc','sub-kc-mac')">
+        <span class="focus-num">1</span>
+        <span class="focus-label"><strong>AI-AF / Workflow Tools adoption</strong> &mdash; users struggling with workflow paths. Step-by-step guidance + active listening (Greg's coaching).</span>
+        <span class="focus-tag">B.1.2</span>
+      </button>
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-kc','sub-kc-damit')">
+        <span class="focus-num">2</span>
+        <span class="focus-label"><strong>Training structure next week</strong> &mdash; 1hr review + 1hr Zapier deep dive + 15min breaks. Office hours for 1:1 support.</span>
+        <span class="focus-tag">B.1.1</span>
+      </button>
+      <button class="focus-btn focus-btn-urgent" onclick="jumpToItem('card-kc','sub-kc-mac')">
+        <span class="focus-num">3</span>
+        <span class="focus-label"><strong>&#9888;&#65039; Rex withdrawing from AI training</strong> &mdash; Greg to monitor. Risk: trainer gap.</span>
+        <span class="focus-tag">B.1.2</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-community','sub-comm-slack')">
+        <span class="focus-num">4</span>
+        <span class="focus-label"><strong>Community in-person</strong> &mdash; Greg suggests more in-person meetings to build connection/momentum.</span>
+        <span class="focus-tag">C.4</span>
+      </button>
+      <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
         <span class="focus-num">5</span>
-        <span class="focus-label"><strong>Peloton AURA</strong> &mdash; overview call <strong>Mon Apr 13, 3pm ET</strong>. Prep with Rex.</span>
-        <span class="focus-tag">A.3.3</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-a3-campbell')">
-        <span class="focus-num">6</span>
-        <span class="focus-label"><strong>A3 Campbell</strong> &mdash; fiscal Jan 2027 (still moving). Monks replacement question.</span>
-        <span class="focus-tag">A.2.2</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-a3-intuit')">
-        <span class="focus-num">7</span>
-        <span class="focus-label"><strong>A3 Intuit</strong> &mdash; weekly Monks sync TODAY 1:05pm ET (active, not stalled)</span>
-        <span class="focus-tag">A.2.1</span>
+        <span class="focus-label"><strong>Recap session next week</strong> &mdash; highlights from AI office hours, encourage participants to share stories</span>
+        <span class="focus-tag">B.1.1</span>
       </button>
     </div>
   </div>
@@ -830,19 +926,21 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
         <span class="sub-chevron" id="chv-sub-cap-claritas">&rsaquo;</span>
       </div>
       <div class="sub-card-body" id="body-sub-cap-claritas">
-        <span class="section-label help">CRITICAL &mdash; FROM APR 10 ALTT CALL</span>
-        <div class="item-text"><strong>&#128308; Hassan to write directly to Claritas CEO</strong> for CAP &mdash; escalation path to resolve blanket contract renewal + GCE contract blockers. Don Sklenka + Chelsea Crerand (VP Sales) + Claire Vasquez level is not moving the needle fast enough. Go to the top.</div>
-        <div class="item-text item-text-muted">Action owner: Hassan. Draft email today if possible. Loop Greg in as sender/cc if helpful.</div>
+        <span class="section-label help">CRITICAL &mdash; FROM APR 10 ALTT CALL (16:55 timestamp)</span>
+        <div class="item-text"><strong>&#128308; Greg to write to Claritas CEO</strong> &mdash; Greg prepares a <strong>summary of campaign performance insights (excluding specific names)</strong> to elevate concerns to the CEO of Claritas.</div>
+        <div class="item-text"><strong>Rex Briggs + Hassan supporting analysis:</strong> Cross-tab analysis separating campaigns led by <strong>Don vs Rex</strong> to quantitatively confirm the impact of creative variation. This data backs up Greg's summary to the CEO.</div>
+        <div class="item-text item-text-muted">Surfaced in Weekly ALTT Meeting Apr 10, 16:00 UTC. Attendees: Greg, Hassan, Vas, Leah, Alec, Rex (MMA), Rex Briggs (Claritas), Amber Hickman (Claritas).</div>
 
         <span class="section-label help">BLOCKING</span>
         <div class="item-text">1. Contract <strong>EXPIRED Dec 31</strong>. Blocks all Claritas-dependent experiments.</div>
         <div class="item-text">2. Don Sklenka approved as vendor on GCE side &#10003; but master Claritas blanket still unsigned.</div>
         <div class="item-text">3. Chelsea chased again today (Apr 10 14:17) on the GCU License Order signature &mdash; still outstanding.</div>
         <span class="section-label next">NEXT</span>
-        <div class="item-text">1. <strong>Hassan: draft + send email to Claritas CEO.</strong> Escalation above Chelsea/Don/Claire level.</div>
-        <div class="item-text">2. Sign pending GCU License Order (Word doc from Claire Apr 2).</div>
-        <div class="item-text">3. Close master Claritas blanket renewal.</div>
-        <div class="item-sources"><span class="source source-call">ALTT Weekly Apr 10 (critical TODO surfaced)</span> <span class="source source-email">Chelsea Crerand Apr 10 14:17 chase</span> <span class="source source-notion">MMA Pipeline: urgent</span></div>
+        <div class="item-text">1. <strong>Greg:</strong> draft + send anonymized summary to Claritas CEO.</div>
+        <div class="item-text">2. <strong>Rex Briggs + Hassan:</strong> deliver Don vs Rex cross-tab creative variation analysis to Greg.</div>
+        <div class="item-text">3. Sign pending GCU License Order (Word doc from Claire Apr 2).</div>
+        <div class="item-text">4. Close master Claritas blanket renewal.</div>
+        <div class="item-sources"><span class="source source-call">Weekly ALTT Meeting Apr 10 (Fireflies)</span> <span class="source source-email">Chelsea Crerand Apr 10 14:17 chase</span> <span class="source source-notion">MMA Pipeline: urgent</span></div>
         <textarea class="notes" data-key="cap-claritas" placeholder="Notes..."></textarea>
       </div>
     </div>
@@ -1652,7 +1750,27 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
       <div class="action-item" style="background:rgba(248,81,73,0.08);border-left:3px solid var(--red);padding-left:8px;margin:4px 0;">
         <input type="checkbox" data-key="act-h0">
         <span class="action-num">D.0</span>
-        <span class="action-text">&#128308; <strong>Write to Claritas CEO</strong> &mdash; escalation email above Don/Chelsea/Claire level. Unblock GCE contract + master blanket renewal. Surfaced on Apr 10 ALTT call. <span class="tag tag-urgent">CRITICAL</span></span>
+        <span class="action-text">&#128308; <strong>Rex Briggs + Hassan:</strong> deliver Don vs Rex cross-tab creative variation analysis to Greg (backs up Greg's Claritas CEO summary) <span class="tag tag-urgent">CRITICAL</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h0b">
+        <span class="action-num">D.0b</span>
+        <span class="action-text">Draft slides from CAP white paper, share with team for feedback <span class="tag tag-today">TODAY</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h0c">
+        <span class="action-num">D.0c</span>
+        <span class="action-text">Send invitations to prioritized marketers for CAP Roundtable + AI Training sessions at POSSIBLE <span class="tag tag-schedule">SCHEDULE</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h0d">
+        <span class="action-num">D.0d</span>
+        <span class="action-text">Coordinate with Amanda + Stephen to schedule call for AI experiments session planning <span class="tag tag-schedule">SCHEDULE</span></span>
+      </div>
+      <div class="action-item">
+        <input type="checkbox" data-key="act-h0e">
+        <span class="action-num">D.0e</span>
+        <span class="action-text">Monitor ALTT/CAP/Aura labs + NA board meeting scheduling conflicts with POSSIBLE <span class="tag tag-monitor">MONITOR</span></span>
       </div>
       <div class="action-item">
         <input type="checkbox" data-key="act-h1">
@@ -1699,22 +1817,33 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <!-- Team cards -->
     <h3 style="font-size:0.9rem;font-weight:600;margin:18px 0 8px;">Team</h3>
     <div class="team-grid">
-      <div class="team-card">
-        <h4>Greg</h4>
+      <div class="team-card" style="border-color:var(--red);border-width:2px;">
+        <h4 style="color:var(--red);">Greg &nbsp;&#128308;</h4>
         <ul>
-          <li>AmFam: Send letter to Sherina Smith <strong>(#1 blocker)</strong></li>
+          <li><strong>CRITICAL:</strong> Prepare anonymized summary of campaign performance insights &rarr; elevate to <strong>Claritas CEO</strong> (Apr 10 call)</li>
+          <li>Monitor: Rex withdrawing from AI training responsibilities (from Apr 10 Greg+Alec 1:1)</li>
           <li>Home Depot: Send email to Molly for final report</li>
           <li>E*Trade: Approve escalation to Andrea Zaretsky</li>
-          <li>POSSIBLE: Approve CAP Roundtable move to Mon 3:45pm</li>
           <li>Board engagement: Identify 2&ndash;3 warm-intro targets</li>
         </ul>
       </div>
       <div class="team-card">
-        <h4>Rex</h4>
+        <h4>Rex Briggs (Claritas)</h4>
         <ul>
-          <li>Confirm availability for 3 Monday sessions (AI Training + ALTT Meeting + CAP Roundtable)</li>
+          <li>Re-send NPS report from DAMit VII event to team</li>
+          <li>Share finalized CAP session video with Hassan + Vas (slide dev support)</li>
+          <li>Confirm POSSIBLE schedule vs NA board meeting conflicts</li>
+          <li>With Vas: CAP Roundtable detailed agenda (norms white paper + participant feedback)</li>
+          <li>With Hassan: Don vs Rex cross-tab analysis</li>
+        </ul>
+      </div>
+      <div class="team-card">
+        <h4>Rex (MMA)</h4>
+        <ul>
+          <li>Confirm availability for 3 Monday POSSIBLE sessions (AI Training + ALTT Meeting + CAP Roundtable)</li>
           <li>Romy/Google update post Apr 16 (Mazda/Bells calls)</li>
           <li>Yellow Belt test automation with Cameron</li>
+          <li>POSSIBLE 1-hour session &mdash; answer level question (final task)</li>
         </ul>
       </div>
       <div class="team-card">
@@ -1869,8 +1998,8 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   'use strict';
 
   /* ── Week Math ── */
+  // Meeting day varies (Tue, Fri, whatever). Don't hardcode a day — show "Week of Mon Xxx D".
   let weekOffset = 0;
-  const MEETING_DOW = 5; // Friday (ALTT weekly moved from Tue to Fri)
 
   function getMondayOfWeek(date) {
     const d = new Date(date);
@@ -1912,13 +2041,19 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   function updateWeekDisplay() {
     const mon = getMondayOfWeek(new Date());
     mon.setDate(mon.getDate() + weekOffset * 7);
-    // Meeting is Friday = Monday + 4
-    const meetingDay = new Date(mon); meetingDay.setDate(meetingDay.getDate() + (MEETING_DOW - 1));
+    const sun = new Date(mon); sun.setDate(sun.getDate() + 6);
     const yr = mon.getFullYear();
     const wk = getISOWeek(mon);
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
     document.getElementById('weekCode').textContent = yr + '-W' + String(wk).padStart(2, '0');
-    document.getElementById('weekDate').textContent = formatDate(meetingDay);
+    // Day-agnostic range: "Apr 6 — Apr 12, 2026" or "Mar 30 — Apr 5, 2026"
+    const rangeStr = 'Week of ' + months[mon.getMonth()] + ' ' + mon.getDate() +
+      (mon.getMonth() !== sun.getMonth() ? ' — ' + months[sun.getMonth()] + ' ' + sun.getDate() : '—' + sun.getDate()) +
+      ', ' + yr;
+    document.getElementById('weekDate').textContent = rangeStr;
+    const tEl = document.getElementById('weekTime');
+    if (tEl) tEl.textContent = 'Meeting day varies';
 
     const todayMon = getMondayOfWeek(new Date());
     const isPast = mon < todayMon;
@@ -1955,6 +2090,34 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     updateWeekDisplay();
   };
 
+  /* ── Tab Switcher (CAP / ALTT / Greg+Alec) ── */
+  let activeTab = 'altt';
+  try {
+    const savedTab = localStorage.getItem('altt-active-tab');
+    if (savedTab) activeTab = savedTab;
+  } catch(e) {}
+
+  window.switchTab = function(tab) {
+    activeTab = tab;
+    try { localStorage.setItem('altt-active-tab', tab); } catch(e) {}
+    // Highlight tab button
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tab);
+    });
+    // Show/hide priority list for this tab
+    document.querySelectorAll('.tab-priorities').forEach(function(el) {
+      el.classList.toggle('active', el.getAttribute('data-tab-content') === tab);
+    });
+    // Update focus badge label
+    const badge = document.getElementById('focusTabBadge');
+    if (badge) {
+      const labels = { 'altt': 'ALTT', 'cap': 'CAP Weekly', 'greg-alec': 'Greg + Alec' };
+      badge.textContent = labels[tab] || tab;
+    }
+    // Reload notes (scoped per-tab)
+    loadNotes();
+  };
+
   /* ── Toast helper ── */
   function toast(msg, isError) {
     let el = document.getElementById('toast');
@@ -1973,8 +2136,8 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 
   /* ── Rollover: copy current week's notes into next week as seed context ── */
   window.rolloverToNextWeek = function() {
-    const curKey = 'altt-agenda-' + getWeekKeyForOffset(weekOffset);
-    const nextKey = 'altt-agenda-' + getWeekKeyForOffset(weekOffset + 1);
+    const curKey = 'altt-agenda-' + activeTab + '-' + getWeekKeyForOffset(weekOffset);
+    const nextKey = 'altt-agenda-' + activeTab + '-' + getWeekKeyForOffset(weekOffset + 1);
     let curData = {};
     try { curData = JSON.parse(localStorage.getItem(curKey)) || {}; } catch(e) {}
     const hasNotes = Object.keys(curData).some(function(k) {
@@ -2103,9 +2266,9 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     });
   };
 
-  /* ── Auto-save Notes ── */
+  /* ── Auto-save Notes (scoped per tab + week) ── */
   let saveTimer = null;
-  function getStorageKey() { return 'altt-agenda-' + getWeekKey(); }
+  function getStorageKey() { return 'altt-agenda-' + activeTab + '-' + getWeekKey(); }
 
   function saveNotes() {
     const data = {};
@@ -2513,6 +2676,8 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   });
 
   /* ── Init ── */
+  // Set active tab UI to restored tab (from localStorage)
+  switchTab(activeTab);
   updateWeekDisplay();
   initEditControls();
 })();
