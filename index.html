@@ -339,6 +339,66 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   font-size: 0.72rem; color: var(--gold);
 }
 
+/* ── EDIT MODE ── */
+body.edit-mode #btnEditMode {
+  background: var(--red) !important; color: #fff !important;
+  border-color: var(--red) !important;
+}
+body.edit-mode [contenteditable="true"] {
+  outline: 1px dashed var(--border-highlight);
+  outline-offset: 2px;
+  cursor: text;
+  border-radius: 3px;
+  padding: 1px 3px;
+  transition: outline-color 0.1s;
+}
+body.edit-mode [contenteditable="true"]:hover {
+  outline-color: var(--gold);
+}
+body.edit-mode [contenteditable="true"]:focus {
+  outline: 2px solid var(--gold) !important;
+  background: rgba(240,180,41,0.06);
+}
+/* Delete X buttons on every deletable block */
+.del-x {
+  display: none;
+  position: absolute;
+  top: -8px; right: -8px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff; border: 2px solid var(--bg);
+  font-size: 0.75rem; font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  z-index: 10;
+  align-items: center; justify-content: center;
+  padding: 0;
+}
+.del-x:hover { background: #ff3b30; transform: scale(1.1); }
+body.edit-mode .del-x { display: flex; }
+body.edit-mode [data-deletable] {
+  position: relative;
+}
+body.edit-mode .focus-btn { pointer-events: auto; }
+body.edit-mode .focus-btn[onclick] { cursor: text; }
+body.edit-mode .card-header,
+body.edit-mode .sub-card-header {
+  cursor: default;
+}
+/* Edit mode banner */
+body.edit-mode::before {
+  content: "\270E Edit Mode \2014 click any text to edit, \00D7 to delete, toggle off to save";
+  display: block;
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--red); color: #fff;
+  padding: 8px 16px; font-size: 0.8rem; font-weight: 600;
+  text-align: center; z-index: 500;
+  letter-spacing: 0.3px;
+}
+body.edit-mode .header { top: 32px !important; }
+body.edit-mode { padding-top: 32px; }
+
 /* ── TABS (CAP / ALTT / Greg+Alec) ── */
 .tab-bar {
   display: flex; gap: 4px; margin-bottom: 16px;
@@ -680,6 +740,7 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   <!-- Toolbar -->
   <div class="toolbar">
     <button onclick="toggleMeetingMode()" id="btnMeetingMode" style="background:var(--gold);color:#000;border-color:var(--gold);font-weight:600">&#9654; Meeting Mode</button>
+    <button onclick="toggleEditMode()" id="btnEditMode" title="Click to edit any text and delete any item">&#9998; Edit</button>
     <button onclick="expandAll()">Expand All</button>
     <button onclick="collapseAll()">Collapse All</button>
     <button onclick="rolloverToNextWeek()" style="background:var(--blue-bright);color:#000;border-color:var(--blue-bright);font-weight:600" title="Carry this week's notes forward as starting point for next week">&rarr; Rollover</button>
@@ -702,7 +763,6 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   <div class="status-card"><span class="dot dot-green"></span><strong>DAMit VII</strong> NPS +47 / 1,727 unique reg</div>
   <div class="status-card"><span class="dot dot-amber"></span><strong>GCE</strong> landing page pixel mismatch</div>
   <div class="status-card"><span class="dot dot-green"></span><strong>GM</strong> Amazon CTV LIVE Apr 6</div>
-  <div class="status-card"><span class="dot dot-red"></span><strong>AmFam</strong> letter NOT sent &mdash; still blocked</div>
   <div class="status-card"><span class="dot dot-blue"></span><strong>SIFT</strong> GM kickoff done Apr 7</div>
   <div class="status-card"><span class="dot dot-red"></span><strong>A3 Campbell's</strong> ON HOLD &mdash; Jan 2027</div>
   <div class="status-card"><span class="dot dot-green"></span><strong>Canva</strong> call done, lab onboarding</div>
@@ -750,11 +810,6 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
         <span class="focus-num">3</span>
         <span class="focus-label"><strong>GCE contract</strong> &mdash; Chelsea chased Apr 10. Legal on brand/results sharing. <span class="tag tag-urgent">URGENT</span></span>
         <span class="focus-tag">Labs &middot; CAP</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
-        <span class="focus-num">4</span>
-        <span class="focus-label"><strong>DAMit VII debrief</strong> &mdash; NPS +47 (228), 1,727 unique, Credly approved. Day 2 dip to watch.</span>
-        <span class="focus-tag">Knowledge</span>
       </button>
     </div>
 
@@ -990,23 +1045,6 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
       </div>
     </div>
 
-    <!-- A.1.4 AmFam -->
-    <div class="sub-card" id="sub-cap-amfam">
-      <div class="sub-card-header" onclick="toggleSub('sub-cap-amfam')">
-        <span class="sub-title">A.1.4 AmFam <span class="badge badge-urgent">#1 BLOCKER</span></span>
-        <span class="sub-chevron" id="chv-sub-cap-amfam">&rsaquo;</span>
-      </div>
-      <div class="sub-card-body" id="body-sub-cap-amfam">
-        <span class="section-label help">STILL BLOCKED</span>
-        <div class="item-text">1. Greg's letter to CMO <strong>Sherina Smith NOT sent</strong>.</div>
-        <div class="item-text">2. Rex's white paper <strong>blocked</strong> until resolved.</div>
-        <div class="item-text">3. Greg considering board continuity based on AmFam participation.</div>
-        <span class="section-label next">NEXT</span>
-        <div class="item-text">1. <strong>Greg to send letter.</strong> This is the #1 blocker.</div>
-        <div class="item-sources"><span class="source source-call">CAP Weekly Apr 9</span></div>
-        <textarea class="notes" data-key="cap-amfam" placeholder="Notes..."></textarea>
-      </div>
-    </div>
 
     <!-- A.1.5 Home Depot (NEW) -->
     <div class="sub-card" id="sub-cap-hd">
@@ -1891,7 +1929,6 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
         <h3>1. Labs &mdash; CAP <span class="time">~6 min</span></h3>
         <div class="script-line say">"Big CAP wins: Amazon GMC Sierra CTV went LIVE April 6. GCE pixels are up."</div>
         <div class="script-line flag"><strong>Flag:</strong> GCE landing page pixel MISMATCH vs GA4 &mdash; Claritas fixing by Apr 13.</div>
-        <div class="script-line flag"><strong>#1 BLOCKER:</strong> AmFam letter to Sherina Smith still NOT sent. Greg &mdash; can we ship it today?</div>
         <div class="script-line flag"><strong>URGENT:</strong> Claritas blanket contract EXPIRED Dec 31. I'm owning renewal.</div>
         <div class="script-line ask"><strong>Ask Greg:</strong> "Home Depot &mdash; email to Molly for final report? Need numbers before CMO Summit."</div>
         <div class="script-line say">"Pipeline wins this week: SC Johnson, Custom Ink, Canva, Peloton all re-engaged Apr 9."</div>
@@ -2135,6 +2172,123 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     try { localStorage.setItem(nextKey, JSON.stringify(nextData)); } catch(e) {}
     logChange('note', 'Rollover', count + ' notes carried forward to ' + getWeekKeyForOffset(weekOffset + 1));
     toast('\u2713 ' + count + ' notes rolled over to next week');
+  };
+
+  /* ── EDIT MODE ── makes every text editable + adds delete X on every block ── */
+  const EDIT_SELECTORS = [
+    '.item-text', '.focus-label', '.focus-tag', '.sub-title', '.card-title',
+    '.action-text', '.section-label', '.lab-full', '.badge', '.tag',
+    '.status-card', '.team-card h4', '.team-card li', '.pill',
+    '.process-step h5', '.process-step p', '.kpi-item',
+    '.script-line', '.attendee'
+  ];
+  const DELETABLE_SELECTORS = [
+    '.sub-card', '.focus-btn', '.action-item', '.status-card',
+    '.team-card li', '.item-text', '.script-line', '.pill',
+    '.action-section > h3', '.team-card'
+  ];
+
+  function getEditsKey() {
+    return 'altt-edits-' + activeTab + '-' + getWeekKey();
+  }
+  function loadEdits() {
+    try { return JSON.parse(localStorage.getItem(getEditsKey())) || {}; } catch(e) { return {}; }
+  }
+  function saveAllEdits() {
+    const edits = {};
+    // Text edits: find every element with data-edit-id and save its innerHTML
+    document.querySelectorAll('[data-edit-id]').forEach(function(el) {
+      edits[el.getAttribute('data-edit-id')] = { html: el.innerHTML };
+    });
+    // Deletions
+    const deleted = [];
+    document.querySelectorAll('[data-del-id].__deleted').forEach(function(el) {
+      deleted.push(el.getAttribute('data-del-id'));
+    });
+    edits.__deleted = deleted;
+    try { localStorage.setItem(getEditsKey(), JSON.stringify(edits)); } catch(e) {}
+    toast('\u2713 Edits saved');
+  }
+  function applyStoredEdits() {
+    const edits = loadEdits();
+    Object.keys(edits).forEach(function(id) {
+      if (id === '__deleted') return;
+      const el = document.querySelector('[data-edit-id="' + id + '"]');
+      if (el && edits[id] && edits[id].html) el.innerHTML = edits[id].html;
+    });
+    (edits.__deleted || []).forEach(function(id) {
+      const el = document.querySelector('[data-del-id="' + id + '"]');
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  function markAllElementsEditable() {
+    let idCounter = 0;
+    // Assign data-edit-id to every editable text element (stable based on DOM path)
+    EDIT_SELECTORS.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        if (!el.hasAttribute('data-edit-id')) {
+          el.setAttribute('data-edit-id', 'e' + (++idCounter) + '-' + sel.replace(/[^a-z0-9]/gi,'').slice(0,8));
+        }
+      });
+    });
+    // Assign data-del-id to every deletable block
+    let delCounter = 0;
+    DELETABLE_SELECTORS.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        if (!el.hasAttribute('data-del-id')) {
+          el.setAttribute('data-del-id', 'd' + (++delCounter));
+        }
+      });
+    });
+  }
+
+  function enableEditing() {
+    markAllElementsEditable();
+    document.querySelectorAll('[data-edit-id]').forEach(function(el) {
+      el.contentEditable = 'true';
+    });
+    // Add delete X to every deletable
+    document.querySelectorAll('[data-del-id]').forEach(function(el) {
+      if (el.querySelector(':scope > .del-x')) return;
+      const x = document.createElement('button');
+      x.className = 'del-x';
+      x.innerHTML = '\u00D7';
+      x.title = 'Delete';
+      x.onclick = function(e) {
+        e.stopPropagation(); e.preventDefault();
+        if (confirm('Delete this item?')) {
+          el.style.display = 'none';
+          el.classList.add('__deleted');
+        }
+      };
+      // Ensure relative positioning for X absolute placement
+      const cs = getComputedStyle(el);
+      if (cs.position === 'static') el.style.position = 'relative';
+      el.appendChild(x);
+    });
+  }
+
+  function disableEditing() {
+    document.querySelectorAll('[data-edit-id]').forEach(function(el) {
+      el.contentEditable = 'false';
+    });
+    document.querySelectorAll('.del-x').forEach(function(x) { x.remove(); });
+  }
+
+  window.toggleEditMode = function() {
+    const on = !document.body.classList.contains('edit-mode');
+    document.body.classList.toggle('edit-mode', on);
+    const btn = document.getElementById('btnEditMode');
+    if (on) {
+      enableEditing();
+      if (btn) btn.innerHTML = '\u2713 Done Editing';
+      toast('Edit Mode ON \u2014 click text to edit, \u00D7 to delete');
+    } else {
+      saveAllEdits();
+      disableEditing();
+      if (btn) btn.innerHTML = '\u270E Edit';
+    }
   };
 
   /* ── Meeting Mode toggle ── */
@@ -2650,6 +2804,9 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
   switchTab(activeTab);
   updateWeekDisplay();
   initEditControls();
+  // Assign stable IDs to editable/deletable elements + apply any saved edits
+  markAllElementsEditable();
+  applyStoredEdits();
 })();
 </script>
 </body>
