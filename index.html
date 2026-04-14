@@ -391,13 +391,13 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 }
 .focus-btn .focus-label { flex: 1; line-height: 1.35; }
 .focus-btn .focus-tag {
-  background: var(--bg); color: var(--muted);
-  font-size: 0.65rem; font-family: monospace; font-weight: 600;
-  padding: 2px 7px; border-radius: 3px;
+  background: var(--bg); color: var(--gold);
+  font-size: 0.62rem; font-weight: 700;
+  padding: 3px 8px; border-radius: 10px;
   border: 1px solid var(--border); flex-shrink: 0;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  white-space: nowrap;
 }
-.focus-btn-urgent { border-left: 3px solid var(--red); }
-.focus-btn-urgent .focus-num { background: var(--red); color: #fff; }
 
 /* Target highlight when jumped to */
 .jump-flash {
@@ -738,33 +738,23 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <div class="focus-list tab-priorities active" data-tab-content="altt">
       <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-claritas')">
         <span class="focus-num">1</span>
-        <span class="focus-label"><strong>Claritas CEO escalation</strong> &mdash; Greg drafts anonymized campaign performance summary. Rex Briggs + Hassan do Don-vs-Rex cross-tab analysis. (Apr 10 ALTT call, 16:55.) <span class="tag tag-urgent">CRITICAL</span></span>
-        <span class="focus-tag">A.1.1</span>
+        <span class="focus-label"><strong>Claritas CEO escalation</strong> &mdash; Greg drafts anonymized summary. Rex+Hassan cross-tab Don-vs-Rex analysis. <span class="tag tag-urgent">CRITICAL</span></span>
+        <span class="focus-tag">Labs &middot; CAP</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-possible','sub-possible-schedule')">
         <span class="focus-num">2</span>
-        <span class="focus-label"><strong>POSSIBLE 2026</strong> &mdash; 4 member sessions, NA board meeting conflict, Rex re-confirm calendar <span class="tag tag-urgent">URGENT</span></span>
-        <span class="focus-tag">POSSIBLE</span>
+        <span class="focus-label"><strong>POSSIBLE 2026</strong> &mdash; 4 member sessions, NA board meeting conflict <span class="tag tag-urgent">URGENT</span></span>
+        <span class="focus-tag">Event</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-gce')">
         <span class="focus-num">3</span>
-        <span class="focus-label"><strong>GCE CAP contract</strong> &mdash; Chelsea chased Apr 10 14:17. Legal on brand/results sharing. <span class="tag tag-urgent">URGENT</span></span>
-        <span class="focus-tag">A.1.2</span>
+        <span class="focus-label"><strong>GCE contract</strong> &mdash; Chelsea chased Apr 10. Legal on brand/results sharing. <span class="tag tag-urgent">URGENT</span></span>
+        <span class="focus-tag">Labs &middot; CAP</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
         <span class="focus-num">4</span>
-        <span class="focus-label"><strong>DAMit VII debrief</strong> &mdash; NPS +47 (228), 1,727 unique reg, Credly approved. Pacing/complexity feedback (Day 2 dip).</span>
-        <span class="focus-tag">B.1.1</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-aura-peloton')">
-        <span class="focus-num">5</span>
-        <span class="focus-label"><strong>Peloton AURA</strong> &mdash; overview call Mon Apr 13, 3pm ET. Prep.</span>
-        <span class="focus-tag">A.3.3</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-a3-intuit')">
-        <span class="focus-num">6</span>
-        <span class="focus-label"><strong>A3 Intuit</strong> &mdash; active Monks weekly sync. Creative variation insight driving CAP narrative.</span>
-        <span class="focus-tag">A.2.1</span>
+        <span class="focus-label"><strong>DAMit VII debrief</strong> &mdash; NPS +47 (228), 1,727 unique, Credly approved. Day 2 dip to watch.</span>
+        <span class="focus-tag">Knowledge</span>
       </button>
     </div>
 
@@ -772,33 +762,23 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <div class="focus-list tab-priorities" data-tab-content="cap">
       <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-gce')">
         <span class="focus-num">1</span>
-        <span class="focus-label"><strong>GCE contract resolution</strong> &mdash; Sec.22 Use of Name, Public Report veto, ISA gap, $20K billing. Heba / Chelsea / legal. Due Apr 14. <span class="tag tag-urgent">URGENT</span></span>
-        <span class="focus-tag">A.1.2</span>
+        <span class="focus-label"><strong>GCE contract resolution</strong> &mdash; Sec.22, Public Report veto, ISA gap, $20K billing. Due Apr 14. <span class="tag tag-urgent">URGENT</span></span>
+        <span class="focus-tag">Labs &middot; CAP</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-gm')">
         <span class="focus-num">2</span>
-        <span class="focus-label"><strong>GM Roku vs Amazon $20K fee split</strong> &mdash; close budget split in agreement. Norm contract signing. Roku pixel approvals. First week of May launch. <span class="tag tag-urgent">URGENT</span></span>
-        <span class="focus-tag">A.1.3</span>
+        <span class="focus-label"><strong>GM Roku vs Amazon $20K split</strong> &mdash; close budget split. Norm contract. First week of May launch. <span class="tag tag-urgent">URGENT</span></span>
+        <span class="focus-tag">Labs &middot; CAP</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-claritas')">
         <span class="focus-num">3</span>
-        <span class="focus-label"><strong>Claritas CEO escalation</strong> &mdash; Greg's summary + Rex/Hassan cross-tab creative variation analysis (Don vs Rex campaigns) <span class="tag tag-urgent">CRITICAL</span></span>
-        <span class="focus-tag">A.1.1</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-pipeline')">
-        <span class="focus-num">4</span>
-        <span class="focus-label"><strong>Pipeline moves</strong> &mdash; SC Johnson re-engaged, Custom Ink re-engaged, Canva call done, Peloton overview Mon</span>
-        <span class="focus-tag">A.1.7</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-labs','sub-cap-hd')">
-        <span class="focus-num">5</span>
-        <span class="focus-label"><strong>Home Depot</strong> &mdash; Molly/Norm final report still missing. Greg to nudge.</span>
-        <span class="focus-tag">A.1.5</span>
+        <span class="focus-label"><strong>Claritas CEO escalation</strong> &mdash; Greg summary + Rex/Hassan Don-vs-Rex cross-tab <span class="tag tag-urgent">CRITICAL</span></span>
+        <span class="focus-tag">Labs &middot; CAP</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-possible','sub-possible-schedule')">
-        <span class="focus-num">6</span>
-        <span class="focus-label"><strong>POSSIBLE CAP Roundtable</strong> &mdash; Tue Apr 28, 3:45pm Splash 9-10. Rex+Vas detailed agenda (norms + participant feedback)</span>
-        <span class="focus-tag">POSSIBLE</span>
+        <span class="focus-num">4</span>
+        <span class="focus-label"><strong>POSSIBLE CAP Roundtable</strong> &mdash; Tue Apr 28, 3:45pm. Rex+Vas detailed agenda.</span>
+        <span class="focus-tag">Event</span>
       </button>
     </div>
 
@@ -806,28 +786,18 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
     <div class="focus-list tab-priorities" data-tab-content="greg-alec">
       <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-mac')">
         <span class="focus-num">1</span>
-        <span class="focus-label"><strong>AI-AF / Workflow Tools adoption</strong> &mdash; users struggling with workflow paths. Step-by-step guidance + active listening (Greg's coaching). <span class="tag tag-urgent">URGENT</span></span>
-        <span class="focus-tag">B.1.2</span>
+        <span class="focus-label"><strong>AI-AF Workflow Tools adoption</strong> &mdash; users struggling. Need step-by-step + active listening. <span class="tag tag-urgent">URGENT</span></span>
+        <span class="focus-tag">Knowledge</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-mac')">
         <span class="focus-num">2</span>
-        <span class="focus-label"><strong>Rex withdrawing from AI training</strong> &mdash; Greg to monitor. Risk: trainer gap. <span class="tag tag-urgent">WATCH</span></span>
-        <span class="focus-tag">B.1.2</span>
+        <span class="focus-label"><strong>Rex withdrawing from AI training</strong> &mdash; trainer gap risk. Monitor. <span class="tag tag-urgent">WATCH</span></span>
+        <span class="focus-tag">Knowledge</span>
       </button>
       <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
         <span class="focus-num">3</span>
-        <span class="focus-label"><strong>Training structure next week</strong> &mdash; 1hr review + 1hr Zapier deep dive + 15min breaks. Office hours for 1:1 support.</span>
-        <span class="focus-tag">B.1.1</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-community','sub-comm-slack')">
-        <span class="focus-num">4</span>
-        <span class="focus-label"><strong>Community in-person</strong> &mdash; Greg suggests more in-person meetings to build connection/momentum.</span>
-        <span class="focus-tag">C.4</span>
-      </button>
-      <button class="focus-btn" onclick="jumpToItem('card-kc','sub-kc-damit')">
-        <span class="focus-num">5</span>
-        <span class="focus-label"><strong>Recap session next week</strong> &mdash; highlights from AI office hours, encourage participants to share stories</span>
-        <span class="focus-tag">B.1.1</span>
+        <span class="focus-label"><strong>Next-week training structure</strong> &mdash; 1hr review + 1hr Zapier + 15min breaks. Office hours for 1:1.</span>
+        <span class="focus-tag">Knowledge</span>
       </button>
     </div>
   </div>
