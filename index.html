@@ -745,6 +745,7 @@ body.edit-mode { padding-top: 32px; }
     <button onclick="collapseAll()">Collapse All</button>
     <button onclick="rolloverToNextWeek()" style="background:var(--blue-bright);color:#000;border-color:var(--blue-bright);font-weight:600" title="Carry this week's notes forward as starting point for next week">&rarr; Rollover</button>
     <button onclick="exportMarkdown()">Export MD</button>
+    <button onclick="exportAngelaTemplate()" title="Download in Angela's GS Weekly template format (.doc for Word)" style="background:#2f81f7;color:#fff;border-color:#2f81f7;font-weight:600">&#128196; Template .doc</button>
     <button onclick="downloadScript()">Script</button>
     <button onclick="saveNotesFile()" style="background:var(--green);color:#000;border-color:var(--green);font-weight:600">Save Notes</button>
     <button onclick="toggleLog()">Change Log</button>
@@ -2487,6 +2488,163 @@ body.edit-mode { padding-top: 32px; }
     a.download = 'ALTT-Agenda-' + wk + '.md';
     a.click();
     URL.revokeObjectURL(a.href);
+  };
+
+  /* ── Export to Angela's GS Weekly Template (.doc that Word opens natively) ── */
+  window.exportAngelaTemplate = function() {
+    const wk = getWeekKey();
+    const weekLabel = document.getElementById('weekDate') ?
+      document.getElementById('weekDate').textContent : wk;
+    const tabLabels = { 'altt': 'ALTT Group Meeting Agenda', 'cap': 'CAP Weekly Agenda', 'greg-alec': 'GS \u2013 Alec 1-1 Agenda' };
+    const title = tabLabels[activeTab] || 'ALTT Weekly Agenda';
+
+    // Helper: extract items under a specific section-label keyword within a sub-card
+    function extractSection(subCard, labelKeywords) {
+      const items = [];
+      let capturing = false;
+      Array.from(subCard.querySelectorAll('.sub-card-body > *')).forEach(function(el) {
+        if (el.classList.contains('section-label')) {
+          const t = el.textContent.toUpperCase();
+          capturing = labelKeywords.some(function(k) { return t.indexOf(k) !== -1; });
+          return;
+        }
+        if (capturing && el.classList.contains('item-text')) {
+          const txt = el.textContent.trim().replace(/\s+/g, ' ');
+          if (txt) items.push(txt);
+        }
+      });
+      return items;
+    }
+
+    // Build HTML that Word will open as a doc
+    let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
+    html += '<head><meta charset="utf-8"><title>' + title + '</title>';
+    html += '<style>';
+    html += 'body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#222;max-width:800px;margin:0 auto;padding:24px;}';
+    html += 'h1{font-size:18pt;color:#1a2342;border-bottom:2px solid #f0b429;padding-bottom:4px;}';
+    html += 'h2{font-size:14pt;color:#1a2342;margin-top:18pt;border-bottom:1px solid #ccc;padding-bottom:2px;}';
+    html += 'h3{font-size:12pt;color:#333;margin-top:12pt;margin-bottom:4pt;}';
+    html += 'h4{font-size:11pt;color:#555;margin:6pt 0 2pt 0;font-weight:700;}';
+    html += 'ul{margin-top:2pt;margin-bottom:6pt;padding-left:22pt;}';
+    html += 'li{margin-bottom:2pt;}';
+    html += '.project-block{margin-bottom:12pt;padding-left:4pt;border-left:3px solid #f0b429;padding:4pt 0 4pt 10pt;}';
+    html += '.help-label{color:#b42a2a;}';
+    html += '.done-label{color:#2ea043;}';
+    html += '.next-label{color:#2f81f7;}';
+    html += '</style></head><body>';
+
+    html += '<h1>GS \u2013 ' + title + '</h1>';
+    html += '<p><strong>Week:</strong> ' + weekLabel + ' (' + wk + ')</p>';
+
+    // 2026 KPIs (pull from existing KPI card)
+    html += '<h2>2026 KPIs</h2><ul>';
+    const kpiItems = document.querySelectorAll('#card-kpis .kpi-item');
+    if (kpiItems.length) {
+      kpiItems.forEach(function(k) { html += '<li>' + k.textContent.trim() + '</li>'; });
+    } else {
+      html += '<li>20+ experiments</li><li>10,000+ registrations</li><li>Community launch</li><li>3+ papers</li>';
+    }
+    html += '</ul>';
+
+    // Major Projects List
+    html += '<h2>Major Projects List for Reference</h2>';
+    html += '<h4>Core Programs</h4><ul>';
+    document.querySelectorAll('#card-projects .pill-group').forEach(function(g) {
+      const label = g.querySelector('.pill-group-label');
+      const pills = g.querySelectorAll('.pill');
+      if (!pills.length) return;
+      // We'll emit each group as its own bullet list
+    });
+    // Simpler: just list all pills grouped
+    document.querySelectorAll('#card-projects .pill-group').forEach(function(g) {
+      const label = g.querySelector('.pill-group-label');
+      const pills = Array.from(g.querySelectorAll('.pill')).map(function(p) { return p.textContent.trim(); });
+      if (label && pills.length) {
+        html += '</ul><h4>' + label.textContent.trim() + '</h4><ul>';
+        pills.forEach(function(p) { html += '<li>' + p + '</li>'; });
+      }
+    });
+    html += '</ul>';
+
+    // This week's updates
+    html += '<h2>' + (new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })) + ' Updates</h2>';
+
+    // Walk through every sub-card (our "project blocks")
+    const subCards = document.querySelectorAll('.sub-card');
+    let emittedCount = 0;
+    subCards.forEach(function(sub) {
+      if (sub.style.display === 'none' || sub.classList.contains('__deleted')) return;
+      const titleEl = sub.querySelector('.sub-title');
+      if (!titleEl) return;
+      const projectName = titleEl.textContent.trim();
+
+      const accomplished = extractSection(sub, ['ACCOMPLISHED','STATUS','DONE','LATEST','CURRENT','UPDATE']);
+      const nextItems = extractSection(sub, ['NEXT','EXPERIMENTS PROPOSED']);
+      const helpItems = extractSection(sub, ['HELP','BLOCKING','BLOCKED','OPEN','ISSUE','BLOCKER','DISCUSS','CRITICAL','CARRY-OVER']);
+      const notesEl = sub.querySelector('textarea[data-key]');
+      const notes = notesEl ? notesEl.value.trim() : '';
+
+      // Skip empty blocks
+      if (!accomplished.length && !nextItems.length && !helpItems.length && !notes) return;
+
+      html += '<div class="project-block">';
+      html += '<h3>' + projectName + '</h3>';
+      html += '<h4 class="done-label">What was accomplished since last mtg?</h4>';
+      if (accomplished.length) {
+        html += '<ul>';
+        accomplished.forEach(function(i) { html += '<li>' + i + '</li>'; });
+        html += '</ul>';
+      } else {
+        html += '<p><em>&mdash; no update &mdash;</em></p>';
+      }
+      html += '<h4 class="next-label">What is to get done next?</h4>';
+      if (nextItems.length) {
+        html += '<ul>';
+        nextItems.forEach(function(i) { html += '<li>' + i + '</li>'; });
+        html += '</ul>';
+      } else {
+        html += '<p><em>&mdash; tbd &mdash;</em></p>';
+      }
+      html += '<h4 class="help-label">What do you need help with?</h4>';
+      if (helpItems.length) {
+        html += '<ul>';
+        helpItems.forEach(function(i) { html += '<li>' + i + '</li>'; });
+        html += '</ul>';
+      } else {
+        html += '<p><em>&mdash; no blockers &mdash;</em></p>';
+      }
+      if (notes) {
+        html += '<h4>Meeting notes</h4><p>' + notes.replace(/\n/g, '<br>') + '</p>';
+      }
+      html += '</div>';
+      emittedCount++;
+    });
+
+    // Last week updates if available
+    const lastWeekKey = 'altt-agenda-' + activeTab + '-' + getWeekKeyForOffset(weekOffset - 1);
+    let lastWeekData = {};
+    try { lastWeekData = JSON.parse(localStorage.getItem(lastWeekKey)) || {}; } catch(e) {}
+    const lastWeekNotes = Object.keys(lastWeekData).filter(function(k) {
+      return typeof lastWeekData[k] === 'string' && lastWeekData[k].trim();
+    });
+    if (lastWeekNotes.length) {
+      html += '<h2>' + getWeekKeyForOffset(weekOffset - 1) + ' Updates (last week)</h2>';
+      lastWeekNotes.forEach(function(k) {
+        html += '<div class="project-block"><h3>' + k + '</h3><p>' + lastWeekData[k].replace(/\n/g, '<br>') + '</p></div>';
+      });
+    }
+
+    html += '<hr><p style="font-size:9pt;color:#888;"><em>Generated from ALTT Agenda Tool (' + emittedCount + ' projects) &mdash; ' + new Date().toISOString() + '</em></p>';
+    html += '</body></html>';
+
+    // Download as .doc — Word will open HTML with this extension natively
+    const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'GS-' + activeTab.toUpperCase() + '-Weekly-' + wk + '.doc';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('\u2713 Template .doc downloaded (' + emittedCount + ' projects)');
   };
 
   /* ── Edit Controls ── */
