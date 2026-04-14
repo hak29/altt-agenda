@@ -363,9 +363,9 @@ body.meeting-mode #btnMeetingMode::before { content: "\25A0 "; }
 }
 .tab-btn.active .tab-sub { color: #000; opacity: 0.7; }
 
-/* Per-tab priorities show/hide */
-.tab-priorities { display: none; }
-.tab-priorities.active { display: block; }
+/* Per-tab priorities show/hide — use higher specificity than .focus-list */
+.focus-list.tab-priorities { display: none; }
+.focus-list.tab-priorities.active { display: flex; }
 
 /* Today's Focus quick-jump buttons */
 .focus-list {
